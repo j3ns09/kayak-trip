@@ -1,87 +1,44 @@
-<?php
-require_once 'config.php';
+<?php include_once 'includes/header.php'; ?>
 
-$stmtPacks = $pdo->query("SELECT id, name, description, price FROM pack_templates WHERE CURDATE() BETWEEN available_from AND available_to LIMIT 3");
-$packs = $stmtPacks->fetchAll(PDO::FETCH_ASSOC);
-
-$stmtStops = $pdo->query("SELECT id, name, description FROM stops ORDER BY name ASC");
-$stops = $stmtStops->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="UTF-8">
-  <title>Vacances Kayak sur la Loire</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      background-color: #f8f9fa;
-    }
-    .navbar {
-      background-color: #007bff;
-    }
-    .navbar .navbar-brand, .navbar .nav-link {
-      color: white !important;
-    }
-  </style>
-</head>
-<body>
-
-<!-- 🔷 Barre de navigation -->
-<nav class="navbar navbar-expand-lg">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="#">🛶 Kayak Loire</a>
-    <div class="ms-auto">
-      <a href="admin/login.php" class="btn btn-outline-light">Se connecter (Admin)</a>
+<nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bolder ms-3" href="#"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
+        <div class="ms-auto mb-3 me-2">
+            <a href="login.php" class="btn btn-warning text-white fw-bold fs-5">Se connecter</a>
+        </div>
+        <button class="navbar-toggler mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
-  </div>
 </nav>
 
-<!-- 💡 Contenu principal -->
-<div class="container py-5">
-  <h1 class="text-center mb-4">Explorez la Loire en Kayak</h1>
-  
-  <div class="text-center mb-5">
-    <a href="composer-itineraire.php" class="btn btn-primary btn-lg m-2">🎯 Composer mon itinéraire</a>
-    <a href="packs.php" class="btn btn-success btn-lg m-2">📦 Choisir un pack</a>
-  </div>
-
-  <section class="mb-5">
-    <h2 class="h4"> Packs disponibles</h2>
-    <div class="row">
-      <?php foreach ($packs as $pack): ?>
-        <div class="col-md-4">
-          <div class="card mb-3 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($pack['name']) ?></h5>
-              <p class="card-text"><?= nl2br(htmlspecialchars($pack['description'])) ?></p>
-              <p><strong>À partir de <?= number_format($pack['price'], 2) ?> €</strong></p>
-              <a href="pack-details.php?id=<?= $pack['id'] ?>" class="btn btn-outline-primary">Voir le pack</a>
+<div>
+    <div class="container position-absolute top-50 start-0 translate-middle-y text-white ps-5">
+        <div class="ps-3">
+            <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
+            <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l’un de nos packs tout inclus</p>
+            
+            <div class="mt-4 d-flex flex-column gap-3">
+                <a href="#" class="btn btn-light bg-opacity-75 text-white fw-semibold px-4 py-2 rounded-5">Composer mon itinéraire</a>
+                <a href="#" class="btn btn-light bg-opacity-50 text-white fw-semibold px-4 py-2" style="backdrop-filter: blur(5px); border-radius: 25px;">Voir les packs disponibles</a>
             </div>
-          </div>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </section>
 
-  <section>
-    <h2 class="h4"> Points d'arrêt le long de la Loire</h2>
-    <div class="row">
-      <?php foreach ($stops as $stop): ?>
-        <div class="col-md-4">
-          <div class="card mb-3 shadow-sm">
-            <div class="card-body">
-              <h5 class="card-title"><?= htmlspecialchars($stop['name']) ?></h5>
-              <p class="card-text"><?= nl2br(htmlspecialchars($stop['description'])) ?></p>
-              <a href="stop-details.php?id=<?= $stop['id'] ?>" class="btn btn-outline-secondary">Détails</a>
-            </div>
-          </div>
+            <hr class="border border-light border-2 opacity-100" style="width: 300px;">
         </div>
-      <?php endforeach; ?>
     </div>
-  </section>
 </div>
 
-</body>
-</html>
+
+<!-- 
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
+    </div>
+    <div class="offcanvas-body">
+        <a href="admin/login.php" class="btn btn-warning text-white fw-bold montserrat fs-5">Se connecter</a>
+    </div>
+</div> -->
+
+<?php include_once "includes/footer.php"; ?>

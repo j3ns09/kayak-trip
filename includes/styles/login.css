@@ -1,0 +1,39 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background: url('/src/img/photo_kayak.png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.login-card {
+    backdrop-filter: blur(8px);
+    background-color: rgba(0, 0, 0, 0.6);
+    border: none;
+    border-radius: 2rem;
+    color: white;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.form-control::placeholder {
+    color: #ccc;
+}
+
+.form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.btn-warning {
+    font-weight: bold;
+    border-radius: 2rem;
+}
