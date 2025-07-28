@@ -12,18 +12,20 @@
     </div>
 </nav>
 
-<div>
-    <div class="container position-absolute top-50 start-0 translate-middle-y text-white ps-5">
-        <div class="ps-3">
-            <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
-            <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l’un de nos packs tout inclus</p>
+<div id="main">
+    <div class="container text-white ps-5">
+        <div class="container ps-3 row gx-5 justify-content-evenly">
+            <div class="col-10">
+                <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
+                <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l’un de nos packs tout inclus</p>
+            </div>
             
-            <div class="mt-4 d-flex flex-column gap-3">
-                <a href="#" class="btn btn-light bg-opacity-75 text-white fw-semibold px-4 py-2 rounded-5">Composer mon itinéraire</a>
-                <a href="#" class="btn btn-light bg-opacity-50 text-white fw-semibold px-4 py-2" style="backdrop-filter: blur(5px); border-radius: 25px;">Voir les packs disponibles</a>
+            <div class="mt-4 d-flex flex-column gap-3 col-5 offset-1 align-items-center justify-content-center">
+                <a href="#" class="btn text-white fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>
+                <a href="#" class="btn text-white fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
             </div>
 
-            <hr class="border border-light border-2 opacity-100" style="width: 300px;">
+            <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
         </div>
     </div>
 </div>

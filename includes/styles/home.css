@@ -5,11 +5,26 @@ body, html {
     background-size: cover;
     font-family: 'Montserrat', sans-serif;
 }
+
+#main {
+    min-height: 100vh;
+    padding-top: 6rem;
+}
+
 .navbar {
-    background-color: #000000d3;
+    background-color: #000000;
+    backdrop-filter: blur(55%);
 }
 
 .navbar .navbar-brand,
 .navbar .nav-link {
     color: white !important;
+}
+
+.home-buttons {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.home-buttons:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
