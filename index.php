@@ -1,4 +1,9 @@
-<?php include_once 'includes/header.php'; ?>
+<?php 
+
+include_once 'includes/store.php';
+include_once 'includes/shape/header.php';
+
+?>
 
 <nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
     <div class="container-fluid">
@@ -12,17 +17,21 @@
     </div>
 </nav>
 
-<div id="main">
+<div id="main" class="container row align-items-center">
     <div class="container text-white ps-5">
-        <div class="container ps-3 row gx-5 justify-content-evenly">
-            <div class="col-10">
+        <div class="container ps-3 row gx-5 justify-content-around align-items-center">
+            <div class="col-6 px-5">
                 <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
                 <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l’un de nos packs tout inclus</p>
             </div>
             
-            <div class="mt-4 d-flex flex-column gap-3 col-5 offset-1 align-items-center justify-content-center">
-                <a href="#" class="btn text-white fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>
-                <a href="#" class="btn text-white fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
+            <div class="col-6 row gx-5">
+                <div class="col">
+                    <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
+                </div>
+                <div class="col">
+                    <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
+                </div>
             </div>
 
             <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
@@ -43,4 +52,4 @@
     </div>
 </div> -->
 
-<?php include_once "includes/footer.php"; ?>
+<?php include_once "includes/shape/footer.php"; ?>

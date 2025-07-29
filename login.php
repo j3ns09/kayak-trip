@@ -1,4 +1,12 @@
-<?php include_once 'includes/header.php'; ?>
+<?php 
+
+include_once 'includes/store.php';
+include_once 'includes/functions.php';
+include_once 'includes/shape/header.php';
+
+$formData = $_SESSION['form_data'];
+
+?>
 
 <link rel="stylesheet" href="includes/styles/login.css">
 
@@ -11,10 +19,21 @@
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="login-card shadow-lg">
         <h2 class="mb-4 text-center fw-semibold">Connexion</h2>
-        <form action="processes/register/register_process.php" method="POST">
-            <div class="mb-3">
+        <?php
+            if (isset($_SESSION['error'])) {
+                displayAlert('error', 1);
+                unset($_SESSION['error']);
+            }
+
+            if (isset($_SESSION['success'])) {
+                displayAlert('success', 0);
+                unset($_SESSION['success']);
+            }
+        ?>
+        <form action="processes/access/login_process.php" method="POST">
+            <div class="my-3">
                 <label for="email" class="form-label">Adresse e-mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre e-mail" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre e-mail" value="<?= $formData['email'] ?? '' ?>" required>
             </div>
             <div class="mb-4">
                 <label for="password" class="form-label">Mot de passe</label>
@@ -22,10 +41,20 @@
             </div>
             <button type="submit" class="btn btn-warning w-100">Se connecter</button>
         </form>
-        <div class="mt-3 text-center">
-            <a href="#" class="text-light text-decoration-underline">Mot de passe oublié ?</a>
+        <div>
+            <div class="mt-3 text-center">
+                <a href="#" class="text-light text-decoration-underline">Mot de passe oublié ?</a>
+            </div>
+            <div class="mt-3 text-center">
+                <a href="register.php" class="text-light text-decoration-underline">Vous n'avez pas de compte ?</a>
+            </div>
         </div>
     </div>
 </div>
 
-<?php include_once "includes/footer.php"; ?>
+<?php 
+
+unset($_SESSION['form_data']);
+include_once "includes/shape/footer.php";
+
+?>
