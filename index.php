@@ -19,13 +19,13 @@ include_once 'includes/templates/header.php';
 
 <div id="main" class="container row align-items-center">
     <div class="container text-white ps-5">
-        <div class="container ps-3 row gx-5 justify-content-around align-items-center">
+        <div class="container ps-3 row gx-1 justify-content-around align-items-center">
             <div class="col-6 px-5">
-                <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
+                <h1 class="display-1 fw-semibold">Explorez la Loire en Kayak</h1>
                 <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l'un de nos packs tout inclus</p>
             </div>
             
-            <div class="col-6 row gx-5">
+            <div class="col-6 row gx-5 ps-5">
                 <div class="col">
                     <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
                 </div>
