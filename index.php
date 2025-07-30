@@ -7,10 +7,15 @@ include_once 'includes/functions.php';
 
 include_once 'includes/templates/header.php';
 
-$userId = $_SESSION['user_id'] !== false ? $_SESSION['user_id'] : null;
-$userInfo = getDisplayableUserInfo($pdo, $userId);
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+    $userInfo = getDisplayableUserInfo($pdo, $userId);
+} else {
+    $userId = null;
+}
 
 $isConnected = !is_null($userId);
+
 ?>
 
 <link rel="stylesheet" href="/src/css/home.css">
