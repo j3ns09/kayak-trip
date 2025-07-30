@@ -2,12 +2,12 @@
 
 include_once 'includes/store.php';
 include_once 'includes/functions.php';
-include_once 'includes/shape/header.php';
+include_once 'includes/templates/header.php';
 
 $formData = $_SESSION['form_data'];
 ?>
 
-<link rel="stylesheet" href="includes/styles/login.css">
+<link rel="stylesheet" href="src/css/login.css">
 
 <nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
     <div class="container-fluid">
@@ -23,7 +23,7 @@ $formData = $_SESSION['form_data'];
             }
         ?>
         <h2 class="mb-4 text-center fw-semibold">Inscription</h2>
-        <form action="processes/access/register_process.php" method="POST">
+        <form action="processes/user/access/register_process.php" method="POST">
             
             <div class="row mb-3">
                 <div class="col">
@@ -66,6 +66,6 @@ $formData = $_SESSION['form_data'];
 <?php
 
 unset($_SESSION['form_data']);
-include_once "includes/shape/footer.php";
+include_once "includes/templates/footer.php";
 
 ?>

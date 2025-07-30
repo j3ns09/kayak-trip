@@ -2,13 +2,13 @@
 
 include_once 'includes/store.php';
 include_once 'includes/functions.php';
-include_once 'includes/shape/header.php';
+include_once 'includes/templates/header.php';
 
 $formData = $_SESSION['form_data'];
 
 ?>
 
-<link rel="stylesheet" href="includes/styles/login.css">
+<link rel="stylesheet" href="src/css/login.css">
 
 <nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
     <div class="container-fluid">
@@ -30,7 +30,7 @@ $formData = $_SESSION['form_data'];
                 unset($_SESSION['success']);
             }
         ?>
-        <form action="processes/access/login_process.php" method="POST">
+        <form action="processes/user/access/login_process.php" method="POST">
             <div class="my-3">
                 <label for="email" class="form-label">Adresse e-mail</label>
                 <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre e-mail" value="<?= $formData['email'] ?? '' ?>" required>
@@ -55,6 +55,6 @@ $formData = $_SESSION['form_data'];
 <?php 
 
 unset($_SESSION['form_data']);
-include_once "includes/shape/footer.php";
+include_once "includes/templates/footer.php";
 
 ?>

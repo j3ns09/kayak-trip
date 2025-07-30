@@ -1,7 +1,7 @@
 <?php 
 
 include_once 'includes/store.php';
-include_once 'includes/shape/header.php';
+include_once 'includes/templates/header.php';
 
 ?>
 
@@ -22,7 +22,7 @@ include_once 'includes/shape/header.php';
         <div class="container ps-3 row gx-5 justify-content-around align-items-center">
             <div class="col-6 px-5">
                 <h1 class="display-1 fw-semibold">Explorez la Loire en<br>Kayak</h1>
-                <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l’un de nos packs tout inclus</p>
+                <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l'un de nos packs tout inclus</p>
             </div>
             
             <div class="col-6 row gx-5">
@@ -52,4 +52,4 @@ include_once 'includes/shape/header.php';
     </div>
 </div> -->
 
-<?php include_once "includes/shape/footer.php"; ?>
+<?php include_once "includes/templates/footer.php"; ?>
