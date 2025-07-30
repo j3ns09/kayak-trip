@@ -13,6 +13,7 @@ function setUserOffline(PDO $pdo, int $userId) {
 function getUserId(PDO $pdo, string $email) {
     $r = $pdo->prepare("SELECT id FROM users WHERE email = :email");
     $r->bindParam(':email', $email, PDO::PARAM_STR);
+    $r->execute();
     return $r->fetch(PDO::FETCH_COLUMN);
 }
 
