@@ -8,6 +8,7 @@ include_once 'includes/functions.php';
 include_once 'includes/templates/header.php';
 
 $userId = $_SESSION['user_id'] !== false ? $_SESSION['user_id'] : null;
+$userInfo = getDisplayableUserInfo($pdo, $userId);
 
 $isConnected = !is_null($userId);
 ?>
@@ -16,10 +17,10 @@ $isConnected = !is_null($userId);
 
 <nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
     <div class="container-fluid">
-        <a class="navbar-brand fw-bolder ms-3" href="#"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
+        <a class="navbar-brand ms-3 fs-2 title" href="#"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
         <div class="ms-auto mb-3 me-2">
             <?php if ($isConnected): ?>
-                <p class="btn btn-warning text-white fs-5 my-0">Connecté</p>
+                <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">Bonjour, <span class="fw-bold"><?= strtoupper($userInfo['last_name']) . " " . $userInfo['first_name'] ?></span></p>
                 
             <?php else: ?>
                 <a href="login.php" class="btn btn-warning text-white fs-5">

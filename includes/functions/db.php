@@ -22,6 +22,16 @@ function getDisplayableUserInfo(PDO $pdo, int $userId) {
     return $r->fetch(PDO::FETCH_ASSOC);
 }
 
+function getApiKey(PDO $pdo, int $userId) {
+    $r = $pdo->query("SELECT api_key FROM api_keys WHERE user_id = $userId");
+    return $r->fetch(PDO::FETCH_COLUMN);
+}
+
+function getAllUsers(PDO $pdo) {
+    $r = $pdo->query("SELECT id, first_name, last_name, email, phone, is_admin FROM users");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function createUser(
     PDO $pdo,
     string $name,

@@ -49,22 +49,12 @@ if (isset($_SESSION['user_id'])) {
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Admin</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>Tahi</td>
-                    <td>Jensen</td>
-                    <td>test@test.fr</td>
-                    <td>Oui</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
+            <tbody id="usersShowing">
             </tbody>
         </table>
     </div>
@@ -280,3 +270,5 @@ if (isset($_SESSION['user_id'])) {
 </div>
 
 <script type="module" src="/src/js/admin/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
