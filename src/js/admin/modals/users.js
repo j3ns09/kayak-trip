@@ -8,7 +8,7 @@ export async function loadUsers() {
     const data = await response.json();
     const users = data.users;
     const userIdSession = data.waiter;
-    const no = 1;
+    let no = 1;
 
     for (const user of users) {
         const id = user.id
@@ -26,7 +26,7 @@ export async function loadUsers() {
             <td>${email}</td>
             <td>${phone}</td>
             <td>
-                <span data-bs-toggle="tooltip" data-bs-title="Changer ses droits depuis cet espace est impossible">
+                ${id === userIdSession ? '<span data-bs-toggle="tooltip" data-bs-title="Changer ses droits depuis cet espace est impossible">' : ''}
                     <div class="form-check form-switch">
                         <input type="checkbox"
                             class="form-check-input"
@@ -41,23 +41,24 @@ export async function loadUsers() {
                         </label>
                     </div>
                     ${generateSwitchModal(id, isAdmin)}
-                </span>
+                ${id === userIdSession ? '</span>' : ''}
             </td>
             <td>
                 <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editProfile${id}"><i class="bi bi-pencil"></i></button>
                 
-                <span data-bs-toggle="tooltip" data-bs-title="Supprimer son propre compte depuis cet espace est impossible">
+                ${id === userIdSession ? '<span data-bs-toggle="tooltip" data-bs-title="Supprimer son propre compte depuis cet espace est impossible">' : ''}
                     <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteProfile${id}" ${id === userIdSession ? 'disabled' : ''}>
                         <i class="bi bi-trash3-fill"></i>
                     </button>
-                </span>
-                
+                ${id === userIdSession ? '</span>' : ''}
+
                 ${generateDeleteModal(id)}
                 ${generateEditModal(id, user)}
 
             </td>`;
                 
         tbody.appendChild(tr);
+        no++;
     }
 }
 

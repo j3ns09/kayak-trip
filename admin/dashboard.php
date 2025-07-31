@@ -18,6 +18,7 @@ if (isset($_SESSION['user_id'])) {
 ?>
 
 <link rel="stylesheet" href="/src/css/admin.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <div class="sidebar">
     <div class="text-center mb-4">
@@ -62,27 +63,60 @@ if (isset($_SESSION['user_id'])) {
     <div id="etapes" class="section">
         <h2>Points d’arrêt</h2>
         <form class="row g-3">
-            <div class="col-md-6">
-                <label>Nom de l’étape</label>
-                <input type="text" class="form-control">
+            <div class="col-md-4">
+                <label for="nom_etape" class="form-label">Nom de l’étape</label>
+                <input type="text" class="form-control" id="nom_etape" name="nom_etape" placeholder="Ex : Pause déjeuner">
             </div>
-            <div class="col-md-6 d-flex align-items-end">
-                <button class="btn btn-success">Ajouter</button>
+
+            <div class="col-md-3">
+                <label for="latitude" class="form-label">Latitude</label>
+                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="44.835">
+            </div>
+
+            <div class="col-md-3">
+                <label for="longitude" class="form-label">Longitude</label>
+                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="4.209167">
+            </div>
+
+            <div class="col-md-2">
+                <label for="description" class="form-label">Type</label>
+                <select name="description" id="description" class="form-select">
+                    <option value="" disabled selected>Choisir un type</option>
+                    <option value="embarquement">Point d'embarquement</option>
+                    <option value="etape">Aire de repos / étape</option>
+                    <option value="abri">Abri</option>
+                    <option value="ravitaillement">Point de ravitaillement</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Ajouter l’étape</button>
             </div>
         </form>
+        <div id="map">
+
+        </div>
+
         <table class="table table-dark table-striped mt-4">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Nom</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Type</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>1</td>
-                    <td>Orléans</td>
+                    <td>Ancenis</td>
+                    <td>47.366259</td>
+                    <td>-1.16807</td>
+                    <td>Etape</td>
                     <td>
+                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
                         <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
                         <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                     </td>
@@ -91,6 +125,7 @@ if (isset($_SESSION['user_id'])) {
                     <td>2</td>
                     <td>Blois</td>
                     <td>
+                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
                         <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
                         <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                     </td>
@@ -102,19 +137,37 @@ if (isset($_SESSION['user_id'])) {
 
     <div id="hebergements" class="section">
         <h2>Hébergements</h2>
-        <form class="row g-3">
+        <form id="form_hebergement" class="row g-3">
             <div class="col-md-4">
-                <label>Point d’arrêt</label>
-                <select class="form-select">
-                    <option>Choisir...</option>
+                <label for="nom_hebergement" class="form-label">Nom de l’hébergement</label>
+                <input type="text" class="form-control" id="nom_hebergement" name="nom_hebergement">
+            </div>
+
+            <div class="col-md-3">
+                <label for="type_hebergement" class="form-label">Type</label>
+                <select class="form-select" id="type_hebergement" name="type_hebergement">
+                <option disabled selected>Choisir un type</option>
+                <option value="camping">Camping</option>
+                <option value="gite">Gîte</option>
+                <option value="hotel">Hôtel</option>
+                <option value="chambre_hote">Chambre d’hôtes</option>
+                <option value="refuge">Refuge</option>
+                <option value="autre">Autre</option>
                 </select>
             </div>
-            <div class="col-md-4">
-                <label>Nom</label>
-                <input type="text" class="form-control">
+
+            <div class="col-md-2">
+                <label class="form-label">Latitude</label>
+                <input type="text" class="form-control" id="latitude_hebergement" name="latitude_hebergement">
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-success">Ajouter</button>
+
+            <div class="col-md-2">
+                <label class="form-label">Longitude</label>
+                <input type="text" class="form-control" id="longitude_hebergement" name="longitude_hebergement">
+            </div>
+
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-success">Ajouter</button>
             </div>
         </form>
         <hr class="text-white">
@@ -272,3 +325,4 @@ if (isset($_SESSION['user_id'])) {
 <script type="module" src="/src/js/admin/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

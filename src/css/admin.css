@@ -64,6 +64,12 @@ canvas {
     border-radius: 0.5rem;
 }
 
+#map {
+    margin-top: 2rem;
+    height: 32rem;
+    width: 48rem;
+}
+
 @media (max-width: 768px) {
     .sidebar {
         position: static;
