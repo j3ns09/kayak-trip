@@ -31,7 +31,7 @@ if ($method === "GET") {
         $accommodations = getAllAccommodations($pdo);
     }
 
-    if (!$accomodations) {
+    if (!$accommodations) {
         echo json_encode(["state" => "Pas d'hébergements ou mauvaise réponse", "response" => $accommodations]);
         exit();
     }

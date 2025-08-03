@@ -52,7 +52,7 @@ export function loadMap() {
         });
     }).catch(error => {
         console.error("Erreur :", error);
-    })
+    })  
     
     map.on('click', onMapClick);
 }

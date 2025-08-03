@@ -23,6 +23,33 @@ function getDisplayableUserInfo(PDO $pdo, int $userId) {
     return $r->fetch(PDO::FETCH_ASSOC);
 }
 
+// Stops
+function setStopNewValues(
+    PDO $pdo, 
+    int $stopId, 
+    string $name,
+    float $lat,
+    float $lng,
+    string $description
+    )
+{
+    $sql = "UPDATE stops SET 
+    name = :name,
+    latitude = :latitude,
+    longitude = :longitude,
+    description = :description
+    WHERE id = :id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':latitude', $lat);
+    $stmt->bindParam(':longitude', $lng);
+    $stmt->bindParam(':description', $description);
+    $stmt->bindParam(':id', $stopId, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+
 // Api
 function getApiKey(PDO $pdo, int $userId) {
     $r = $pdo->query("SELECT api_key FROM api_keys WHERE user_id = $userId");
@@ -40,7 +67,27 @@ function getAllStops(PDO $pdo) {
 }
 
 function getAllAccommodations(PDO $pdo) {
-    $r = $pdo->query("SELECT id, stop_id, name, description, capacity, base_price_per_night FROM accommodations");
+    $r = $pdo->query("
+        SELECT 
+        a.id,
+        a.name,
+        a.description,
+        s.name AS stop_name,
+        a.base_price_per_night,
+        COUNT(DISTINCT r.id) AS nb_chambres,
+        COALESCE(SUM(r.capacity), 0) AS capacite_totale,
+        (
+            SELECT 
+                GROUP_CONCAT(DISTINCT DATE_FORMAT(rv.date, '%d/%m/%Y') ORDER BY rv.date ASC SEPARATOR ', ')
+            FROM room_availability rv
+            JOIN rooms r2 ON rv.room_id = r2.id
+            WHERE r2.accommodation_id = a.id AND rv.is_available = 0
+        ) AS dates_fermeture
+    FROM accommodations a
+    JOIN stops s ON a.stop_id = s.id
+    LEFT JOIN rooms r ON r.accommodation_id = a.id
+    GROUP BY a.id, a.name, a.description, s.name, a.base_price_per_night
+    ");
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -108,7 +155,12 @@ function createStop(
     $stmt->bindParam(':lng', $lng);
     $stmt->bindParam(':type', $type);
 
-    $stmt->execute();
+    return $stmt->execute();
 }
 
+function deleteStop(PDO $pdo, int $stopId) {
+    $stmt = $pdo->prepare("DELETE FROM stops WHERE id = :id");
+    $stmt->bindParam(':id', $stopId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
 ?>

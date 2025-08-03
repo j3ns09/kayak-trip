@@ -29,8 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     unset($_SESSION['form_data']);
 
     createStop($pdo, $name, $lat, $lng, $description);
-    redirect("admin/dashboard");
-
-    exit();
 }
+
+redirect("admin/dashboard");
+exit();
+
 ?>

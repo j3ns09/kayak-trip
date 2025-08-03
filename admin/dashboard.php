@@ -131,31 +131,48 @@ if (isset($_SESSION['user_id'])) {
         <form id="form_hebergement" class="row g-3">
             <div class="col-md-4">
                 <label for="nom_hebergement" class="form-label">Nom de l’hébergement</label>
-                <input type="text" class="form-control" id="nom_hebergement" name="nom_hebergement">
+                <input type="text" class="form-control" id="nom_hebergement" name="nom_hebergement" required>
             </div>
 
             <div class="col-md-2">
                 <label for="type_hebergement" class="form-label">Type</label>
-                <select class="form-select" id="type_hebergement" name="type_hebergement">
-                    <option disabled selected>Choisir un type</option>
-                    <option value="camping">Camping</option>
-                    <option value="gite">Gîte</option>
-                    <option value="hotel">Hôtel</option>
-                    <option value="chambre_hote">Chambre d’hôtes</option>
-                    <option value="refuge">Refuge</option>
-                    <option value="autre">Autre</option>
+                <select class="form-select" id="type_hebergement" name="type_hebergement" required>
+                <option disabled selected>Choisir un type</option>
+                <option value="camping">Camping</option>
+                <option value="gite">Gîte</option>
+                <option value="hotel">Hôtel</option>
+                <option value="chambre_hote">Chambre d’hôtes</option>
+                <option value="refuge">Refuge</option>
+                <option value="autre">Autre</option>
                 </select>
             </div>
 
             <div class="col-md-3">
                 <label for="arret" class="form-label">Point d'arrêt</label>
-                <select name="arret" id="arret-list" class="form-select">
-                    <option disabled selected>Choisir un point d'arrêt</option>
+                <select name="arret" id="arret-list" class="form-select" required>
+                <option disabled selected>Choisir un point d'arrêt</option>
+                <!-- options remplies dynamiquement -->
                 </select>
             </div>
 
-            <div class="col-md-1 d-flex align-items-end">
-                <button type="submit" class="btn btn-success">Ajouter</button>
+            <div class="col-md-3">
+                <label for="prix_base" class="form-label">Prix de base / nuit (€)</label>
+                <input type="number" min="0" step="0.01" class="form-control" name="prix_base" required>
+            </div>
+
+            <div class="col-md-12">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="description" rows="2" required></textarea>
+            </div>
+
+            <div class="col-md-12">
+                <label class="form-label">Chambres</label>
+                <div id="chambres-container"></div>
+                <button type="button" class="btn btn-secondary btn-sm mt-2" onclick="ajouterChambre()">+ Ajouter une chambre</button>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">Ajouter l'hébergement</button>
             </div>
         </form>
         <hr class="text-white">
@@ -163,22 +180,17 @@ if (isset($_SESSION['user_id'])) {
         <table class="table table-dark table-striped mt-4">
             <thead>
                 <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Nombre de chambres</th>
                     <th>Point d’arrêt</th>
-                    <th>Hébergement</th>
+                    <th>Capacité totale</th>
+                    <th>Prix moyen</th>
                     <th>Disponibilités</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>Orléans</td>
-                    <td>Hôtel des Quais</td>
-                    <td>Fermé : 1/08/2025 - 15/08/2025</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
+            <tbody id="accommodationsShowing">
             </tbody>
         </table>
     </div>

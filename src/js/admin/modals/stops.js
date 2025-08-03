@@ -67,7 +67,7 @@ function generateDeleteModal(id) {
     <div class="modal fade" id="deleteStop${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+            <form method="POST" action="/processes/stops/delete_stop_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Supprimer un point d'arrêt</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -87,11 +87,21 @@ function generateDeleteModal(id) {
 }
 
 function generateEditModal(id, stop) {
-    return `
+    const desc = stop.description;
+
+    const descriptions = {
+        'embarquement' : "Point d'embarquement",
+        'etape' : "Aire de repos / étape",
+        'abri' : "Abri",
+        'ravitaillement' : "Point de ravitaillement",
+        'autre' : "Autre"
+    };
+    
+    let r = `
     <div class="modal fade" id="editStop${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+            <form method="POST" action="/processes/stops/edit_stop_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Modifier un point d'arrêt</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
@@ -104,14 +114,15 @@ function generateEditModal(id, stop) {
                 <div class="mb-3">
                     <label for="type_hebergement" class="form-label">Type</label>
                     <select name="description" id="description" class="form-select">
-                        <option value="" disabled selected>${stop.description}</option>
-                        <option value="embarquement">Point d'embarquement</option>
-                        <option value="etape">Aire de repos / étape</option>
-                        <option value="abri">Abri</option>
-                        <option value="ravitaillement">Point de ravitaillement</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
+                        <option value="${stop.description}" selected>${stop.description}</option>`;
+    
+                        Object.entries(descriptions).forEach(([value, label]) => {
+                            if (value !== desc) {
+                                r += `<option value="${value}">${label}</option>`;
+                            }
+                        });
+    r += `</select>
+            </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
@@ -121,4 +132,6 @@ function generateEditModal(id, stop) {
         </div>
         </div>
     </div>`;
+
+    return r;
 }

@@ -1,5 +1,6 @@
 import { loadUsers } from "./modals/users.js";
 import { loadStops } from "./modals/stops.js";
+import { loadAccommodations } from "./modals/accommodations.js";
 import { loadMap } from "./map/map.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -13,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
     
     await loadUsers();
+    await loadAccommodations();
     
     let map;
     await loadStops();

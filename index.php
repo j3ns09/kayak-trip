@@ -51,7 +51,7 @@ $isConnected = !is_null($userId);
             
             <div class="col-6 row gx-5 ps-5">
                 <div class="col">
-                    <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
+                    <a href="compose.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
                 </div>
                 <div class="col">
                     <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
