@@ -66,8 +66,8 @@ canvas {
 
 #map {
     margin-top: 2rem;
-    height: 32rem;
-    width: 48rem;
+    height: 52rem;
+    width: 64rem;
 }
 
 @media (max-width: 768px) {

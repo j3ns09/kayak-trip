@@ -1,12 +1,18 @@
-export function loadMap(lat=47.23985, lon=-1.461364) {
-    var map = L.map('map').setView([lat, lon], 13);
-    
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+let clickedMarker = null;
 
-    L.marker([lat, lon]).addTo(map);
+export function loadMap() {
+    map = L.map('map').setView([47.3, 0.7], 7);
+    
+    map.setMaxBounds([
+        [43.8, -3.0],
+        [49.5, 5.0]
+    ]);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap – Leaflet',
+        minZoom: 6,
+        maxZoom: 18
+    }).addTo(map);
 
     var loireStyle = {
         color: "#00BFFF",
@@ -26,12 +32,55 @@ export function loadMap(lat=47.23985, lon=-1.461364) {
             console.error("Erreur :", error);
         });
     
+
+    fetch("/api/stops/", {
+        method: "GET"
+    }).then(response => {
+        if (!response.ok) throw new Error("Erreur lors de la requête à la base de données");
+        return response.json();
+    }).then(data => {
+        const stops = data.stops;
+        stops.forEach(stop => {
+            L.circleMarker([stop.latitude, stop.longitude], {
+                radius: 6,
+                fillColor: getColor(stop.description),
+                color: "#000",
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            }).addTo(map);
+        });
+    }).catch(error => {
+        console.error("Erreur :", error);
+    })
+    
     map.on('click', onMapClick);
 }
 
 
 function onMapClick(e) {
-    console.log("You clicked the map at " + e.latlng);
+    const latInput = document.getElementById("latitude");
+    const lngInput = document.getElementById("longitude");
+    
+    const lat = e.latlng.lat;
+    const lng = e.latlng.lng;
+
+    if (clickedMarker !== null) {
+        map.removeLayer(clickedMarker);
+    }
+    
+    clickedMarker = L.marker([lat, lng]).addTo(map);
+    latInput.value = lat;
+    lngInput.value = lng;
 }
 
-
+function getColor(type) {
+    switch (type) {
+        case 'etape':
+            return 'blue';
+        case 'embarquement':
+            return 'orange';
+        default:
+            return 'blue';
+    }
+}

@@ -2,6 +2,7 @@
 
 // set, get, create, delete
 
+// Users
 function setUserOnline(PDO $pdo, int $userId) {
     $r = $pdo->query("UPDATE users SET is_online = 1 WHERE id = $userId");
 }
@@ -22,6 +23,7 @@ function getDisplayableUserInfo(PDO $pdo, int $userId) {
     return $r->fetch(PDO::FETCH_ASSOC);
 }
 
+// Api
 function getApiKey(PDO $pdo, int $userId) {
     $r = $pdo->query("SELECT api_key FROM api_keys WHERE user_id = $userId");
     return $r->fetch(PDO::FETCH_COLUMN);
@@ -31,6 +33,17 @@ function getAllUsers(PDO $pdo) {
     $r = $pdo->query("SELECT id, first_name, last_name, email, phone, is_admin FROM users");
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
+
+function getAllStops(PDO $pdo) {
+    $r = $pdo->query("SELECT id, name, description, latitude, longitude FROM stops");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllAccommodations(PDO $pdo) {
+    $r = $pdo->query("SELECT id, stop_id, name, description, capacity, base_price_per_night FROM accommodations");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
 
 function createUser(
     PDO $pdo,
@@ -77,6 +90,25 @@ function createUser(
 
     return ['ok' => false, 'message' => "Une erreur est survenue lors de l'inscription. Veuillez réessayer."];
 
+}
+
+function createStop(
+    PDO $pdo,
+    string $name,
+    float $lat,
+    float $lng,
+    string $type
+    )
+{
+    $sql = "INSERT INTO stops (name, description, latitude, longitude) VALUES (:name, :type, :lat, :lng)";
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':lat', $lat);
+    $stmt->bindParam(':lng', $lng);
+    $stmt->bindParam(':type', $type);
+
+    $stmt->execute();
 }
 
 ?>

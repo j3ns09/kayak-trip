@@ -62,7 +62,7 @@ if (isset($_SESSION['user_id'])) {
 
     <div id="etapes" class="section">
         <h2>Points d’arrêt</h2>
-        <form class="row g-3">
+        <form class="row g-3" method="POST" action="/processes/stops/add_stop_process.php">
             <div class="col-md-4">
                 <label for="nom_etape" class="form-label">Nom de l’étape</label>
                 <input type="text" class="form-control" id="nom_etape" name="nom_etape" placeholder="Ex : Pause déjeuner">
@@ -70,12 +70,12 @@ if (isset($_SESSION['user_id'])) {
 
             <div class="col-md-3">
                 <label for="latitude" class="form-label">Latitude</label>
-                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="44.835">
+                <input type="text" class="form-control" id="latitude" name="latitude" placeholder="Ex : 44.835">
             </div>
 
             <div class="col-md-3">
                 <label for="longitude" class="form-label">Longitude</label>
-                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="4.209167">
+                <input type="text" class="form-control" id="longitude" name="longitude" placeholder="Ex : 4.209167">
             </div>
 
             <div class="col-md-2">
@@ -108,22 +108,13 @@ if (isset($_SESSION['user_id'])) {
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="stopsShowing">
                 <tr>
                     <td>1</td>
                     <td>Ancenis</td>
                     <td>47.366259</td>
                     <td>-1.16807</td>
                     <td>Etape</td>
-                    <td>
-                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Blois</td>
                     <td>
                         <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
                         <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
@@ -143,27 +134,24 @@ if (isset($_SESSION['user_id'])) {
                 <input type="text" class="form-control" id="nom_hebergement" name="nom_hebergement">
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <label for="type_hebergement" class="form-label">Type</label>
                 <select class="form-select" id="type_hebergement" name="type_hebergement">
-                <option disabled selected>Choisir un type</option>
-                <option value="camping">Camping</option>
-                <option value="gite">Gîte</option>
-                <option value="hotel">Hôtel</option>
-                <option value="chambre_hote">Chambre d’hôtes</option>
-                <option value="refuge">Refuge</option>
-                <option value="autre">Autre</option>
+                    <option disabled selected>Choisir un type</option>
+                    <option value="camping">Camping</option>
+                    <option value="gite">Gîte</option>
+                    <option value="hotel">Hôtel</option>
+                    <option value="chambre_hote">Chambre d’hôtes</option>
+                    <option value="refuge">Refuge</option>
+                    <option value="autre">Autre</option>
                 </select>
             </div>
 
-            <div class="col-md-2">
-                <label class="form-label">Latitude</label>
-                <input type="text" class="form-control" id="latitude_hebergement" name="latitude_hebergement">
-            </div>
-
-            <div class="col-md-2">
-                <label class="form-label">Longitude</label>
-                <input type="text" class="form-control" id="longitude_hebergement" name="longitude_hebergement">
+            <div class="col-md-3">
+                <label for="arret" class="form-label">Point d'arrêt</label>
+                <select name="arret" id="arret-list" class="form-select">
+                    <option disabled selected>Choisir un point d'arrêt</option>
+                </select>
             </div>
 
             <div class="col-md-1 d-flex align-items-end">
