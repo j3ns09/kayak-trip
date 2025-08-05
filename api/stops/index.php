@@ -9,18 +9,6 @@ include_once $root . '/includes/functions.php';
 
 header("Content-Type: application/json");
 
-if (isset($_SESSION['user_id'])) {
-    $key = getApiKey($pdo, $_SESSION['user_id']);
-
-    if (!$key) {
-        echo json_encode(["state" => "Erreur: Pas de clé pour l'API"]);
-        exit();
-    }
-} else {
-    echo json_encode(["state" => "Erreur: Utilisateur non connecté"]);
-    exit();
-}
-
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {

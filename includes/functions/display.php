@@ -40,4 +40,21 @@ function displayAlert(string $key, int $kind) {
     }
 }
 
+function displayToast(string $id, string $btspColor, string $title, string $time, string $message) {
+    echo '
+<div class="toast-container position-fixed top-0 end-0 p-3 my-4 ">
+  <div id="' . $id . '" class="toast text-bg-' . $btspColor . '" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-header">
+      <strong class="me-auto">' . $title . '</strong>
+      <small>' . $time . '</small>
+      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+    <div class="toast-body">
+      ' . $message . '
+    </div>
+  </div>
+</div>
+';
+}
+
 ?>

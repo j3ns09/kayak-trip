@@ -26,7 +26,7 @@ $isConnected = !is_null($userId);
         <div class="ms-auto mb-3 me-2">
             <?php if ($isConnected): ?>
                 <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">Bonjour, <span class="fw-bold"><?= strtoupper($userInfo['last_name']) . " " . $userInfo['first_name'] ?></span></p>
-                
+
             <?php else: ?>
                 <a href="login.php" class="btn btn-warning text-white fs-5">
                     <span class="fw-bolder">
@@ -51,97 +51,35 @@ $isConnected = !is_null($userId);
             
             <div class="col-6 row gx-5 ps-5">
                 <div class="col">
-                    <a href="compose.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
+                    <a href="build.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
                 </div>
                 <div class="col">
-                    <a href="#" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
+                    <a href="packs.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
                 </div>
             </div>
-
             <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
         </div>
     </div>
 </div>
 
+<?php include_once 'includes/templates/offcanvas.php'; ?>
 
+<?php
 
+if (isset($_SESSION['event'])) {
+    if ($_SESSION['event'] === 'logout') {
+        displayToast("logoutToast", "danger", "Déconnexion", "Maintenant", "Déconnexion réussie.");
+    } else if ($_SESSION['event'] === 'login') {
+        displayToast("loginToast", "success", "Connexion", "Maintenant", "Vous êtes maintenant connecté.");
+    }
+    
+    unset($_SESSION['event']);
+}
 
-<div class="offcanvas offcanvas-end bg-dark text-white" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
-    <div class="offcanvas-header border-bottom">
-        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Menu</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fermer"></button>
-    </div>
-
-    <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
-        <?php if ($isConnected): ?>
-            <div class="nav flex-column gap-3">
-                <a href="#" class="btn btn-outline-light fw-bold">
-                    <i class="bi bi-house-door-fill me-2"></i> Accueil
-                </a>
-                <a href="profile.php" class="btn btn-outline-light fw-bold">
-                    <i class="bi bi-person-fill me-2"></i> Profil
-                </a>
-
-                <?php if (isAdmin($pdo, $userId)): ?>
-                    <a href="admin/dashboard.php" class="btn btn-outline-light fw-bold">
-                        <i class="bi bi-person-fill-gear"></i> Espace Administrateur
-                    </a>
-                <?php endif; ?>
-                
-                <a href="packs.php" class="btn btn-outline-light fw-bold">
-                    <i class="bi bi-backpack2-fill"></i> Packs
-                </a>
-                <a href="build.php" class="btn btn-outline-light fw-bold">
-                    <i class="bi bi-signpost-2-fill"></i> Composer son itinéraire
-                </a>
-            </div>
-            
-            <div class="border-top pt-3 mt-4">
-                <a href="processes/user/access/logout_process.php" class="btn btn-danger w-100 fw-bold">
-                    <i class="bi bi-box-arrow-right me-2"></i> Se déconnecter
-                </a>
-            </div>
-
-            <?php else: ?>
-                <a href="admin/login.php" class="btn btn-warning text-dark fw-bold fs-5">
-                    <i class="bi bi-box-arrow-in-right me-2"></i> Connexion
-                </a>
-            <?php endif; ?>
-    </div>
-</div>
-
-<?php if (isset($_SESSION['event']) && $_SESSION['event'] === 'logout'): ?> 
-<div class="toast-container position-fixed top-0 end-0 p-3 my-4 ">
-  <div id="logoutToast" class="toast text-bg-danger" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <!-- <img src="..." class="rounded me-2" alt="..."> -->
-      <strong class="me-auto">Déconnexion</strong>
-      <small>Maintenant</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Déconnexion réussie.
-    </div>
-  </div>
-</div>
-<?php unset($_SESSION['event']); endif; ?>
-
-<?php if (isset($_SESSION['event']) && $_SESSION['event'] === 'login'): ?> 
-<div class="toast-container position-fixed top-0 end-0 p-3 my-4 ">
-  <div id="logoutToast" class="toast text-bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <!-- <img src="..." class="rounded me-2" alt="..."> -->
-      <strong class="me-auto">Connexion</strong>
-      <small>Maintenant</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Vous êtes maintenant connecté.
-    </div>
-  </div>
-</div>
-<?php unset($_SESSION['event']); endif; ?>
+?>
 
 <script type="module" src="/src/js/index/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
 
 <?php include_once "includes/templates/footer.php"; ?>

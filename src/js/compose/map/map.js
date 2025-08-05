@@ -3,7 +3,7 @@ let pointsToLoire = {};
 const stopMarkers = {};
 
 export function loadMap() {
-    map = L.map('map').setView([47.3, 0.7], 7);
+    map = L.map('map').setView([46.3, 4], 7);
     
     map.setMaxBounds([
         [43.8, -3.0],
@@ -91,15 +91,4 @@ export function loadMap() {
         });
     });
 
-}
-
-function getColor(type) {
-    switch (type) {
-        case 'etape':
-            return 'blue';
-        case 'embarquement':
-            return 'orange';
-        default:
-            return 'blue';
-    }
 }
