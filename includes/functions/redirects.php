@@ -5,9 +5,9 @@ function redirect(string $locationFromRoot) {
     exit();
 }
 
-function redirectAlert(string $alertName, string $errorMessage, string $location) {
+function redirectAlert(string $alertName, string $errorMessage, string $locationFromRoot) {
     $_SESSION[$alertName] = $errorMessage;
-    header("Location: /" . $location . ".php");
+    header("Location: /" . $locationFromRoot . ".php");
     exit();
 }
 

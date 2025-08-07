@@ -4,7 +4,11 @@ include_once 'includes/store.php';
 include_once 'includes/functions.php';
 include_once 'includes/templates/header.php';
 
-$formData = $_SESSION['form_data'];
+$formData = null;
+
+if (isset($_SESSION['form_data'])) {
+    $formData = $_SESSION['form_data'];
+}
 
 ?>
 
@@ -54,7 +58,9 @@ $formData = $_SESSION['form_data'];
 
 <?php 
 
-unset($_SESSION['form_data']);
+if ($formData) {
+    unset($_SESSION['form_data']);
+}
 include_once "includes/templates/footer.php";
 
 ?>
