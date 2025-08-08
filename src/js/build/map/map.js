@@ -31,7 +31,7 @@ export function loadMap() {
         fillOpacity: 0.8
     }
 
-    fetch("/src/js/compose/map/export_loire.geojson")
+    fetch("/src/js/build/map/export_loire.geojson")
         .then(response => {
             if (!response.ok) throw new Error("Erreur lors du chargement du GeoJSON");
             return response.json();

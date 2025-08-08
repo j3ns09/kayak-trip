@@ -16,7 +16,7 @@ $isConnected = !is_null($userId);
 $stops = getAllStops($pdo);
 ?>
 
-<link rel="stylesheet" href="/src/css/compose.css">
+<link rel="stylesheet" href="/src/css/build.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
 
 <nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
@@ -55,7 +55,8 @@ $stops = getAllStops($pdo);
                                     value="<?= htmlspecialchars($stop['id']) ?>"
                                     id="stop-<?= htmlspecialchars($stop['id']) ?>"
                                     data-lat="<?= htmlspecialchars($stop['latitude']) ?>"
-                                    data-lng="<?= htmlspecialchars($stop['longitude']) ?>">
+                                    data-lng="<?= htmlspecialchars($stop['longitude']) ?>"
+                                    data-name="<?= $stop['name'] ?>">
                                 <label class="form-check-label" for="stop-<?= htmlspecialchars($stop['id']) ?>">
                                     <?= htmlspecialchars($stop['name']) ?>
                                 </label>
@@ -79,19 +80,21 @@ $stops = getAllStops($pdo);
 
         <div id="route-summary" class="mb-3">
             <div class="container">
-                <div class="stepper">
+                <div id="stop-container" class="container row row-cols-6">
+                    <!-- stepper invisible
                     <div class="d-flex flex-column align-items-center">
-                        <div class="step completed">1</div>
-                        <div class="step-label">Étape 1</div>
-                    </div>
-                        <div class="d-flex flex-column align-items-center">
+                        <div class="step-label mb-2">Départ</div>
+                        <div class="step completed"><i class="bi bi-flag"></i></div>
+                        <div class="step-label mb-2"></div>
+                    </div> -->
+                    <!-- <div class="d-flex flex-column align-items-center">
                         <div class="step active">2</div>
-                    <div class="step-label">Étape 2</div>
+                        <div class="step-label">Étape 2</div>
                     </div>
                     <div class="d-flex flex-column align-items-center">
-                        <div class="step">3</div>
-                        <div class="step-label">Étape 3</div>
-                    </div>
+                        <div class="step"><i class="bi bi-geo-alt"></i></div>
+                        <div class="step-label">Arrivée</div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -124,7 +127,7 @@ if (isset($_SESSION['event'])) {
 
 ?>
 
-<script type="module" src="/src/js/compose/main.js"></script>
+<script type="module" src="/src/js/build/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

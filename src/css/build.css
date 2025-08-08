@@ -89,4 +89,5 @@ body, html {
     margin-top: 1rem;
     height: 36rem;
     width: 68rem;
+    border-radius: 10px;
 }
