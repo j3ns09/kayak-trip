@@ -3,7 +3,7 @@ let pointsToLoire = {};
 const stopMarkers = {};
 
 export function loadMap() {
-    map = L.map('map').setView([46.3, 4], 7);
+    let map = L.map('map').setView([46.3, 4], 7);
     
     map.setMaxBounds([
         [43.8, -3.0],

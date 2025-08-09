@@ -104,8 +104,25 @@ $stops = getAllStops($pdo);
             <p><strong>Temps estimé :</strong> <span id="estimated-time">0h00</span></p>
         </div>
 
+        <div id="params" class="mb-3">
+            <div class="row">
+                <div class="col row">
+                    <div id="checkbox-bagage" class="checkbox-wrapper-63 col">
+                        <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                        </label>
+                    </div>
+                    <label for="checkbox-bagage" class="form-text col text-white">Morad</label>
+                </div>
+                <div class="col">
+                    <input id="travel-time" type="text" class="form-control">
+                </div>
+            </div>
+
+        </div>
+
         <div class="d-flex gap-2">
-            <button id="edit-route" class="btn btn-warning">Modifier l’itinéraire</button>
             <button id="finalize-route" class="btn btn-primary">Finaliser</button>
         </div>
     </div>

@@ -44,39 +44,31 @@ export function loadRoadMap() {
         const checkbox = e.target;
 
         if (checkbox.type !== 'checkbox') return;
-        
+
         const stopName = checkbox.dataset.name;
         const stopId = `step-${stopName}`;
 
         if (checkbox.checked) {
             let stop = {
                 name: stopName,
-                lat: checkbox.dataset.lat,
-                lng: checkbox.dataset.lng
+                lat: parseFloat(checkbox.dataset.lat),
+                lng: parseFloat(checkbox.dataset.lng)
             };
 
             if (!road.some((step) => step.name === stopName)) {
                 road.push(stop);
+
                 let newStepIndex = road.length - 1;
-                let newStep;
-                if (newStepIndex === 0) {
-                    newStep = stepGenerator(stopId, stopName, 'Départ', 'completed', 1);
-                } else {
-                    newStep = stepGenerator(stopId, stopName, road.length - 1, '', 1);
-                }
+                let newStep = stepGenerator(
+                    stopId,
+                    stopName,
+                    newStepIndex === 0 ? 'Départ' : newStepIndex,
+                    newStepIndex === 0 ? 'completed' : '',
+                    1
+                );
+
                 stopContainer.innerHTML += newStep;
             }
-
-            if (road.length > 1) {
-                let s1 = road[road.length - 1];
-                let s2 = road[road.length - 2];
-
-                let d = haversine(s1.lat, s1.lng, s2.lat, s2.lng);
-                console.log(d);
-                distances.push(d);
-                totalDistance.innerHTML = distances.reduce((a, b) => a + b) + " km";
-            }
-
 
         } else {
             road = road.filter(step => step.name !== stopName);
@@ -84,6 +76,18 @@ export function loadRoadMap() {
             const stepDiv = document.getElementById(`step-${stopName}`);
             if (stepDiv) stepDiv.remove();
         }
+
+        distances = [];
+        for (let i = 1; i < road.length; i++) {
+            let d = haversine(
+                road[i - 1].lat, road[i - 1].lng,
+                road[i].lat, road[i].lng
+            );
+            distances.push(d);
+        }
+
+        const total = distances.reduce((a, b) => a + b, 0);
+        totalDistance.innerHTML = total.toFixed(2) + " km";
     });
 }
 
