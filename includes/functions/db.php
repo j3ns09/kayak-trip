@@ -41,6 +41,24 @@ function setStopNewValues(
     return $stmt->execute();
 }
 
+function setServiceNewValues(
+    PDO $pdo,
+    int $id,
+    string $name,
+    string $description,
+    float $price
+)
+{
+    $stmt = $pdo->prepare("UPDATE services SET name = :name, description = :description, price = :price WHERE id = :id");
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+    $stmt->bindParam(':price', $price);
+
+    return $stmt->execute();
+}
+
 function getUserId(PDO $pdo, string $email) {
     $r = $pdo->prepare("SELECT id FROM users WHERE email = :email");
     $r->bindParam(':email', $email, PDO::PARAM_STR);
