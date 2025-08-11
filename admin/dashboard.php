@@ -254,7 +254,7 @@ if (isset($_SESSION['user_id'])) {
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="servicesShowing">
                 <tr>
                     <td>1</td>
                     <td>Transport de bagages</td>

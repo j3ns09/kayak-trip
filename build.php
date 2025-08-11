@@ -1,4 +1,5 @@
 <?php
+
 include_once 'includes/store.php';
 include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
@@ -102,28 +103,53 @@ $stops = getAllStops($pdo);
         <div id="route-details" class="mb-3">
             <p><strong>Distance totale :</strong> <span id="total-distance">0 km</span></p>
             <p><strong>Temps estimé :</strong> <span id="estimated-time">0h00</span></p>
+            <input id="estimated-time-input" type="hidden" value="">
         </div>
 
         <div id="params" class="mb-3">
             <div class="row">
-                <div class="col row">
-                    <div id="checkbox-bagage" class="checkbox-wrapper-63 col">
+                <div class="col mb-3">
+                    <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
+                    <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
+                </div>
+                <div class="col mb-3">
+                    <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
+                    <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col d-flex align-items-center gap-2">
+                    <div id="checkbox-bagage" class="checkbox-wrapper-63">
+                        <span for="checkbox-bagage" class="form-label fw-bold text-white pe-3">Transport des bagages:</span>
                         <label class="switch">
-                        <input type="checkbox">
+                        <input type="checkbox" id="chk-bag">
                         <span class="slider"></span>
                         </label>
                     </div>
-                    <label for="checkbox-bagage" class="form-text col text-white">Morad</label>
                 </div>
-                <div class="col">
-                    <input id="travel-time" type="text" class="form-control">
+                <div class="col d-flex align-items-center gap-2">
+                    <div id="checkbox-food" class="checkbox-wrapper-63">
+                        <span for="checkbox-food" class="form-label fw-bold text-white pe-3">Paniers garnis:</span>
+                        <label class="switch">
+                        <input type="checkbox" id="chk-fd">
+                        <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="col d-flex align-items-center gap-2">
+                    <div id="checkbox-location" class="checkbox-wrapper-63">
+                        <span for="checkbox-location" class="form-label fw-bold text-white pe-3">Location de matériel:</span>
+                        <label class="switch">
+                        <input type="checkbox" id="chk-loc">
+                        <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
             </div>
-
         </div>
 
         <div class="d-flex gap-2">
-            <button id="finalize-route" class="btn btn-primary">Finaliser</button>
+            <button id="finalize-route" class="btn btn-success">Valider</button>
         </div>
     </div>
 </div>

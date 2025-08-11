@@ -12,28 +12,23 @@ header("Content-Type: application/json");
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {
-    $input = json_decode(file_get_contents('php://input'), true);
-    $type = trim($input['type'] ?? '');
-    
-    if (empty($type)) {
-        $stops = getAllStops($pdo);
-    }
+    $services = getAllServices($pdo);
 
-    if (!$stops) {
-        echo json_encode(["state" => "Pas de point d'arrêt ou mauvaise réponse", "response" => $stops]);
+    if (!$services) {
+        echo json_encode(["state" => "Pas de services ou mauvaise réponse", "response" => $services]);
         exit();
     }
 
     if (isset($_SESSION['user_id'])) {
         echo json_encode([
             "waiter" => $_SESSION['user_id'],
-            "stops" => $stops
+            "services" => $services
         ]);
         exit();
     }
     
     echo json_encode([
-            "stops" => $stops
+            "services" => $services
         ]);
 }
 

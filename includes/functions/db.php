@@ -139,6 +139,11 @@ function getAllPromotions(PDO $pdo) {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getAllServices(PDO $pdo) {
+    $r = $pdo->query("SELECT id, name, description, price, is_active FROM services");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function createUser(
     PDO $pdo,
     string $name,
@@ -206,7 +211,7 @@ function createStop(
 }
 
 function createThread(PDO $pdo, int $userId) {
-    $sql = " INSERT INTO chat_threads (user_id) VALUES (:user_id)";
+    $sql = "INSERT INTO chat_threads (user_id) VALUES (:user_id)";
     $stmt = $pdo->prepare($sql);
 
     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
@@ -235,9 +240,31 @@ function createMessage(
     return $stmt->execute();
 }
 
+function createService(
+    PDO $pdo,
+    string $name,
+    string $description,
+    float $price
+)
+{
+    $stmt = $pdo->prepare("INSERT INTO services (name, description, price) VALUES (:name, :description, :price)");
+    
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+    $stmt->bindParam(':price', $price);
+
+    return $stmt->execute();
+}
+
 function deleteStop(PDO $pdo, int $stopId) {
     $stmt = $pdo->prepare("DELETE FROM stops WHERE id = :id");
     $stmt->bindParam(':id', $stopId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+function deleteService(PDO $pdo, int $serviceId) {
+    $stmt = $pdo->prepare("DELETE FROM services WHERE id = :id");
+    $stmt->bindParam(':id', $serviceId, PDO::PARAM_INT);
     return $stmt->execute();
 }
 ?>

@@ -15,8 +15,12 @@ const icons = [
     '<i class="bi bi-geo-alt"></i>'
 ];
 
+const speed = 4;
+
 const stopContainer = document.getElementById('stop-container');
 const totalDistance = document.getElementById('total-distance');
+const estimatedHtml = document.getElementById('estimated-time');
+const estimatedInput = document.getElementById('estimated-time-input');
 const checkboxesContainer = document.getElementById('route-form');
 
 function stepGenerator(id, name, stop, status, iconIndex) {
@@ -88,6 +92,10 @@ export function loadRoadMap() {
 
         const total = distances.reduce((a, b) => a + b, 0);
         totalDistance.innerHTML = total.toFixed(2) + " km";
+
+        const hm = totalTime(total);
+        estimatedHtml.innerHTML = hm.hours + 'h' + hm.minutes;
+        estimatedInput.value = JSON.stringify(hm);
     });
 }
 
@@ -110,4 +118,10 @@ function haversine(lat1, lon1, lat2, lon2) {
     const distance = R * c;
 
     return distance;
+}
+
+function totalTime(distance) {
+    const timeHours = distance / speed;
+    const hours = Math.floor(timeHours);
+    return { hours: Math.floor(timeHours), minutes: Math.round((timeHours - hours) * 60) };
 }
