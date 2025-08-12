@@ -22,7 +22,7 @@ export async function loadDiscounts() {
         tr.innerHTML = `
             <td>${no}</td>
             <td>${code}</td>
-            <td>${start} - ${end}</td>
+            <td>${start ? start + " - " + end : "Indéfinie"}</td>
             <td>${description}</td>
             <td>${reduction} %</td>
             <td>${firstTimeOnly == 1 ? "Oui" : "Non"}</td>
@@ -79,7 +79,7 @@ function generateEditModal(code, discount) {
                 <input type="hidden" name="code" value="${code}">
                 <div class="mb-3">
                     <label class="form-label">Code</label>
-                    <input name="code" class="form-control" value="${discount.code}" disabled />
+                    <input name="code" class="form-control" value="${discount.code}" />
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Date de début</label>

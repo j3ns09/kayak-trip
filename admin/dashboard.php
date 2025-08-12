@@ -30,9 +30,9 @@ if (isset($_SESSION['user_id'])) {
     <a href="#utilisateurs" class="active"><i class="bi bi-person"></i> Utilisateurs</a>
     <a href="#etapes"><i class="bi bi-geo-alt"></i> Points d’arrêt</a>
     <a href="#hebergements"><i class="bi bi-house-door"></i> Hébergements</a>
+    <a href="#packs"><i class="bi bi-backpack2"></i> Packs</a>
     <a href="#promos"><i class="bi bi-percent"></i> Promotions</a>
     <a href="#services"><i class="bi bi-tools"></i> Services</a>
-    <a href="#tarifs"><i class="bi bi-calendar2-week"></i> Tarifs saisonniers</a>
     <a href="#messagerie"><i class="bi bi-envelope"></i> Messagerie</a>
     <a href="#newsletter"><i class="bi bi-newspaper"></i> Newsletter</a>
 </div>
@@ -174,7 +174,7 @@ if (isset($_SESSION['user_id'])) {
                     <th>Nom</th>
                     <th>Nombre de chambres</th>
                     <th>Point d’arrêt</th>
-                    <th>Capacité totale</th>
+                    <th>Description</th>
                     <th>Prix moyen</th>
                     <th>Disponibilités</th>
                     <th>Actions</th>
@@ -184,6 +184,49 @@ if (isset($_SESSION['user_id'])) {
             </tbody>
         </table>
         <ul id="accommodations-pagination" class="pagination justify-content-center"></ul>
+    </div>
+
+    <div id="packs" class="section">
+        <h2>Packs</h2>
+        <form class="row g-3" action="POST" action="/processes/packs/add_pack_process.php">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="pack-nom" class="form-label">Nom du pack</label>
+                    <input type="text" name="name" id="pack-nom" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="pack-duree" class="form-label">Durée</label>
+                    <input type="number" name="duration" id="pack-duree" class="form-control" min="1" max="10">
+                </div>
+                <div class="col-md-3">
+                    <label for="pack-description" class="form-label">Description</label>
+                    <input type="text" name="description" id="pack-description" class="form-control">
+                </div>
+                <div class="col-md-3">
+                    <label for="pack-prix" class="form-label">Prix</label>
+                    <input type="number" name="price" id="pack-prix" class="form-control" min="0" max="1000" placeholder="Prix en euros...">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                </div>
+            </div>
+        </form>
+        <table class="table table-dark table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Durée</th>
+                    <th>Description</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="packsShowing">
+            </tbody>
+        </table>
     </div>
 
     <div id="promos" class="section">
@@ -283,28 +326,6 @@ if (isset($_SESSION['user_id'])) {
             </tbody>
         </table>
     </div>
-
-    <div id="tarifs" class="section">
-        <h2>Tarification saisonnière</h2>
-        <form class="row g-3">
-            <div class="col-md-4">
-                <label>Du</label>
-                <input type="date" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Au</label>
-                <input type="date" class="form-control">
-            </div>
-            <div class="col-md-4">
-                <label>Tarif (€)</label>
-                <input type="number" class="form-control">
-            </div>
-            <div class="col-12 d-flex justify-content-end">
-                <button type="submit" class="btn btn-success">Appliquer</button>
-            </div>
-        </form>
-    </div>
-
 
     <div id="messagerie" class="section">
         <h2>Messagerie commerciale</h2>
