@@ -1,18 +1,33 @@
+let stopsData = [];
+let currentPage = 1;
+const itemsPerPage = 10;
+
+
 export async function loadStops() {
-    const response = await fetch("/api/stops/", {
-            method: 'GET'
-    });
-    
-    const stopsSelect = document.getElementById("arret-list");
-    const tbody = document.querySelector('#stopsShowing');
+    const response = await fetch("/api/stops/", { method: 'GET' });
 
     const data = await response.json();
-    const stops = data.stops;
-    const userIdSession = data.waiter;
-    let no = 1;
+    stopsData = data.stops;
 
-    for (const stop of stops) {
-        const id = stop.id
+    renderPage(1);
+    renderPagination();
+}
+
+function renderPage(page) {
+    currentPage = page;
+    const tbody = document.querySelector('#stopsShowing');
+    const stopsSelect = document.getElementById("arret-list");
+
+    tbody.innerHTML = "";
+    stopsSelect.innerHTML = "";
+
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const pageStops = stopsData.slice(start, end);
+
+    let no = start + 1;
+    for (const stop of pageStops) {
+        const id = stop.id;
         const name = stop.name;
         const lat = stop.latitude;
         const lng = stop.longitude;
@@ -20,11 +35,9 @@ export async function loadStops() {
 
         const option = document.createElement('option');
         option.value = id;
-        option.innerHTML = `
-            ${name}
-        `;
+        option.innerHTML = `${name}`;
         stopsSelect.appendChild(option);
-        
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${no}</td>
@@ -39,9 +52,7 @@ export async function loadStops() {
 
                 ${generateDeleteModal(id)}
                 ${generateEditModal(id, stop)}
-
             </td>`;
-                
         tbody.appendChild(tr);
 
         const viewButton = tr.querySelector('.view-stop');
@@ -49,17 +60,52 @@ export async function loadStops() {
             document.getElementById('map').scrollIntoView({ behavior: 'smooth', block: 'start' });
             const lat = parseFloat(viewButton.dataset.lat);
             const lng = parseFloat(viewButton.dataset.lng);
-
             if (!isNaN(lat) && !isNaN(lng)) {
-                map.flyTo([lat, lng], 14, {
-                    animate: true,
-                    duration: 1
-                });
+                map.flyTo([lat, lng], 14, { animate: true, duration: 1 });
             }
         });
-        
+
         no++;
     }
+}
+
+function renderPagination() {
+    const totalPages = Math.ceil(stopsData.length / itemsPerPage);
+    const pagination = document.getElementById("step-pagination");
+    pagination.innerHTML = "";
+
+    const prevLi = document.createElement("li");
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<button class="page-link" aria-label="Previous"><i class="bi bi-arrow-left-circle"></i></button>`;
+    prevLi.addEventListener("click", () => {
+        if (currentPage > 1) {
+            renderPage(currentPage - 1);
+            renderPagination();
+        }
+    });
+    pagination.appendChild(prevLi);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement("li");
+        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        li.innerHTML = `<button class="page-link">${i}</button>`;
+        li.addEventListener("click", () => {
+            renderPage(i);
+            renderPagination();
+        });
+        pagination.appendChild(li);
+    }
+
+    const nextLi = document.createElement("li");
+    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<button class="page-link" aria-label="Next"><i class="bi bi-arrow-right-circle"></i></button>`;
+    nextLi.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            renderPage(currentPage + 1);
+            renderPagination();
+        }
+    });
+    pagination.appendChild(nextLi);
 }
 
 function generateDeleteModal(id) {

@@ -109,21 +109,11 @@ if (isset($_SESSION['user_id'])) {
                 </tr>
             </thead>
             <tbody id="stopsShowing">
-                <tr>
-                    <td>1</td>
-                    <td>Ancenis</td>
-                    <td>47.366259</td>
-                    <td>-1.16807</td>
-                    <td>Etape</td>
-                    <td>
-                        <button class="btn btn-sm btn-info"><i class="bi bi-eye"></i></button>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
             </tbody>
         </table>
-
+        <nav>
+            <ul id="step-pagination" class="pagination justify-content-center"></ul>
+        </nav>
     </div>
 
     <div id="hebergements" class="section">
@@ -193,6 +183,7 @@ if (isset($_SESSION['user_id'])) {
             <tbody id="accommodationsShowing">
             </tbody>
         </table>
+        <ul id="accommodations-pagination" class="pagination justify-content-center"></ul>
     </div>
 
     <div id="promos" class="section">

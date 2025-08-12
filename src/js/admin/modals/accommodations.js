@@ -1,12 +1,31 @@
+let accommodationsData = [];
+let currentPage = 1;
+const itemsPerPage = 10;
+
 export async function loadAccommodations() {
     const response = await fetch("/api/accommodations/", {
         method: 'GET'
     });
 
-    const tbody = document.querySelector('#accommodationsShowing');
     const data = await response.json();
-    const accommodations = data.accommodations;
-    let no = 1;
+    accommodationsData = data.accommodations;
+
+    renderPage(1);
+    renderPagination();
+}
+
+
+function renderPage(page) {
+    currentPage = page;
+    const tbody = document.querySelector('#accommodationsShowing');
+
+    tbody.innerHTML = "";
+
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const accommodations = accommodationsData.slice(start, end);
+
+    let no = start + 1;
 
     for (const accom of accommodations) {
         const tr = document.createElement('tr');
@@ -16,7 +35,7 @@ export async function loadAccommodations() {
             <td>${accom.name}</td>
             <td>${accom.nb_chambres} chambres</td>
             <td>${accom.stop_name}</td>
-            <td>${capitalize(accom.description)}</td>
+            <td>${accom.description}</td>
             <td>${accom.base_price_per_night} €/nuit</td>
             <td>
                 ${accom.dates_fermeture ? `Fermé : ${accom.dates_fermeture}` : '<span class="text-success">Ouvert</span>'}
@@ -33,6 +52,45 @@ export async function loadAccommodations() {
         tbody.appendChild(tr);
         no++;
     }
+}
+
+function renderPagination() {
+    const totalPages = Math.ceil(accommodationsData.length / itemsPerPage);
+    const pagination = document.getElementById("accommodations-pagination");
+    pagination.innerHTML = "";
+
+    const prevLi = document.createElement("li");
+    prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+    prevLi.innerHTML = `<button class="page-link" aria-label="Previous"><i class="bi bi-arrow-left-circle"></i></button>`;
+    prevLi.addEventListener("click", () => {
+        if (currentPage > 1) {
+            renderPage(currentPage - 1);
+            renderPagination();
+        }
+    });
+    pagination.appendChild(prevLi);
+
+    for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement("li");
+        li.className = `page-item ${i === currentPage ? 'active' : ''}`;
+        li.innerHTML = `<button class="page-link">${i}</button>`;
+        li.addEventListener("click", () => {
+            renderPage(i);
+            renderPagination();
+        });
+        pagination.appendChild(li);
+    }
+
+    const nextLi = document.createElement("li");
+    nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+    nextLi.innerHTML = `<button class="page-link" aria-label="Next"><i class="bi bi-arrow-right-circle"></i></button>`;
+    nextLi.addEventListener("click", () => {
+        if (currentPage < totalPages) {
+            renderPage(currentPage + 1);
+            renderPagination();
+        }
+    });
+    pagination.appendChild(nextLi);
 }
 
 function generateDeleteModal(id) {
