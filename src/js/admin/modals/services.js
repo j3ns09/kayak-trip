@@ -1,4 +1,4 @@
-export async function loadStops() {
+export async function loadServices() {
     const response = await fetch("/api/services/", {
             method: 'GET'
     });
@@ -6,7 +6,7 @@ export async function loadStops() {
     const tbody = document.querySelector('#servicesShowing');
 
     const data = await response.json();
-    const services = data.stops;
+    const services = data.services;
     const userIdSession = data.waiter;
     let no = 1;
 
@@ -22,7 +22,7 @@ export async function loadStops() {
             <td>${no}</td>
             <td>${name}</td>
             <td>${description}</td>
-            <td>${price}</td>
+            <td>${price} €</td>
             <td>
                 <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editService${id}"><i class="bi bi-pencil"></i></button>
                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteService${id}"><i class="bi bi-trash"></i></button>
@@ -67,7 +67,7 @@ function generateEditModal(id, service) {
     <div class="modal fade" id="editService${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="/processes/services/edit_stop_process.php">
+            <form method="POST" action="/processes/services/edit_service_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Modifier un service</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>

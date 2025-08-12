@@ -5,14 +5,20 @@ include_once $_SERVER["DOCUMENT_ROOT"] . '/includes/functions.php';
 include_once $_SERVER["DOCUMENT_ROOT"] . '/includes/config/config.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $name = filter_input(INPUT_POST, "name", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $code = filter_input(INPUT_POST, "code", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $date_start = filter_input(INPUT_POST, "discount-start", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $date_end = filter_input(INPUT_POST, "discount-end", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-    $price = filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT);
+    $reduction = filter_input(INPUT_POST, "reduction", FILTER_VALIDATE_INT);
+    $unique_use = filter_input(INPUT_POST, "discount-use", FILTER_VALIDATE_INT);
 
     $data = [
-        'name' => $name,
+        'code' => $code,
+        'date_start' => $date_start,
+        'date_end' => $date_end,
         'description' => $description,
-        'price' => $price,
+        'reduction' => $reduction,
+        'unique_use' => $unique_use,
     ];
 
     $_SESSION['form_data'] = $data;
@@ -26,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unset($_SESSION['form_data']);
 
-    createService($pdo, $name, $description, $price);
+    createDiscount($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
 }
 
 redirect("admin/dashboard");

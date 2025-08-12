@@ -65,7 +65,6 @@ $stops = getAllStops($pdo);
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-success w-100">Valider mon itinéraire</button>
             </form>
         </div>
 
@@ -108,15 +107,28 @@ $stops = getAllStops($pdo);
 
         <div id="params" class="mb-3">
             <div class="row">
-                <div class="col mb-3">
+                <!-- <div class="col mb-3">
                     <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
                     <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
-                </div>
-                <div class="col mb-3">
+                </div> -->
+                <div class="col-3 mb-3">
                     <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
                     <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants">
                 </div>
             </div>
+            <div class="row">
+                <label class="form-label fw-bold">Dates du voyage</label>
+                <div class="col-3">
+                    <input type="date" id="travel-start" class="form-control">
+                    <div id="travel-start-label" class="form-text text-white">Date de début</div>
+                </div>
+
+                <div class="col-3">
+                    <input type="date" id="travel-end" class="form-control">
+                    <div id="travel-end-label" class="form-text text-white">Date de fin</div>
+                </div>
+            </div>
+
             <div class="row">
                 <div class="col d-flex align-items-center gap-2">
                     <div id="checkbox-bagage" class="checkbox-wrapper-63">

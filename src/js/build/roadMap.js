@@ -94,8 +94,9 @@ export function loadRoadMap() {
         totalDistance.innerHTML = total.toFixed(2) + " km";
 
         const hm = totalTime(total);
-        estimatedHtml.innerHTML = hm.hours + 'h' + hm.minutes;
-        estimatedInput.value = JSON.stringify(hm);
+        const nbDays = Math.ceil(hm.hours / 24)
+        estimatedHtml.innerHTML = hm.hours + 'h' + hm.minutes + ' (' + nbDays + ' jours minimum)';
+        estimatedInput.value = nbDays;
     });
 }
 

@@ -1,6 +1,8 @@
 import { loadUsers } from "./modals/users.js";
 import { loadStops } from "./modals/stops.js";
 import { loadAccommodations } from "./modals/accommodations.js";
+import { loadServices } from "./modals/services.js";
+import { loadDiscounts, today } from "./modals/promotions.js";
 import { loadMap } from "./map/map.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -15,7 +17,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     await loadUsers();
     await loadAccommodations();
-    
+    await loadServices();
+    await loadDiscounts();
+
     let map;
     await loadStops();
     
@@ -23,4 +27,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
     
     loadMap();
+
+    setMinDate();
 });
+
+function setMinDate() {
+    const discountStart = document.getElementById('discount-start');
+    const discountEnd = document.getElementById('discount-end');
+
+    discountStart.setAttribute('min', today());
+    discountEnd.setAttribute('min', today());
+}

@@ -29,25 +29,7 @@ if (isset($_SESSION['cart_items'])) {
 
 <link rel="stylesheet" href="/src/css/home.css">
 
-<nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
-    <div class="container-fluid">
-        <a class="navbar-brand ms-3 fs-2 title" href="/"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
-        <div class="ms-auto mb-3 me-2">
-            <?php if ($isConnected): ?>
-                <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">
-                    Bonjour, <span class="fw-bold"><?= strtoupper($userInfo['last_name']) . " " . $userInfo['first_name'] ?></span>
-                </p>
-            <?php else: ?>
-                <a href="login.php" class="btn btn-warning text-white fs-5 fw-bold">
-                    Se connecter
-                </a>
-            <?php endif; ?>
-        </div>
-        <button class="navbar-toggler mb-3" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</nav>
+<?php include_once 'includes/templates/navbar.php'; ?>
 
 <div class="container" style="padding-top: 8rem; color: white;">
     <h1 class="mb-4">Votre panier</h1>
@@ -70,10 +52,13 @@ if (isset($_SESSION['cart_items'])) {
                 <p><strong>Repas :</strong> <?= $cart['food'] ? "Oui" : "Non" ?></p>
                 <p><strong>Location de matériel :</strong> <?= $cart['location'] ? "Oui" : "Non" ?></p>
             </div>
+
+            <div class="card-footer">
+                <a href="checkout.php" class="btn btn-success me-3">Procéder au paiement</a>
+                <a href="build.php" class="btn btn-secondary">Modifier mon itinéraire</a>
+            </div>
         </div>
 
-        <a href="checkout.php" class="btn btn-success me-3">Procéder au paiement</a>
-        <a href="build.php" class="btn btn-secondary">Modifier mon itinéraire</a>
     <?php endif; ?>
 </div>
 
@@ -82,8 +67,9 @@ if (isset($_SESSION['cart_items'])) {
 
 <?php
 
+include_once 'includes/templates/offcanvas.php';
 include_once 'includes/templates/footer.php';
 
-if (!$isCartEmpty) unset($_SESSION['cart_items']);
+// if (!$isCartEmpty) unset($_SESSION['cart_items']);
 
 ?>

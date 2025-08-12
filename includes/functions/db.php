@@ -59,6 +59,28 @@ function setServiceNewValues(
     return $stmt->execute();
 }
 
+function setDiscountNewValues(
+    PDO $pdo,
+    string $code,
+    string $dateStart,
+    string $dateEnd,
+    string $description,
+    int $reduction,
+    int $uniqueUse
+)
+{
+    $stmt = $pdo->prepare("UPDATE promotions SET code = :code, valid_from = :dateStart, valid_to = :dateEnd, description = :description, discount_value = :reduction, first_time_only = :uniqueUse");
+
+    $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+    $stmt->bindParam(':dateStart', $dateStart, PDO::PARAM_STR);
+    $stmt->bindParam(':dateEnd', $dateEnd, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+    $stmt->bindParam(':reduction', $reduction, PDO::PARAM_INT);
+    $stmt->bindParam(':uniqueUse', $uniqueUse, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+
 function getUserId(PDO $pdo, string $email) {
     $r = $pdo->prepare("SELECT id FROM users WHERE email = :email");
     $r->bindParam(':email', $email, PDO::PARAM_STR);
@@ -153,13 +175,22 @@ function getThreadState(PDO $pdo, int $threadId) {
 }
 
 function getAllPromotions(PDO $pdo) {
-    $r = $pdo->query("SELECT code, description, discount_type, discount_value, valid_from, valid_to, first_time_only FROM promotions");
+    $r = $pdo->query("SELECT code, description, discount_value, valid_from, valid_to, first_time_only FROM promotions");
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getAllServices(PDO $pdo) {
     $r = $pdo->query("SELECT id, name, description, price, is_active FROM services");
     return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// TODO: Terminer sql
+function getOrders(PDO $pdo, int $userId) {
+    $sql = "
+    SELECT 
+        booking.id
+
+    ";
 }
 
 function createUser(
@@ -274,6 +305,30 @@ function createService(
     return $stmt->execute();
 }
 
+function createDiscount(
+    PDO $pdo,
+    string $code,
+    string $dateStart,
+    string $dateEnd,
+    string $description,
+    int $reduction,
+    int $unique
+)
+{
+    $stmt = $pdo->prepare("
+    INSERT INTO promotions (code, valid_from, valid_to, description, discount_value, first_time_only) 
+    VALUES (:code, :valid_from, :valid_to, :description, :discount_value, :first_time_only)");
+    
+    $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+    $stmt->bindParam(':valid_from', $dateStart, PDO::PARAM_STR);
+    $stmt->bindParam(':valid_to', $dateEnd, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+    $stmt->bindParam(':discount_value', $reduction, PDO::PARAM_INT);
+    $stmt->bindParam(':first_time_only', $unique, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+
 function deleteStop(PDO $pdo, int $stopId) {
     $stmt = $pdo->prepare("DELETE FROM stops WHERE id = :id");
     $stmt->bindParam(':id', $stopId, PDO::PARAM_INT);
@@ -285,4 +340,11 @@ function deleteService(PDO $pdo, int $serviceId) {
     $stmt->bindParam(':id', $serviceId, PDO::PARAM_INT);
     return $stmt->execute();
 }
+
+function deleteDiscount(PDO $pdo, string $code) {
+    $stmt = $pdo->prepare("DELETE FROM promotions WHERE code = :code");
+    $stmt->bindParam(':code', $code, PDO::PARAM_STR);
+    return $stmt->execute();
+}
+
 ?>

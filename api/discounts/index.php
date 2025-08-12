@@ -12,16 +12,16 @@ header("Content-Type: application/json");
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {    
-    $promotions = getAllPromotions($pdo);
+    $discounts = getAllPromotions($pdo);
 
-    if (!$promotions) {
-        echo json_encode(["state" => "Pas de promotions ou mauvaise réponse", "response" => $promotions]);
+    if (!$discounts) {
+        echo json_encode(["state" => "Pas de promotions ou mauvaise réponse", "response" => $discounts, "discounts" => ""]);
         exit();
     }
 
     echo json_encode([
         "waiter" => $_SESSION['user_id'],
-        "promotions" => $promotions
+        "discounts" => $discounts
     ]);
 }
 

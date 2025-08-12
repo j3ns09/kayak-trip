@@ -79,8 +79,8 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
             <div class="col-md-2">
-                <label for="description" class="form-label">Type</label>
-                <select name="description" id="description" class="form-select">
+                <label for="step-description" class="form-label">Type</label>
+                <select name="description" id="step-description" class="form-select">
                     <option value="" disabled selected>Choisir un type</option>
                     <option value="embarquement">Point d'embarquement</option>
                     <option value="etape">Aire de repos / étape</option>
@@ -161,8 +161,8 @@ if (isset($_SESSION['user_id'])) {
             </div>
 
             <div class="col-md-12">
-                <label for="description" class="form-label">Description</label>
-                <textarea class="form-control" name="description" rows="2" required></textarea>
+                <label for="acc-description" class="form-label">Description</label>
+                <textarea id="acc-description" class="form-control" name="description" rows="2" required></textarea>
             </div>
 
             <div class="col-md-12">
@@ -197,17 +197,46 @@ if (isset($_SESSION['user_id'])) {
 
     <div id="promos" class="section">
         <h2>Promotions</h2>
-        <form class="row g-3">
-            <div class="col-md-4">
-                <label>Période</label>
-                <input type="date" class="form-control">
+        <form class="row g-3" method="POST" action="/processes/discounts/add_discount_process.php">
+            <div class="row mb-3">
+                <div class="col-md-2">
+                    <label for="promo-code" class="form-label">Code de promotion</label>
+                    <input type="text" id="promo-code" class="form-control" name="code" placeholder="Ex: FIRSTKAYAK10...">
+                </div>
+                <div class="col-md-3">
+                    <label for="promo-description" class="form-label">Description</label>
+                    <input type="text" id="promo-description" name="description" class="form-control" placeholder="Description de la promotion...">
+                </div>
+                <div class="col-md-2">
+                    <label for="reduction" class="form-label">Remise (%)</label>
+                    <input id="reduction" name="reduction" type="number" class="form-control" placeholder="Ex: 15, 40">
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <div class="form-check mb-0">
+                        <input type="checkbox" class="form-check-input" id="discount-use" name="discount-use" value="1">
+                        <label for="discount-use" class="form-check-label">Utilisation unique</label>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4">
-                <label>Remise (%)</label>
-                <input type="number" class="form-control">
+            <div class="row col-md-6 mb-3">
+                <div class="col">
+                    <label for="dates-promos" class="form-label">Période</label>
+                    <div id="dates-promos" class="row g-2">
+                        <div class="col-6">
+                            <input id="discount-start" name="discount-start" type="date" class="form-control">
+                            <div class="form-text text-white">Date de début</div>
+                        </div>
+                        <div class="col-6">
+                            <input id="discount-end" name="discount-end" type="date" class="form-control">
+                            <div class="form-text text-white">Date de fin</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-success">Appliquer</button>
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                </div>
             </div>
         </form>
         <div class="mt-3">
@@ -216,33 +245,37 @@ if (isset($_SESSION['user_id'])) {
         <table class="table table-dark table-striped mt-4">
             <thead>
                 <tr>
+                    <th>#</th>
+                    <th>Code</th>
                     <th>Période</th>
+                    <th>Description</th>
                     <th>Remise</th>
+                    <th>Utilisation unique</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>01/07/2025 - 15/07/2025</td>
-                    <td>15%</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
+            <tbody id="discountsShowing">
             </tbody>
         </table>
     </div>
 
     <div id="services" class="section">
         <h2>Services complémentaires</h2>
-        <form class="row g-3">
-            <div class="col-md-6">
-                <label>Nom du service</label>
-                <input type="text" class="form-control">
+        <form class="row g-3" method="POST" action="/processes/services/add_service_process.php">
+            <div class="col-md-3">
+                <label for="service-name" class="form-label">Nom du service</label>
+                <input id="service-name" name="name" type="text" class="form-control">
+            </div>
+            <div class="col-md-4">
+                <label for="service-description" class="form-label">Description du service</label>
+                <input id="service-description" name="description" type="text" class="form-control" placeholder="Description du service...">
+            </div>
+            <div class="col-md-3">
+                <label for="service-price" class="form-label">Prix du service</label>
+                <input id="service-price" name="price" type="text" class="form-control" placeholder="Prix en euros (€)">
             </div>
             <div class="col-md-6 d-flex align-items-end">
-                <button class="btn btn-success">Ajouter</button>
+                <button type="submit" class="btn btn-success">Ajouter</button>
             </div>
         </form>
         <table class="table table-dark table-striped mt-4">
@@ -250,29 +283,12 @@ if (isset($_SESSION['user_id'])) {
                 <tr>
                     <th>#</th>
                     <th>Service</th>
+                    <th>Description</th>
                     <th>Prix</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody id="servicesShowing">
-                <tr>
-                    <td>1</td>
-                    <td>Transport de bagages</td>
-                    <td>20</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Location de tentes</td>
-                    <td>30</td>
-                    <td>
-                        <button class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></button>
-                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>
@@ -293,7 +309,7 @@ if (isset($_SESSION['user_id'])) {
                 <input type="number" class="form-control">
             </div>
             <div class="col-12 d-flex justify-content-end">
-                <button class="btn btn-success">Appliquer</button>
+                <button type="submit" class="btn btn-success">Appliquer</button>
             </div>
         </form>
     </div>
