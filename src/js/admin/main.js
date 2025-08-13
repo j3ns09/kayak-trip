@@ -3,6 +3,7 @@ import { loadStops } from "./modals/stops.js";
 import { loadAccommodations } from "./modals/accommodations.js";
 import { loadServices } from "./modals/services.js";
 import { loadDiscounts, today } from "./modals/promotions.js";
+import { loadPacks } from "./modals/packs.js";
 import { loadMap } from "./map/map.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadAccommodations();
     await loadServices();
     await loadDiscounts();
+    await loadPacks();
 
     let map;
     await loadStops();

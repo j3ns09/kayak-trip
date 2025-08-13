@@ -188,7 +188,7 @@ if (isset($_SESSION['user_id'])) {
 
     <div id="packs" class="section">
         <h2>Packs</h2>
-        <form class="row g-3" action="POST" action="/processes/packs/add_pack_process.php">
+        <form class="row g-3" method="POST" action="/processes/packs/add_pack_process.php">
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="pack-nom" class="form-label">Nom du pack</label>
@@ -204,7 +204,7 @@ if (isset($_SESSION['user_id'])) {
                 </div>
                 <div class="col-md-3">
                     <label for="pack-prix" class="form-label">Prix</label>
-                    <input type="number" name="price" id="pack-prix" class="form-control" min="0" max="1000" placeholder="Prix en euros...">
+                    <input type="text" name="price" id="pack-prix" class="form-control" min="0" max="1000" placeholder="Prix en euros...">
                 </div>
             </div>
             <div class="row">
@@ -218,8 +218,8 @@ if (isset($_SESSION['user_id'])) {
                 <tr>
                     <th>#</th>
                     <th>Nom</th>
-                    <th>Durée</th>
                     <th>Description</th>
+                    <th>Durée</th>
                     <th>Prix</th>
                     <th>Actions</th>
                 </tr>
@@ -297,15 +297,15 @@ if (isset($_SESSION['user_id'])) {
         <h2>Services complémentaires</h2>
         <form class="row g-3" method="POST" action="/processes/services/add_service_process.php">
             <div class="col-md-3">
-                <label for="service-name" class="form-label">Nom du service</label>
-                <input id="service-name" name="name" type="text" class="form-control">
+                <label for="service-name" class="form-label">Nom</label>
+                <input id="service-name" name="name" type="text" class="form-control" placeholder="Nom du service...">
             </div>
             <div class="col-md-4">
-                <label for="service-description" class="form-label">Description du service</label>
+                <label for="service-description" class="form-label">Description</label>
                 <input id="service-description" name="description" type="text" class="form-control" placeholder="Description du service...">
             </div>
             <div class="col-md-3">
-                <label for="service-price" class="form-label">Prix du service</label>
+                <label for="service-price" class="form-label">Prix</label>
                 <input id="service-price" name="price" type="text" class="form-control" placeholder="Prix en euros (€)">
             </div>
             <div class="col-md-6 d-flex align-items-end">
