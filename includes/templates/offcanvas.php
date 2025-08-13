@@ -7,7 +7,7 @@
     <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
         <?php if ($isConnected): ?>
             <div class="nav flex-column gap-3">
-                <a href="#" class="btn btn-outline-light fw-bold">
+                <a href="index.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-house-door-fill me-2"></i> Accueil
                 </a>
                 <a href="profile.php" class="btn btn-outline-light fw-bold">

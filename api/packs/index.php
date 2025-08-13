@@ -20,11 +20,12 @@ if ($method === "GET") {
     }
 
     if (!$packs) {
-        echo json_encode(["state" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
+        echo json_encode(["ok" => false, "state" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
         exit();
     }
 
     echo json_encode([
+        "ok" => true,
         "waiter" => $_SESSION['user_id'],
         "packs" => $packs
     ]);

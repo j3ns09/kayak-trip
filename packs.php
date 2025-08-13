@@ -41,8 +41,18 @@ $isConnected = !is_null($userId);
     </div>
 </nav>
 
+<div id="main" class="container pb-4 mx-5">
+    <h1 class="mt-2 mb-4">Composez votre itinéraire en kayak</h1>
+
+    <div class="container">
+        <div id="card-region" class="row row-cols-4">
+        </div>
+    </div>
+</div>
+
 <?php include_once 'includes/templates/offcanvas.php'; ?>
 
+<script type="module" src="/src/js/packs/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
 

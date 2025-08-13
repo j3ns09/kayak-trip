@@ -41,7 +41,7 @@ $stops = getAllStops($pdo);
 </nav>
 
 <div id="main" class="container pb-4 mx-5">
-    <h1 class="mb-4">Composez votre itinéraire en kayak</h1>
+    <h1 class="mt-2 mb-4">Composez votre itinéraire en kayak</h1>
 
     <div class="row mb-4">
         <div class="col-md-4 steps-list bg-dark bg-opacity-50 p-3 rounded">
@@ -106,62 +106,64 @@ $stops = getAllStops($pdo);
         </div>
 
         <div id="params" class="mb-3">
-            <div class="row">
-                <!-- <div class="col mb-3">
-                    <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
-                    <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
-                </div> -->
-                <div class="col-3 mb-3">
-                    <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
-                    <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants">
-                </div>
-            </div>
-            <div class="row">
-                <label class="form-label fw-bold">Dates du voyage</label>
-                <div class="col-3">
-                    <input type="date" id="travel-start" class="form-control">
-                    <div id="travel-start-label" class="form-text text-white">Date de début</div>
-                </div>
-
-                <div class="col-3">
-                    <input type="date" id="travel-end" class="form-control">
-                    <div id="travel-end-label" class="form-text text-white">Date de fin</div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col d-flex align-items-center gap-2">
-                    <div id="checkbox-bagage" class="checkbox-wrapper-63">
-                        <span for="checkbox-bagage" class="form-label fw-bold text-white pe-3">Transport des bagages:</span>
-                        <label class="switch">
-                        <input type="checkbox" id="chk-bag">
-                        <span class="slider"></span>
-                        </label>
+            <form id="build-form">
+                <div class="row">
+                    <!-- <div class="col mb-3">
+                        <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
+                        <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
+                    </div> -->
+                    <div class="col-3 mb-3">
+                        <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
+                        <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants">
                     </div>
                 </div>
-                <div class="col d-flex align-items-center gap-2">
-                    <div id="checkbox-food" class="checkbox-wrapper-63">
-                        <span for="checkbox-food" class="form-label fw-bold text-white pe-3">Paniers garnis:</span>
-                        <label class="switch">
-                        <input type="checkbox" id="chk-fd">
-                        <span class="slider"></span>
-                        </label>
+                <div class="row">
+                    <label class="form-label fw-bold">Dates du voyage</label>
+                    <div class="col-3">
+                        <input type="date" id="travel-start" class="form-control">
+                        <div id="travel-start-label" class="form-text text-white">Date de début</div>
+                    </div>
+    
+                    <div class="col-3">
+                        <input type="date" id="travel-end" class="form-control">
+                        <div id="travel-end-label" class="form-text text-white">Date de fin</div>
                     </div>
                 </div>
-                <div class="col d-flex align-items-center gap-2">
-                    <div id="checkbox-location" class="checkbox-wrapper-63">
-                        <span for="checkbox-location" class="form-label fw-bold text-white pe-3">Location de matériel:</span>
-                        <label class="switch">
-                        <input type="checkbox" id="chk-loc">
-                        <span class="slider"></span>
-                        </label>
+    
+                <div class="row">
+                    <div class="col d-flex align-items-center gap-2">
+                        <div id="checkbox-bagage" class="checkbox-wrapper-63">
+                            <span for="checkbox-bagage" class="form-label fw-bold text-white pe-3">Transport des bagages:</span>
+                            <label class="switch">
+                            <input type="checkbox" id="chk-bag">
+                            <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col d-flex align-items-center gap-2">
+                        <div id="checkbox-food" class="checkbox-wrapper-63">
+                            <span for="checkbox-food" class="form-label fw-bold text-white pe-3">Paniers garnis:</span>
+                            <label class="switch">
+                            <input type="checkbox" id="chk-fd">
+                            <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col d-flex align-items-center gap-2">
+                        <div id="checkbox-location" class="checkbox-wrapper-63">
+                            <span for="checkbox-location" class="form-label fw-bold text-white pe-3">Location de matériel:</span>
+                            <label class="switch">
+                            <input type="checkbox" id="chk-loc">
+                            <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-2 mt-2">
+                        <button id="finalize-route" type="submit" class="btn btn-success">Valider</button>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="d-flex gap-2">
-            <button id="finalize-route" class="btn btn-success">Valider</button>
+            </form>
         </div>
     </div>
 </div>

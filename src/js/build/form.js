@@ -1,4 +1,4 @@
-const submitButton = document.getElementById('finalize-route');
+const form = document.getElementById('build-form');
 const estimatedTimeHtml = document.getElementById('estimated-time-input');
 const personCountHtml = document.getElementById('person-count');
 const startDate = document.getElementById('travel-start');
@@ -23,7 +23,8 @@ export function setDates() {
 }
 
 export function submitForm() {
-    submitButton.addEventListener('click', () => {
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
         getValues();
     });
 }
