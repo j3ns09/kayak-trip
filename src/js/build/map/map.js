@@ -1,4 +1,4 @@
-let loireCoords = [];
+export let loireCoords = [];
 let pointsToLoire = {};
 const stopMarkers = {};
 
@@ -41,7 +41,11 @@ export function loadMap() {
                 style: loireStyle,
                 onEachFeature: function (feature) {
                     if (feature.geometry.type === "MultiLineString") {
-                        loireCoords = feature.geometry.coordinates.map(coord => [coord[1], coord[0]]); // Leaflet = [lat, lng]
+                        feature.geometry.coordinates.forEach(line => {
+                            line.forEach(coord => {
+                                loireCoords.push([coord[1], coord[0]]);
+                            });
+                        });
                     }
                 }
             }).addTo(map);

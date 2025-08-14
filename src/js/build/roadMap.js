@@ -1,5 +1,21 @@
+import { loireCoords } from "./map/map.js";
+
 let road = [];
 let distances = [];
+
+const loireLength = 1006;
+
+const coordSum = (coordArray) => {
+    let s = 0;
+    const step = 10;
+    for (let i = step; i < coordArray.length; i+=step) {
+        const [lat1, lon1] = coordArray[i - step];
+        const [lat2, lon2] = coordArray[i];
+        s += haversine(lat1, lon1, lat2, lon2);
+        console.log(s);
+    }
+    return s;
+};
 
 const stepDiv = `
     <div id="__id__" class="d-flex flex-column col align-items-center">
@@ -45,6 +61,7 @@ function stepGenerator(id, name, stop, status, iconIndex) {
 
 export function loadRoadMap() {
     checkboxesContainer.addEventListener('change', (e) => {
+        console.log(coordSum(loireCoords));
         const checkbox = e.target;
 
         if (checkbox.type !== 'checkbox') return;
