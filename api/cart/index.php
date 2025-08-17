@@ -18,7 +18,7 @@ if ($method === 'POST') {
     $data = json_decode($rawData, true);
     
     if (!$data) {
-        echo json_encode(["error" => "Données invalides"]);
+        echo json_encode(["ok" => false, "error" => "Données invalides"]);
         exit;
     }
     
