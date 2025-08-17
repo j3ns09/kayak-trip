@@ -102,7 +102,7 @@ $stops = getAllStops($pdo);
         <div id="route-details" class="mb-3">
             <p><strong>Distance totale :</strong> <span id="total-distance">0 km</span></p>
             <p><strong>Temps estimé :</strong> <span id="estimated-time">0h00</span></p>
-            <input id="estimated-time-input" type="hidden" value="">
+            <input id="estimated-time-input" type="hidden" value="0">
         </div>
 
         <div id="params" class="mb-3">
@@ -114,18 +114,18 @@ $stops = getAllStops($pdo);
                     </div> -->
                     <div class="col-3 mb-3">
                         <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
-                        <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants">
+                        <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" required>
                     </div>
                 </div>
                 <div class="row">
                     <label class="form-label fw-bold">Dates du voyage</label>
                     <div class="col-3">
-                        <input type="date" id="travel-start" class="form-control">
+                        <input type="date" id="travel-start" class="form-control" required>
                         <div id="travel-start-label" class="form-text text-white">Date de début</div>
                     </div>
     
                     <div class="col-3">
-                        <input type="date" id="travel-end" class="form-control">
+                        <input type="date" id="travel-end" class="form-control" required>
                         <div id="travel-end-label" class="form-text text-white">Date de fin</div>
                     </div>
                 </div>

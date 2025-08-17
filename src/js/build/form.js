@@ -20,6 +20,23 @@ export function setDates() {
 
     startDate.setAttribute('min', currentDate);
     startDate.value = currentDate;
+
+    endDate.setAttribute('min', currentDate);
+    endDate.value = currentDate;
+}
+
+export function updateEndDate() {
+    estimatedTimeHtml.addEventListener('change', () => {
+        let minDate = startDate.value;
+
+        minDate = new Date(minDate);
+        minDate.setDate(minDate.getDate() + parseInt(estimatedTimeHtml.value));
+    
+        minDate = minDate.toISOString().split('T')[0];
+        
+        endDate.setAttribute('min', minDate);
+        endDate.value = minDate;
+    })
 }
 
 export function submitForm() {
@@ -36,8 +53,6 @@ function getValues() {
     const end = new Date(endDate.value);
 
     const desiredTime = (end - start) / (1000 * 60 * 60 * 24);
-
-    console.log(estimatedTime, desiredTime);
 
     const value = personCountHtml.value.trim();
     const personCount = Number(value);

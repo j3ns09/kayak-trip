@@ -61,7 +61,6 @@ function stepGenerator(id, name, stop, status, iconIndex) {
 
 export function loadRoadMap() {
     checkboxesContainer.addEventListener('change', (e) => {
-        console.log(coordSum(loireCoords));
         const checkbox = e.target;
 
         if (checkbox.type !== 'checkbox') return;
@@ -114,6 +113,7 @@ export function loadRoadMap() {
         const nbDays = Math.ceil(hm.hours / 24)
         estimatedHtml.innerHTML = hm.hours + 'h' + hm.minutes + ' (' + nbDays + ' jours minimum)';
         estimatedInput.value = nbDays;
+        estimatedInput.dispatchEvent(new Event('change'));
     });
 }
 
