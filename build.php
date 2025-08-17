@@ -107,7 +107,7 @@ $stops = getAllStops($pdo);
 
         <div id="params" class="mb-3">
             <form id="build-form">
-                <div class="row">
+                <div class="row pb-2">
                     <!-- <div class="col mb-3">
                         <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
                         <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
@@ -117,7 +117,7 @@ $stops = getAllStops($pdo);
                         <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" required>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row pb-2">
                     <label class="form-label fw-bold">Dates du voyage</label>
                     <div class="col-3">
                         <input type="date" id="travel-start" class="form-control" required>
@@ -130,7 +130,7 @@ $stops = getAllStops($pdo);
                     </div>
                 </div>
     
-                <div class="row">
+                <div class="row pb-2">
                     <div class="col d-flex align-items-center gap-2">
                         <div id="checkbox-bagage" class="checkbox-wrapper-63">
                             <span for="checkbox-bagage" class="form-label fw-bold text-white pe-3">Transport des bagages:</span>

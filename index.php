@@ -1,21 +1,20 @@
-<?php 
+<?php
 
-include_once 'includes/store.php';
+include_once "includes/store.php";
 
-include_once 'includes/config/config.php';
-include_once 'includes/functions.php';
+include_once "includes/config/config.php";
+include_once "includes/functions.php";
 
-include_once 'includes/templates/header.php';
+include_once "includes/templates/header.php";
 
-if (isset($_SESSION['user_id'])) {
-    $userId = $_SESSION['user_id'];
+if (isset($_SESSION["user_id"])) {
+    $userId = $_SESSION["user_id"];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {
     $userId = null;
 }
 
 $isConnected = !is_null($userId);
-
 ?>
 
 <link rel="stylesheet" href="/src/css/home.css">
@@ -25,7 +24,11 @@ $isConnected = !is_null($userId);
         <a class="navbar-brand ms-3 fs-2 title" href="/"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
         <div class="ms-auto mb-3 me-2">
             <?php if ($isConnected): ?>
-                <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">Bonjour, <span class="fw-bold"><?= strtoupper($userInfo['last_name']) . " " . $userInfo['first_name'] ?></span></p>
+                <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">Bonjour, <span class="fw-bold"><?= strtoupper(
+                    $userInfo["last_name"],
+                ) .
+                    " " .
+                    $userInfo["first_name"] ?></span></p>
 
             <?php else: ?>
                 <a href="login.php" class="btn btn-warning text-white fs-5">
@@ -48,10 +51,10 @@ $isConnected = !is_null($userId);
                 <h1 class="display-1 fw-semibold">Explorez la Loire en Kayak</h1>
                 <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l'un de nos packs tout inclus</p>
             </div>
-            
+
             <div class="col-6 row gx-5 ps-5">
                 <div class="col">
-                    <a href="build.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>                    
+                    <a href="build.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>
                 </div>
                 <div class="col">
                     <a href="packs.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
@@ -60,23 +63,37 @@ $isConnected = !is_null($userId);
             <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
         </div>
     </div>
+    <div class="container text-white">
+        <div class="container ps-3 row">
+            <h1 class="display-2 fw-semibold">Besoin d'aide ?</h1>
+            <p>Discutez avec nos commerciaux</p>
+        </div>
+    </div>
 </div>
 
-<?php include_once 'includes/templates/offcanvas.php'; ?>
+<?php include_once "includes/templates/offcanvas.php"; ?>
 
-<?php
-
-if (isset($_SESSION['event'])) {
-    if ($_SESSION['event'] === 'logout') {
-        displayToast("logoutToast", "danger", "Déconnexion", "Maintenant", "Déconnexion réussie.");
-    } else if ($_SESSION['event'] === 'login') {
-        displayToast("loginToast", "success", "Connexion", "Maintenant", "Vous êtes maintenant connecté.");
+<?php if (isset($_SESSION["event"])) {
+    if ($_SESSION["event"] === "logout") {
+        displayToast(
+            "logoutToast",
+            "danger",
+            "Déconnexion",
+            "Maintenant",
+            "Déconnexion réussie.",
+        );
+    } elseif ($_SESSION["event"] === "login") {
+        displayToast(
+            "loginToast",
+            "success",
+            "Connexion",
+            "Maintenant",
+            "Vous êtes maintenant connecté.",
+        );
     }
-    
-    unset($_SESSION['event']);
-}
 
-?>
+    unset($_SESSION["event"]);
+} ?>
 
 <script type="module" src="/src/js/index/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
