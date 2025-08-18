@@ -20,7 +20,7 @@ if ($method === "GET") {
     }
 
     if (!$packs) {
-        echo json_encode(["ok" => false, "state" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
+        echo json_encode(["ok" => false, "ok" => false, "error" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
         exit();
     }
 

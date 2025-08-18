@@ -72,7 +72,11 @@ function createThread(PDO $pdo, int $userId) {
 
     $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
 
-    return $stmt->execute();
+    if ($stmt->execute()) {
+        return (int)$pdo->lastInsertId();
+    }
+
+    return false;
 }
 
 function createMessage(

@@ -15,7 +15,7 @@ if ($method === "GET") {
     $orders = getAllOrders($pdo);
 
     if (!$orders) {
-        echo json_encode(["state" => "Pas de commandes ou mauvaise réponse", "response" => $orders]);
+        echo json_encode(["ok" => false, "error" => "Pas de commandes ou mauvaise réponse", "response" => $orders]);
         exit();
     }
 

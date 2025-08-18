@@ -15,7 +15,7 @@ if ($method === "GET") {
     $services = getAllServices($pdo);
 
     if (!$services) {
-        echo json_encode(["state" => "Pas de services ou mauvaise réponse", "response" => $services]);
+        echo json_encode(["ok" => false, "error" => "Pas de services ou mauvaise réponse", "response" => $services]);
         exit();
     }
 

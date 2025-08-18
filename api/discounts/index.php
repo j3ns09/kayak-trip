@@ -15,7 +15,7 @@ if ($method === "GET") {
     $discounts = getAllPromotions($pdo);
 
     if (!$discounts) {
-        echo json_encode(["state" => "Pas de promotions ou mauvaise réponse", "response" => $discounts, "discounts" => ""]);
+        echo json_encode(["ok" => false, "error" => "Pas de promotions ou mauvaise réponse", "response" => $discounts, "discounts" => ""]);
         exit();
     }
 

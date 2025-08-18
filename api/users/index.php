@@ -13,11 +13,11 @@ if (isset($_SESSION['user_id'])) {
     $key = getApiKey($pdo, $_SESSION['user_id']);
 
     if (!$key) {
-        echo json_encode(["state" => "Erreur: Pas de clé pour l'API"]);
+        echo json_encode(["ok" => false, "error" => "Erreur: Pas de clé pour l'API"]);
         exit();
     }
 } else {
-    echo json_encode(["state" => "Erreur: Utilisateur non connecté"]);
+    echo json_encode(["ok" => false, "error" => "Erreur: Utilisateur non connecté"]);
     exit();
 }
 
@@ -27,7 +27,7 @@ if ($method === "GET") {
     $users = getAllUsers($pdo);
 
     if (!$users) {
-        echo json_encode(["state" => "Pas de users ou mauvaise réponse", "response" => $users]);
+        echo json_encode(["ok" => false, "error" => "Pas de users ou mauvaise réponse", "response" => $users]);
         exit();
     }
 

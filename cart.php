@@ -14,15 +14,28 @@ if (isset($_SESSION['cart_items'])) {
 function money($cents) {
     return number_format($cents/100, 2, ',', ' ') . ' €';
 }
+
+$userId = null;
+if (isset($_SESSION["user_id"])) {
+    $userId = $_SESSION["user_id"];
+}
+
+$isConnected = !is_null($userId);
 ?>
 
 <link rel="stylesheet" href="/src/css/home.css">
 
 <div class="container-fluid min-vh-100" style="margin-top:6rem;">
     <div class="row">
+        <?php
+        if ($isConnected) :
+        ?>
+
+
+        <?php else: ?>
         <div class="col-lg-7 bg-white bg-opacity-75 p-5">
             <h4 class="fw-bold mb-4">Informations</h4>
-            <form method="post" action="checkout.php">
+            <form method="POST" action="checkout.php">
                 <div class="mb-3">
                     <label for="email" class="form-label">E-mail</label>
                     <input type="email" class="form-control" id="email" name="email" required>
@@ -48,7 +61,7 @@ function money($cents) {
                 <button type="submit" class="btn btn-primary">Modes de livraison →</button>
             </form>
         </div>
-
+        <?php endif; ?>
         <div class="col-lg-5 p-5 bg-light">
             <h4 class="fw-bold mb-4">Panier</h4>
             <form method="post" action="cart.php">

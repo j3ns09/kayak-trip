@@ -20,7 +20,7 @@ if ($method === "GET") {
     }
 
     if (!$stops) {
-        echo json_encode(["state" => "Pas de point d'arrêt ou mauvaise réponse", "response" => $stops]);
+        echo json_encode(["ok" => false, "error" => "Pas de point d'arrêt ou mauvaise réponse", "response" => $stops]);
         exit();
     }
 
