@@ -59,21 +59,30 @@ function setServiceNewValues(
 function setDiscountNewValues(
     PDO $pdo,
     string $code,
-    string $dateStart,
-    string $dateEnd,
+    string | null $dateStart,
+    string | null $dateEnd,
     string $description,
     int $reduction,
-    int $uniqueUse
+    int | null $uniqueUse
 )
 {
     $stmt = $pdo->prepare("UPDATE promotions SET code = :code, valid_from = :dateStart, valid_to = :dateEnd, description = :description, discount_value = :reduction, first_time_only = :uniqueUse");
 
     $stmt->bindParam(':code', $code, PDO::PARAM_STR);
-    $stmt->bindParam(':dateStart', $dateStart, PDO::PARAM_STR);
-    $stmt->bindParam(':dateEnd', $dateEnd, PDO::PARAM_STR);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':reduction', $reduction, PDO::PARAM_INT);
     $stmt->bindParam(':uniqueUse', $uniqueUse, PDO::PARAM_INT);
+    
+    if (empty($dateStart)) {
+        $stmt->bindValue(':dateStart', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindParam(':dateStart', $dateStart, PDO::PARAM_STR);
+    }
+    if (empty($dateEnd)) {
+        $stmt->bindValue(':dateEnd', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindParam(':dateEnd', $dateEnd, PDO::PARAM_STR);
+    }
 
     return $stmt->execute();
 }

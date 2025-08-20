@@ -10,12 +10,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $date_end = filter_input(INPUT_POST, "discount-end", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $description = filter_input(INPUT_POST, "description", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
     $reduction = filter_input(INPUT_POST, "reduction", FILTER_VALIDATE_INT);
+    
     $unique_use = filter_input(INPUT_POST, "discount-use", FILTER_VALIDATE_INT);
+    $unique_use = is_null($unique_use) ? 0 : 1;
 
     $data = [
         'code' => $code,
-        'date_start' => $date_start,
-        'date_end' => $date_end,
         'description' => $description,
         'reduction' => $reduction,
         'unique_use' => $unique_use,

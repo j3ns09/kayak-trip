@@ -1,3 +1,5 @@
+import { renderToasts } from "../sugar/dashboard.js";
+
 import { loadUsers } from "./modals/users.js";
 import { loadStops } from "./modals/stops.js";
 import { loadAccommodations } from "./modals/accommodations.js";
@@ -15,6 +17,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             this.classList.add('active');
         });
     });
+    
+    renderToasts();
     
     await loadUsers();
     await loadAccommodations();

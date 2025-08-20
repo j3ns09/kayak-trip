@@ -119,8 +119,8 @@ function createService(
 function createDiscount(
     PDO $pdo,
     string $code,
-    string $dateStart,
-    string $dateEnd,
+    string | null $dateStart,
+    string | null $dateEnd,
     string $description,
     int $reduction,
     int $unique
@@ -131,12 +131,21 @@ function createDiscount(
     VALUES (:code, :valid_from, :valid_to, :description, :discount_value, :first_time_only)");
     
     $stmt->bindParam(':code', $code, PDO::PARAM_STR);
-    $stmt->bindParam(':valid_from', $dateStart, PDO::PARAM_STR);
-    $stmt->bindParam(':valid_to', $dateEnd, PDO::PARAM_STR);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':discount_value', $reduction, PDO::PARAM_INT);
     $stmt->bindParam(':first_time_only', $unique, PDO::PARAM_INT);
 
+    if (empty($dateStart)) {
+        $stmt->bindValue(':valid_from', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindParam(':valid_from', $dateStart, PDO::PARAM_STR);
+    }
+    if (empty($dateEnd)) {
+        $stmt->bindValue(':valid_to', null, PDO::PARAM_NULL);
+    } else {
+        $stmt->bindParam(':valid_to', $dateEnd, PDO::PARAM_STR);
+    }
+    
     return $stmt->execute();
 }
 

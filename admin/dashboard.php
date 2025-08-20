@@ -1,8 +1,8 @@
 <?php
 
-$root = $_SERVER['DOCUMENT_ROOT'];
+session_start();
 
-include_once $root . '/includes/store.php';
+$root = $_SERVER['DOCUMENT_ROOT'];
 
 include_once $root . '/includes/config/config.php';
 include_once $root . '/includes/functions.php';
@@ -11,8 +11,10 @@ include_once $root . '/includes/templates/header.php';
 
 if (isset($_SESSION['user_id'])) {
     if (!isAdmin($pdo, $_SESSION['user_id'])) {
-        redirect('index');
+        redirectAlert('error', 'Accès non autorisé à la page ' . $_SERVER['HTTP_HOST'], 'index');
     }
+} else {
+    redirectAlert('error', 'Accès non autorisé à la page ' . $_SERVER['HTTP_HOST'], 'index');
 }
 
 ?>
@@ -235,15 +237,15 @@ if (isset($_SESSION['user_id'])) {
             <div class="row mb-3">
                 <div class="col-md-2">
                     <label for="promo-code" class="form-label">Code de promotion</label>
-                    <input type="text" id="promo-code" class="form-control" name="code" placeholder="Ex: FIRSTKAYAK10...">
+                    <input type="text" id="promo-code" class="form-control" name="code" placeholder="Ex: FIRSTKAYAK10..." required>
                 </div>
                 <div class="col-md-3">
                     <label for="promo-description" class="form-label">Description</label>
-                    <input type="text" id="promo-description" name="description" class="form-control" placeholder="Description de la promotion...">
+                    <input type="text" id="promo-description" name="description" class="form-control" placeholder="Description de la promotion..." required>
                 </div>
                 <div class="col-md-2">
                     <label for="reduction" class="form-label">Remise (%)</label>
-                    <input id="reduction" name="reduction" type="number" class="form-control" placeholder="Ex: 15, 40">
+                    <input id="reduction" name="reduction" type="number" class="form-control" placeholder="Ex: 15, 40" min="1" max="100" required>
                 </div>
                 <div class="col-md-2 d-flex align-items-center">
                     <div class="form-check mb-0">
@@ -273,9 +275,6 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </div>
         </form>
-        <div class="mt-3">
-            <p><strong>Code promo première réservation :</strong> <code>KAYAK2025</code></p>
-        </div>
         <table class="table table-dark table-striped mt-4">
             <thead>
                 <tr>
@@ -349,6 +348,20 @@ if (isset($_SESSION['user_id'])) {
         </form>
     </div>
 </div>
+
+<?php
+
+if (isset($_SESSION["error"])) {
+    displayToast(
+        "errorToast",
+        "danger",
+        "Erreur",
+        "Maintenant",
+        $_SESSION["error"],
+    );
+    unset($_SESSION["error"]);
+}
+?>
 
 <script type="module" src="/src/js/admin/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>

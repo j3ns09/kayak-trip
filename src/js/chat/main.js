@@ -25,8 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     activeThread = await getActiveThread();
     allMessages = await getMessagesAPI(userId, activeThread);
 
-    console.log(allMessages);
-    renderMessages(allMessages);
+    if (allMessages) renderMessages(allMessages);
 });
 
 async function getActiveThread() {
@@ -87,7 +86,7 @@ function sanitizeMessage() {
 
 async function getMessagesAPI(userId, threadId) {
     if (userId === null) {
-        alert("Vous devez être connecté pour voir les messages.");
+        // alert("Vous devez être connecté pour voir les messages.");
         return false;
     }
 
@@ -110,7 +109,7 @@ async function getMessagesAPI(userId, threadId) {
 
 async function postMessageAPI(userId, message, threadId=-1) {
     if (userId === null) {
-        alert("Vous devez être connecté pour envoyer un message.");
+        // alert("Vous devez être connecté pour envoyer un message.");
         return false;
     }
 
@@ -151,6 +150,7 @@ async function sendMessage() {
 
 function renderMessages(messagesArray) {
     messages.innerHTML = '';
+    console.log(messagesArray);
 
     messagesArray.forEach((msg) => {
         const msgDiv = document.createElement('div');

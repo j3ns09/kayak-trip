@@ -7,6 +7,8 @@ function redirect(string $locationFromRoot) {
 
 function redirectAlert(string $alertName, string $errorMessage, string $locationFromRoot) {
     $_SESSION[$alertName] = $errorMessage;
+    session_write_close();
+    
     header("Location: /" . $locationFromRoot . ".php");
     exit();
 }
