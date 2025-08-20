@@ -46,7 +46,7 @@ $stops = getAllStops($pdo);
     <div class="row mb-4">
         <div class="col-md-4 steps-list bg-dark bg-opacity-50 p-3 rounded">
             <h4>Sélectionnez vos étapes</h4>
-            <form id="route-form" class="p-3 border border-dark-subtle border-opacity-10 rounded bg-dark bg-opacity-75">
+            <form id="route-form" class="p-3 rounded bg-dark bg-opacity-75">
                 <div class="mb-3">
                     <label class="form-label fw-bold">Sélectionnez les arrêts :</label>
                     <div class="row row-cols-1 row-cols-md-2 g-2">
@@ -75,95 +75,73 @@ $stops = getAllStops($pdo);
         </div>
     </div>
 
-    <div id="route" class="bg-dark bg-opacity-50 rounded p-4 mt-4 text-light">
-        <h4 class="mb-3">Votre itinéraire</h4>
+    <div class="container bg-dark bg-opacity-50 rounded p-2">
+        <div id="route" class="container bg-dark bg-opacity-75 rounded p-4 text-light">
+            <h1 >Votre itinéraire</h1>
 
-        <div id="route-summary" class="mb-3">
-            <div class="container">
-                <div id="stop-container" class="container row row-cols-6">
-                    <!-- stepper invisible
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="step-label mb-2">Départ</div>
-                        <div class="step completed"><i class="bi bi-flag"></i></div>
-                        <div class="step-label mb-2"></div>
-                    </div> -->
-                    <!-- <div class="d-flex flex-column align-items-center">
-                        <div class="step active">2</div>
-                        <div class="step-label">Étape 2</div>
+            <div id="route-summary" class="mb-3">
+                <div class="container">
+                    <div id="stop-container" class="container row row-cols-6">
+                        <!-- stepper invisible
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step-label mb-2">Départ</div>
+                            <div class="step completed"><i class="bi bi-flag"></i></div>
+                            <div class="step-label mb-2"></div>
+                        </div> -->
+                        <!-- <div class="d-flex flex-column align-items-center">
+                            <div class="step active">2</div>
+                            <div class="step-label">Étape 2</div>
+                        </div>
+                        <div class="d-flex flex-column align-items-center">
+                            <div class="step"><i class="bi bi-geo-alt"></i></div>
+                            <div class="step-label">Arrivée</div>
+                        </div> -->
                     </div>
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="step"><i class="bi bi-geo-alt"></i></div>
-                        <div class="step-label">Arrivée</div>
-                    </div> -->
                 </div>
             </div>
-        </div>
-
-        <div id="route-details" class="mb-3">
-            <p><strong>Distance totale :</strong> <span id="total-distance">0 km</span></p>
-            <p><strong>Temps estimé :</strong> <span id="estimated-time">0h00</span></p>
-            <input id="estimated-time-input" type="hidden" value="0">
-        </div>
-
-        <div id="params" class="mb-3">
-            <form id="build-form">
-                <div class="row pb-2">
-                    <!-- <div class="col mb-3">
-                        <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
-                        <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
-                    </div> -->
-                    <div class="col-3 mb-3">
-                        <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
-                        <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" required>
-                    </div>
-                </div>
-                <div class="row pb-2">
-                    <label class="form-label fw-bold">Dates du voyage</label>
-                    <div class="col-3">
-                        <input type="date" id="travel-start" class="form-control" required>
-                        <div id="travel-start-label" class="form-text text-white">Date de début</div>
-                    </div>
     
-                    <div class="col-3">
-                        <input type="date" id="travel-end" class="form-control" required>
-                        <div id="travel-end-label" class="form-text text-white">Date de fin</div>
-                    </div>
-                </div>
+            <div id="route-details" class="mb-3">
+                <p><strong>Distance totale :</strong> <span id="total-distance">0 km</span></p>
+                <p><strong>Temps estimé :</strong> <span id="estimated-time">0h00</span></p>
+                <input id="estimated-time-input" type="hidden" value="0">
+            </div>
     
-                <div class="row pb-2">
-                    <div class="col d-flex align-items-center gap-2">
-                        <div id="checkbox-bagage" class="checkbox-wrapper-63">
-                            <span for="checkbox-bagage" class="form-label fw-bold text-white pe-3">Transport des bagages:</span>
-                            <label class="switch">
-                            <input type="checkbox" id="chk-bag">
-                            <span class="slider"></span>
-                            </label>
+            <div id="params" class="mb-3">
+                <form id="build-form">
+                    <div class="row pb-3">
+                        <!-- <div class="col mb-3">
+                            <label for="travel-time" class="form-label fw-bold">Temps de voyage souhaité (jours):</label>
+                            <input id="travel-time" type="number" class="form-control pt-2" placeholder="Temps de voyage souhaité en jours... Ex: 5">
+                        </div> -->
+                        <div class="col-3 mb-3">
+                            <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
+                            <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" required>
                         </div>
                     </div>
-                    <div class="col d-flex align-items-center gap-2">
-                        <div id="checkbox-food" class="checkbox-wrapper-63">
-                            <span for="checkbox-food" class="form-label fw-bold text-white pe-3">Paniers garnis:</span>
-                            <label class="switch">
-                            <input type="checkbox" id="chk-fd">
-                            <span class="slider"></span>
-                            </label>
+                    <div class="row pb-3">
+                        <h2 class="pb-2">Dates du voyage</h2>
+                        <div class="col-3">
+                            <input type="date" id="travel-start" class="form-control" required>
+                            <div id="travel-start-label" class="form-text text-white">Date de début</div>
+                        </div>
+        
+                        <div class="col-3">
+                            <input type="date" id="travel-end" class="form-control" required>
+                            <div id="travel-end-label" class="form-text text-white">Date de fin</div>
                         </div>
                     </div>
-                    <div class="col d-flex align-items-center gap-2">
-                        <div id="checkbox-location" class="checkbox-wrapper-63">
-                            <span for="checkbox-location" class="form-label fw-bold text-white pe-3">Location de matériel:</span>
-                            <label class="switch">
-                            <input type="checkbox" id="chk-loc">
-                            <span class="slider"></span>
-                            </label>
-                        </div>
+        
+                    <div id="services-region" class="row pb-2">
+                        <h2>Services optionnels</h2>
                     </div>
                     
-                    <div class="d-flex gap-2 mt-2">
-                        <button id="finalize-route" type="submit" class="btn btn-success">Valider</button>
+                    <div class="row pb-3">
+                        <div class="d-flex gap-2 mt-2">
+                            <button id="finalize-route" type="submit" class="btn btn-success">Valider</button>
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>

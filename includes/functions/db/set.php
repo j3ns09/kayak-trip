@@ -80,6 +80,7 @@ function setDiscountNewValues(
 
 function setPackNewValues(
     PDO $pdo,
+    int $id,
     string $name,
     int $duration,
     string $description,
@@ -89,8 +90,10 @@ function setPackNewValues(
     $stmt = $pdo->prepare("
     UPDATE packs 
     SET name = :name, duration = :duration, description = :description, price = :price
+    WHERE id = :id
     ");
 
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':duration', $duration, PDO::PARAM_INT);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);

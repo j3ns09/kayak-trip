@@ -12,3 +12,5 @@ http_response_code($code);
 
 include $_SERVER["DOCUMENT_ROOT"] . "/errors/{$code}.html";
 exit();
+
+?>

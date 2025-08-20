@@ -18,6 +18,10 @@
                     <a href="admin/dashboard.php" class="btn btn-outline-light fw-bold">
                         <i class="bi bi-person-fill-gear"></i> Espace Administrateur
                     </a>
+                    
+                    <a href="admin/chat.php" class="btn btn-outline-light fw-bold">
+                        <i class="bi bi-chat-right-dots-fill"></i> Espace Discussion
+                    </a>
                 <?php endif; ?>
                 
                 <a href="packs.php" class="btn btn-outline-light fw-bold">

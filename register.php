@@ -28,7 +28,7 @@ $formData = $_SESSION['form_data'];
             <div class="row mb-3">
                 <div class="col">
                     <label for="nom" class="form-label">Nom</label>
-                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" value="<?= $formData['nom'] ?? '' ?>" required>
+                    <input type="text" class="form-control" id="nom" name="nom" placeholder="Votre nom" value="<?= $formData['nom'] ?? '' ?>" autofocus required>
                 </div>
                 <div class="col">
                     <label for="prenom" class="form-label">Prénom</label>

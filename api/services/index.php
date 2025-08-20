@@ -21,6 +21,7 @@ if ($method === "GET") {
 
     if (isset($_SESSION['user_id'])) {
         echo json_encode([
+            "ok" => true,
             "waiter" => $_SESSION['user_id'],
             "services" => $services
         ]);
@@ -28,7 +29,8 @@ if ($method === "GET") {
     }
     
     echo json_encode([
-            "services" => $services
+        "ok" => true,
+        "services" => $services
         ]);
 }
 

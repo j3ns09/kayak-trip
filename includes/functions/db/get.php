@@ -68,6 +68,11 @@ function getAllThreads(PDO $pdo) : array | bool {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getAllOpenThreads(PDO $pdo) : array | bool {
+    $r = $pdo->query("SELECT id, user_id, started_at, is_closed FROM chat_threads WHERE is_closed = 0");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getThread(PDO $pdo, int $threadId) : array | bool {
     $r = $pdo->query("SELECT id, user_id, started_at, is_closed FROM chat_threads WHERE id = $threadId");
     return $r->fetch(PDO::FETCH_ASSOC);

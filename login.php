@@ -37,7 +37,7 @@ if (isset($_SESSION['form_data'])) {
         <form action="processes/user/access/login_process.php" method="POST">
             <div class="my-3">
                 <label for="email" class="form-label">Adresse e-mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre e-mail" value="<?= $formData['email'] ?? '' ?>" required>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Entrez votre e-mail" value="<?= $formData['email'] ?? '' ?>" autofocus required>
             </div>
             <div class="mb-4">
                 <label for="password" class="form-label">Mot de passe</label>

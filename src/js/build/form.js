@@ -3,9 +3,6 @@ const estimatedTimeHtml = document.getElementById('estimated-time-input');
 const personCountHtml = document.getElementById('person-count');
 const startDate = document.getElementById('travel-start');
 const endDate = document.getElementById('travel-end');
-const bagageOption = document.getElementById('chk-bag');
-const foodOption = document.getElementById('chk-fd');
-const locationOption = document.getElementById('chk-loc');
 
 export function setDates() {
     const date = new Date();
@@ -71,21 +68,29 @@ function getValues() {
         return;
     }
 
-    const bagage = bagageOption.checked;
-    const food = foodOption.checked;
-    const location = locationOption.checked;
+    const servicesDiv = document.querySelector('#services-region');
+    const options = servicesDiv.querySelectorAll('input[type="checkbox"]');
+
+    const selectedOptions = [];
+
+    options.forEach(option => {
+        const checked = option.checked;
+        const id = option.id;
+
+        selectedOptions.push({
+            id: id,
+            selected: checked
+        })
+    })
 
     const data = {
         desiredTime: desiredTime,
         personCount: personCount,
-        bagage: bagage,
-        food: food,
-        location: location
+        options: selectedOptions
     };
 
     sendData(data);
 
-    
 }
 
 function sendData(data) {
@@ -99,7 +104,6 @@ function sendData(data) {
     })
     .then(response => response.json())
     .then(result => {
-        console.log("Réponse du serveur: ", result);
         if (result.ok) {
             window.location.href = "/cart.php";
         } else {

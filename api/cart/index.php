@@ -24,20 +24,16 @@ if ($method === 'POST') {
     
     $desired_time = $data['desiredTime'] ?? null;
     $person_count = $data['personCount'] ?? null;
-    $bagage = $data['bagage'] ?? null;
-    $food = $data['food'] ?? null;
-    $location = $data['location'] ?? null;
+    $options = $data['options'] ?? null;
     
     $result = [
         "ok" => true,
         "desired_time" => $desired_time,
         "person_count" => $person_count,
-        "bagage" => $bagage,
-        "food" => $food,
-        "location" => $location
+        "options" => $options
     ];
 
-    if (is_null($desired_time) || is_null($bagage) || is_null($food) || is_null($location) || is_null($person_count)) {
+    if (is_null($desired_time) || is_null($bagage) || is_null($options)) {
         $result['ok'] = false;
         echo json_encode($result);
         exit();
@@ -49,6 +45,11 @@ if ($method === 'POST') {
     echo json_encode($result);
 
     exit();
+} else if ($method === 'GET') {
+    echo isset($_SESSION['cart_items']) ? json_encode($_SESSION['cart_items']) : json_encode(["ok" => false, "error" => "Panier vide"]);
+
+    exit();
+
 } else {
     echo json_encode(['error' => 'mauvaise méthode']);
     exit();
