@@ -1,6 +1,6 @@
 import { loireCoords } from "./map/map.js";
 
-let road = [];
+export let road = [];
 let distances = [];
 
 const loireLength = 1006;

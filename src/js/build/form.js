@@ -1,3 +1,5 @@
+import { road } from "./roadMap.js";
+
 const form = document.getElementById('build-form');
 const estimatedTimeHtml = document.getElementById('estimated-time-input');
 const personCountHtml = document.getElementById('person-count');
@@ -23,7 +25,7 @@ export function setDates() {
 }
 
 export function updateEndDate() {
-    estimatedTimeHtml.addEventListener('change', () => {
+    const update = () => {
         let minDate = startDate.value;
 
         minDate = new Date(minDate);
@@ -33,6 +35,13 @@ export function updateEndDate() {
         
         endDate.setAttribute('min', minDate);
         endDate.value = minDate;
+    }
+
+    startDate.addEventListener('change', () => {
+        update();
+    })
+    estimatedTimeHtml.addEventListener('change', () => {
+        update();
     })
 }
 
@@ -77,18 +86,24 @@ function getValues() {
         const checked = option.checked;
         const id = option.id;
 
-        selectedOptions.push({
-            id: id,
-            selected: checked
-        })
+        if (checked) {
+            selectedOptions.push({
+                id: id
+            })
+        }
     })
 
     const data = {
-        desiredTime: desiredTime,
+        stops: road,
+        desiredTime: {
+            duration: desiredTime,
+            dates: [start, end]
+        },
         personCount: personCount,
         options: selectedOptions
     };
 
+    console.log(data);
     sendData(data);
 
 }

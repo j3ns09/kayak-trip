@@ -22,18 +22,20 @@ if ($method === 'POST') {
         exit;
     }
     
+    $stops = $data['stops'] ?? null;
     $desired_time = $data['desiredTime'] ?? null;
     $person_count = $data['personCount'] ?? null;
     $options = $data['options'] ?? null;
     
     $result = [
         "ok" => true,
+        "stops" => $stops,
         "desired_time" => $desired_time,
         "person_count" => $person_count,
         "options" => $options
     ];
 
-    if (is_null($desired_time) || is_null($bagage) || is_null($options)) {
+    if (is_null($desired_time) || is_null($person_count) || is_null($options)) {
         $result['ok'] = false;
         echo json_encode($result);
         exit();
@@ -46,7 +48,12 @@ if ($method === 'POST') {
 
     exit();
 } else if ($method === 'GET') {
-    echo isset($_SESSION['cart_items']) ? json_encode($_SESSION['cart_items']) : json_encode(["ok" => false, "error" => "Panier vide"]);
+    if (isset($_SESSION['cart_items'])) {
+        echo json_encode(["ok" => true] + $_SESSION['cart_items']);
+        exit();
+    }
+
+    echo json_encode(["ok" => false, "error" => "Panier vide"]);
 
     exit();
 

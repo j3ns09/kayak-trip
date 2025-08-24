@@ -113,6 +113,11 @@ function getAllServices(PDO $pdo) : array | bool {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getService(PDO $pdo, int $serviceId) : array | bool {
+    $r = $pdo->query("SELECT id, name, description, price, is_active FROM services WHERE id = $serviceId");
+    return $r->fetch(PDO::FETCH_ASSOC);
+}
+
 // TODO: Terminer sql
 function getOrders(PDO $pdo, int $userId) {
     $sql = "

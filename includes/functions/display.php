@@ -57,4 +57,9 @@ function displayToast(string $id, string $btspColor, string $title, string $time
 ';
 }
 
+function frenchDate(string $isoDate) {
+    $date = (new DateTime($isoDate))->format('d/m/Y');
+    return $date;
+}
+
 ?>

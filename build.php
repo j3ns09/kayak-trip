@@ -147,6 +147,7 @@ $stops = getAllStops($pdo);
 </div>
 
 <?php include_once 'includes/templates/offcanvas.php'; ?>
+<?php include_once 'includes/templates/chat.php'; ?>
 
 <?php
 

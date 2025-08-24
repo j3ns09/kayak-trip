@@ -3,24 +3,24 @@
 session_start();
 
 include_once 'includes/config/config.php';
+include_once 'includes/functions.php';
 include_once 'includes/templates/header.php';
-// include_once 'includes/templates/navbar.php';
 
 $items = null;
 if (isset($_SESSION['cart_items'])) {
     $items = $_SESSION['cart_items'];
 }
 
-function money($cents) {
-    return number_format($cents/100, 2, ',', ' ') . ' €';
-}
-
-$userId = null;
 if (isset($_SESSION["user_id"])) {
     $userId = $_SESSION["user_id"];
+    $userInfo = getDisplayableUserInfo($pdo, $userId);
+} else {
+    $userId = null;
 }
 
 $isConnected = !is_null($userId);
+
+include_once 'includes/templates/navbar.php';
 ?>
 
 <link rel="stylesheet" href="/src/css/home.css">
@@ -28,7 +28,8 @@ $isConnected = !is_null($userId);
 <div class="container-fluid min-vh-100" style="margin-top:6rem;">
     <div class="row">
         <?php
-        if ($isConnected) :
+        if (!$isConnected) :
+            include_once 'login.php';
         ?>
 
 
@@ -66,30 +67,47 @@ $isConnected = !is_null($userId);
             <h4 class="fw-bold mb-4">Panier</h4>
             <form method="post" action="cart.php">
                 <input type="hidden" name="action" value="update">
-                <?php if (empty($productRows)): ?>
+                <?php if (empty($items)): ?>
                     <p>Votre panier est vide. <a href="packs.php">Retour aux offres</a></p>
-                <?php else: ?>
-                    <?php foreach ($productRows as $id => $p): $qty = $cart[$id]; ?>
+                <?php else: $time = $items['desired_time']['duration']; ?>
+                    <div class="mb-3">
+                        <strong>Durée du voyage souhaitée :</strong> <?= $time . ($time < 2 ? ' jour' : ' jours')?><br>
+                        <strong>Date de départ :</strong> <?= frenchDate($items['desired_time']['dates'][0]) ?><br>
+                        <strong>Date de fin :</strong> <?= frenchDate($items['desired_time']['dates'][1]) ?><br>
+                        <strong>Nombre de personnes :</strong> <?= (int)$items['person_count'] ?>
+                    </div>
+                    <hr>
+
+                    <?php
+                    $total = 0;
+                    $travel_options = [];
+                    
+                    foreach ($items['options'] as $opt) {
+                        $option = getService($pdo, $opt['id']);
+                        array_push($travel_options, $option);
+                    }
+                    foreach ($travel_options as $opt) :
+                        $title = htmlspecialchars($opt['name'] ?? 'Produit inconnu');
+                        $price = (int)($opt['price'] ?? 0);
+                        $qty = (int)($items['person_count']?? 1);
+                        $subtotal = $price * $qty;
+                        $total += $subtotal;
+                    ?>
                         <div class="d-flex align-items-center mb-3">
-                            <img src="<?= htmlspecialchars($p['image'] ?: '/assets/no-image.png') ?>" alt="<?= htmlspecialchars($p['title']) ?>" style="width:70px;height:70px;object-fit:cover;border-radius:8px;">
                             <div class="ms-3 flex-grow-1">
-                                <div class="fw-semibold"><?= htmlspecialchars($p['title']) ?></div>
-                                <div class="text-muted small">Prix unitaire: <?= money((int)$p['price_cents']) ?></div>
+                                <div class="fw-semibold"><?= $title ?></div>
+                                <div class="text-muted small">Prix unitaire: <?= $price ?> €</div>
+                                <div class="text-muted small">Quantité: <?= $qty ?></div>
                             </div>
-                            <div class="d-flex align-items-center">
-                                <input type="number" class="form-control form-control-sm me-2" style="width:70px" name="qty[<?= $id ?>]" value="<?= $qty ?>" min="0">
-                                <button type="submit" formaction="cart.php" name="action" value="remove" class="btn btn-sm btn-outline-danger" onclick="this.form.id.value=<?= $id ?>">×</button>
-                                <input type="hidden" name="id" value="<?= $id ?>">
+                            <div class="text-end">
+                                <strong><?= $subtotal ?> €</strong>
                             </div>
                         </div>
                     <?php endforeach; ?>
+
                     <hr>
-                    <div class="d-flex justify-content-between mb-2"><span>Sous-total</span><span><?= money($totalCents) ?></span></div>
                     <div class="d-flex justify-content-between mb-2"><span>Frais de service</span><span>Inclus</span></div>
-                    <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span><?= money($totalCents) ?></span></div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-secondary">Mettre à jour</button>
-                    </div>
+                    <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span><?= $total ?> €</span></div>
                 <?php endif; ?>
             </form>
         </div>
