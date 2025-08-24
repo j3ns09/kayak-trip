@@ -63,10 +63,15 @@ $isConnected = !is_null($userId);
             <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
         </div>
     </div>
-    <div class="container text-white">
-        <div class="container ps-3 row">
-            <h1 class="display-2 fw-semibold">Besoin d'aide ?</h1>
-            <p>Discutez avec nos commerciaux</p>
+    <div class="container text-white ps-5">
+        <div class="container ps-3 row gx-1 justify-content-around">
+            <div class="col-6 px-5">
+                <h1 class="display-2 fw-semibold">Besoin d'aide ?</h1>
+                <p>Discutez avec nos commerciaux</p>
+            </div>
+            <div class="col-6">
+                <button id="chat-button" class="btn text-white fw-semibols rounded-5 home-buttons">Parler avec nos équipes</button>
+            </div>
         </div>
     </div>
 </div>

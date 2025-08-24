@@ -88,6 +88,11 @@ if ($selectedThreadId) {
 ?>
 
 <div class="container-fluid my-4">
+    <div class="mb-4">
+        <a href="/index.php" class="btn btn-outline-dark btn-sm rounded-pill">
+            <i class="bi bi-arrow-left-circle"></i> Retour utilisateur
+        </a>
+    </div>
     <h1 class="mb-4">Centre de messagerie</h1>
     <div class="row" style="min-height: 70vh;">
         <div class="col-12 col-md-4 col-lg-3">

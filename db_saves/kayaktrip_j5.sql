@@ -434,9 +434,7 @@ CREATE TABLE `room_availability` (
 
 CREATE TABLE `routes` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `description` text DEFAULT NULL,
-  `is_pack` tinyint(1) DEFAULT 0
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
@@ -911,6 +909,12 @@ ALTER TABLE `rooms`
 --
 ALTER TABLE `room_availability`
   ADD CONSTRAINT `room_availability_ibfk_1` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`id`);
+
+--
+-- Constraints for table `route_stops`
+--
+ALTER TABLE `routes`
+  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `uesrs` (`id`) ON DELETE CASCADE,
 
 --
 -- Constraints for table `route_stops`

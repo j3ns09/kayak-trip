@@ -170,4 +170,39 @@ function createPack(
     return $stmt->execute();
 }
 
+function createRoute(PDO $pdo, int $userId) {
+    $sqlRoutes = "INSERT INTO routes (user_id) VALUES (:user_id)";
+    
+    $stmt = $pdo->prepare($sqlRoutes);
+
+    $stmt->bindParam(':userId', $userId);
+
+    if ($stmt->execute()) {
+        return (int)$pdo->lastInsertId();
+    }
+
+    return false;
+}
+
+function createRouteStops(PDO $pdo, int $routeId, array $stops_ids) {
+    $queries = [];
+    $i = 0;
+    
+    foreach ($stops_ids as $stop_id) {
+        $sqlRoutesStops = "INSERT INTO route_stops (route_id, stop_id, order_in_route) VALUES (:route_id, :stop_id, :order_in_route)";
+        
+        $stmt = $pdo->prepare($sqlRoutesStops);
+        $stmt->bindParam(':route_id', $routeId);
+        $stmt->bindParam(':stop_id', $stops_ids[$i]);
+        $stmt->bindParam(':order_in_route', $i);
+
+        array_push($queries, $stmt);
+    }
+
+    foreach($queries as $query) {
+        $query->execute();
+    }
+
+}
+
 ?>
