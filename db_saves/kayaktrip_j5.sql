@@ -914,7 +914,7 @@ ALTER TABLE `room_availability`
 -- Constraints for table `route_stops`
 --
 ALTER TABLE `routes`
-  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `uesrs` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `routes_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `route_stops`

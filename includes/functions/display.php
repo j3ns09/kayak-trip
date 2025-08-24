@@ -57,6 +57,25 @@ function displayToast(string $id, string $btspColor, string $title, string $time
 ';
 }
 
+function displayItem(array $option, int $qty) {
+    $title = $option['name'];
+    $price = $option['price'];
+    $subtotal = $price * $qty;
+    echo '
+    <div class="d-flex align-items-center mb-3">
+        <div class="ms-3 flex-grow-1">
+            <div class="fw-semibold">' . $title . '</div>
+            <div class="text-muted small">Prix unitaire: ' . $price . ' €</div>
+            <div class="text-muted small">Quantité: ' . $qty . '</div>
+        </div>
+        <div class="text-end">
+            <strong>' . $subtotal . ' €</strong>
+        </div>
+    </div>
+    ';
+}
+
+
 function frenchDate(string $isoDate) {
     $date = (new DateTime($isoDate))->format('d/m/Y');
     return $date;

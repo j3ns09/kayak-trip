@@ -58,6 +58,12 @@ function getAllAccommodations(PDO $pdo) : array | bool {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getAccommodationsByStop(PDO $pdo, int $stopId) {
+        $r = $pdo->query("
+        SELECT id, name, description, base_price_per_night, stars FROM accommodations WHERE stop_id = $stopId");
+    return $r->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getAllPacks(PDO $pdo) : array | bool {
     $r = $pdo->query("SELECT id, name, duration, description, price FROM packs");
     return $r->fetchAll(PDO::FETCH_ASSOC);

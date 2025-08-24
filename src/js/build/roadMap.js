@@ -70,9 +70,10 @@ export function loadRoadMap() {
 
         if (checkbox.checked) {
             let stop = {
+                id: parseInt(checkbox.dataset.id),
                 name: stopName,
                 lat: parseFloat(checkbox.dataset.lat),
-                lng: parseFloat(checkbox.dataset.lng)
+                lng: parseFloat(checkbox.dataset.lng),
             };
 
             if (!road.some((step) => step.name === stopName)) {
