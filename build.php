@@ -5,7 +5,7 @@ include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
 include_once 'includes/templates/header.php';
 
-if (isset($_SESSION['user_id'])) {
+if (existsSession('user_id')) {
     $userId = $_SESSION['user_id'];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {
@@ -153,14 +153,14 @@ $stops = getAllStops($pdo);
 
 <?php
 
-if (isset($_SESSION['event'])) {
+if (existsSession('event')) {
     if ($_SESSION['event'] === 'logout') {
         displayToast("logoutToast", "danger", "Déconnexion", "Maintenant", "Déconnexion réussie.");
     } else if ($_SESSION['event'] === 'login') {
         displayToast("loginToast", "success", "Connexion", "Maintenant", "Vous êtes maintenant connecté.");
     }
     
-    unset($_SESSION['event']);
+    unsetSession('event');
 }
 
 ?>

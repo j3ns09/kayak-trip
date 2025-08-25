@@ -35,7 +35,7 @@ function alertMessage(string $alert, int $kind) {
 }
 
 function displayAlert(string $key, int $kind) {
-    if (isset($_SESSION[$key]) && !is_null($_SESSION[$key])) {
+    if (existsSession($key) && !is_null($_SESSION[$key])) {
         alertMessage($_SESSION[$key], $kind);
     }
 }
@@ -62,14 +62,21 @@ function displayItem(array $option, int $qty) {
     $price = $option['price'];
     $subtotal = $price * $qty;
     echo '
-    <div class="d-flex align-items-center mb-3">
+    <div id="sub- ' . $option['id'] . '" class="d-flex align-items-center mb-3 service-item">
         <div class="ms-3 flex-grow-1">
             <div class="fw-semibold">' . $title . '</div>
             <div class="text-muted small">Prix unitaire: ' . $price . ' €</div>
-            <div class="text-muted small">Quantité: ' . $qty . '</div>
+            <div class="text-muted small">
+                Quantité: 
+                <button class="btn btn-sm bg-primary min-btn"><i class="bi bi-arrow-left-circle text-white"></i></button>
+                <span class="qty-service" data-price="' . $price . '">
+                    ' . $qty . '
+                    </span>
+                <button class="btn btn-sm bg-primary pls-btn"><i class="bi bi-arrow-right-circle text-white"></i></button>
+            </div>
         </div>
         <div class="text-end">
-            <strong>' . $subtotal . ' €</strong>
+            <strong class="sub">' . $subtotal . ' €</strong>
         </div>
     </div>
     ';

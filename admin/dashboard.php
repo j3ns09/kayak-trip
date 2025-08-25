@@ -9,7 +9,7 @@ include_once $root . '/includes/functions.php';
 
 include_once $root . '/includes/templates/header.php';
 
-if (isset($_SESSION['user_id'])) {
+if (existsSession('user_id')) {
     if (!isAdmin($pdo, $_SESSION['user_id'])) {
         redirectAlert('error', 'Accès non autorisé à la page ' . $_SERVER['HTTP_HOST'], 'index');
     }
@@ -351,7 +351,7 @@ if (isset($_SESSION['user_id'])) {
 
 <?php
 
-if (isset($_SESSION["error"])) {
+if (existsSession('error')) {
     displayToast(
         "errorToast",
         "danger",

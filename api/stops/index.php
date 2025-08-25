@@ -24,7 +24,7 @@ if ($method === "GET") {
         exit();
     }
 
-    if (isset($_SESSION['user_id'])) {
+    if (existsSession('user_id')) {
         echo json_encode([
             "waiter" => $_SESSION['user_id'],
             "stops" => $stops

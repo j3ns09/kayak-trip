@@ -7,7 +7,7 @@ require_once 'includes/functions.php';
 
 include_once 'includes/templates/header.php';
 
-if (isset($_SESSION['user_id'])) {
+if (existsSession('user_id')) {
     $userId = $_SESSION['user_id'];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {

@@ -19,4 +19,20 @@ function userExistsPasswordCorrect(PDO $pdo, string $email, string $password) : 
     return ($psw && password_verify($password, $psw));
 }
 
+function getSession(string $key) {
+    return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+}
+
+function existsSession(string $key) : bool {
+    return isset($_SESSION[$key]);
+}
+
+function setSession(string $key, $value) : void {
+    $_SESSION[$key] = $value;
+}
+
+function unsetSession(string $key) : void {
+    unset($_SESSION[$key]);
+}
+
 ?>

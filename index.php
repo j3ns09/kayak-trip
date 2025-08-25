@@ -7,7 +7,7 @@ include_once "includes/functions.php";
 
 include_once "includes/templates/header.php";
 
-if (isset($_SESSION["user_id"])) {
+if (existsSession('user_id')) {
     $userId = $_SESSION["user_id"];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {
@@ -47,12 +47,12 @@ $isConnected = !is_null($userId);
 <div id="main" class="container row align-items-center">
     <div class="container text-white ps-5">
         <div class="container ps-3 row gx-1 justify-content-around align-items-center">
-            <div class="col-6 px-5">
+            <div class="col-7 px-5">
                 <h1 class="display-1 fw-semibold">Explorez la Loire en Kayak</h1>
                 <p class="fst-italic fs-5">Composez votre itinéraire ou optez pour l'un de nos packs tout inclus</p>
             </div>
 
-            <div class="col-6 row gx-5 ps-5">
+            <div class="col-5 row gx-5 ps-5">
                 <div class="col">
                     <a href="build.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>
                 </div>
@@ -64,13 +64,13 @@ $isConnected = !is_null($userId);
         </div>
     </div>
     <div class="container text-white ps-5">
-        <div class="container ps-3 row gx-1 justify-content-around">
-            <div class="col-6 px-5">
+        <div class="container ps-3 row gx-1 justify-content-around align-items-center">
+            <div class="col-7 px-5">
                 <h1 class="display-2 fw-semibold">Besoin d'aide ?</h1>
                 <p>Discutez avec nos commerciaux</p>
             </div>
-            <div class="col-6">
-                <button id="chat-button" class="btn text-white fw-semibols rounded-5 home-buttons">Parler avec nos équipes</button>
+            <div class="col-5">
+                <button id="chat-button" class="btn text-white fw-semibold rounded-5 home-buttons">Parler avec nos équipes</button>
             </div>
         </div>
     </div>
@@ -80,7 +80,7 @@ $isConnected = !is_null($userId);
 
 <?php 
 
-if (isset($_SESSION["event"])) {
+if (existsSession("event")) {
     if ($_SESSION["event"] === "logout") {
         displayToast(
             "logoutToast",
@@ -102,7 +102,7 @@ if (isset($_SESSION["event"])) {
     unset($_SESSION["event"]);
 }
 
-if (isset($_SESSION["error"])) {
+if (existsSession("error")) {
     displayToast(
         "errorToast",
         "danger",
@@ -110,9 +110,12 @@ if (isset($_SESSION["error"])) {
         "Maintenant",
         $_SESSION["error"],
     );
-    unset($_SESSION["error"]);
+    unsetSession('error');
 }
 
+if ($isConnected) {
+    include_once 'includes/templates/chat.php';
+}
 ?>
 
 

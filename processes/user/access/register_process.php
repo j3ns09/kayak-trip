@@ -37,7 +37,7 @@ $ok = $result['ok'];
 $message = $result['message'];
 
 if ($ok) {
-    unset($_SESSION['form_data']);
+    unsetSession('form_data');
     redirectAlert('success', 'Compte crée avec succès', 'login');
 }
 

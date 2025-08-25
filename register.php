@@ -18,7 +18,7 @@ $formData = $_SESSION['form_data'];
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="login-card shadow-lg">
         <?php
-            if (isset($_SESSION['error'])) {
+            if (existsSession('error')) {
                 displayAlert('error', 1);
             }
         ?>
@@ -65,7 +65,7 @@ $formData = $_SESSION['form_data'];
 
 <?php
 
-unset($_SESSION['form_data']);
+unsetSession('form_data');
 include_once "includes/templates/footer.php";
 
 ?>

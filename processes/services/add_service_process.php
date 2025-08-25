@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    unset($_SESSION['form_data']);
+    unsetSession('form_data');
 
     createService($pdo, $name, $description, $price);
 }

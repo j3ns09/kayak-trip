@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     
     if (userExistsPasswordCorrect($pdo, $email, $password)) {
-        unset($_SESSION['form_data']);
+        unsetSession('form_data');
         
         $userId = getUserId($pdo, $email);
         $_SESSION['user_id'] = $userId;

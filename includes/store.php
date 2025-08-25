@@ -19,7 +19,7 @@ $root = $_SERVER['DOCUMENT_ROOT'] . "/";
 // }
 
 
-// if (isset($_SESSION['last_refresh'])) {
+// if (existsSession('last_refresh')) {
 //     if (time() - $_SESSION['last_refresh'] > $bdd_refresh && isset($_SESSION['user_id'])) {
 //         $_SESSION['user_info'] = getUser($pdo, $_SESSION['user_id']);
 //         $_SESSION['last_refresh'] = time();
@@ -28,7 +28,7 @@ $root = $_SERVER['DOCUMENT_ROOT'] . "/";
 //     $_SESSION['last_refresh'] = time();
 // }
 
-// if (isset($_SESSION['user_info'])) {
+// if (existsSession('user_info')) {
 //     logAction($pdo, $_SESSION['user_info']['id']);
 // }
 

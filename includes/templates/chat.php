@@ -1,4 +1,4 @@
-<button id="chat-toggle" class="btn btn-warning rounded-circle shadow"
+<button id="chat-toggle" class="btn btn-warning rounded-circle shadow z-1"
         style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px;">
     <i class="bi bi-chat-dots-fill fs-3 text-white"></i>
 </button>

@@ -7,11 +7,11 @@ include_once 'includes/functions.php';
 include_once 'includes/templates/header.php';
 
 $items = null;
-if (isset($_SESSION['cart_items'])) {
+if (existsSession('cart_items')) {
     $items = $_SESSION['cart_items'];
 }
 
-if (isset($_SESSION["user_id"])) {
+if (existsSession('user_id')) {
     $userId = $_SESSION["user_id"];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {
@@ -28,36 +28,29 @@ include_once 'includes/templates/navbar.php';
 
 <div class="container-fluid min-vh-100" style="margin-top:6rem;">
     <div>
-        <?php
-        if (!$isConnected) :
-            include_once 'login.php';
-        ?>
-
-
+        <?php if (!$isConnected): ?>
+            <?php include_once 'login.php'; ?>
         <?php else: ?>
-            <form class="row" method="POST" action="checkout.php">
-                <div class="col-lg-7 bg-white bg-opacity-75 p-5">
+            <div class="row">
+                <div class="col-lg-7 bg-white bg-opacity-75 p-5 min-vh-100">
                     <h4 class="fw-bold mb-4">Informations</h4>
                     <div>
                         <?php foreach ($items['stops'] as $stop): ?>
                             <div class="mb-3">
                                 <h5><?= $stop['name'] ?></h5>
-
                                 <?php
                                 $accommodations = getAccommodationsByStop($pdo, $stop['id']) ?? [];
                                 if (!empty($accommodations)): ?>
                                     <ul class="list-group mt-2">
                                         <?php foreach ($accommodations as $acc): ?>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-
                                                 <div class="form-check">
-                                                    <input 
-                                                        class="form-check-input acc-radio" 
-                                                        type="radio" 
-                                                        name="acc-<?= $stop['id'] ?>" 
+                                                    <input
+                                                        class="form-check-input acc-radio"
+                                                        type="radio"
+                                                        name="acc-<?= $stop['id'] ?>"
                                                         id="radio-<?= $acc['id'] ?>"
-                                                        data-price="<?= $acc['base_price_per_night']?>"
-                                                        >
+                                                        data-price="<?= $acc['base_price_per_night'] ?>">
                                                     <div class="form-check-label" for="radio-<?= $acc['id'] ?>">
                                                         <span class="fw-semibold">
                                                             <?= htmlspecialchars($acc['name']) ?>
@@ -68,8 +61,7 @@ include_once 'includes/templates/navbar.php';
                                                                     } else {
                                                                         echo '<i class="bi bi-star"></i>';
                                                                     }
-                                                                }
-                                                                ?>
+                                                                } ?>
                                                             </span>
                                                         </span><br>
                                                         <small class="text-muted"><?= htmlspecialchars($acc['description'] ?? '') ?></small>
@@ -93,7 +85,6 @@ include_once 'includes/templates/navbar.php';
 
                 <?php if (empty($items)): ?>
                     <p>Votre panier est vide. <a href="packs.php">Retour aux offres</a></p>
-
                 <?php else: $time = $items['desired_time']['duration']; ?>
                     <div class="mb-3">
                         <strong>Durée du voyage souhaitée :</strong> <?= $time . ($time < 2 ? ' jour' : ' jours') ?><br>
@@ -102,10 +93,8 @@ include_once 'includes/templates/navbar.php';
                         <strong>Nombre de personnes :</strong> <?= $items['person_count'] ?>
                     </div>
                     <hr>
-
                     <?php
                     $travel_options = [];
-
                     foreach ($items['options'] as $opt) {
                         $option = getService($pdo, $opt['id']);
                         array_push($travel_options, $option);
@@ -116,19 +105,27 @@ include_once 'includes/templates/navbar.php';
                         $price = $opt['price'] ?? 0;
                         $qty = $items['person_count'] ?? 1;
                         $total += $price * $qty;
-
                         displayItem($opt, $qty);
-                    ?>
-                    <?php endforeach;
+                    endforeach;
                     echo '</div>';
                     ?>
-
                     <hr>
                     <div class="d-flex justify-content-between mb-2"><span>Frais de service</span><span>Inclus</span></div>
-                    <div class="d-flex justify-content-between fw-bold fs-5"><span>Total</span><span id="total"><?= $total ?> €</span></div>
+                    <div class="d-flex justify-content-between fw-bold fs-5 mb-3"><span>Total</span><span id="total"><?= $total ?> €</span></div>
+
+                    <label for="discount-code" class="form-label">Code de promotion</label>
+                    <input type="text" id="discount-code" class="form-control col-3" placeholder="Entrez un code de promotion...">
+
+
+                    <span id="duration" style="display:none;"><?= $items['desired_time']['duration'] ?? 0 ?></span>
+                    <span id="start-date" style="display:none;"><?= frenchDate($items['desired_time']['dates'][0] ?? '') ?></span>
+                    <span id="end-date" style="display:none;"><?= frenchDate($items['desired_time']['dates'][1] ?? '') ?></span>
+                    <span id="person-count" style="display:none;"><?= $items['person_count'] ?? 1 ?></span>
+
+                    <button id="checkout-btn" class="btn btn-success w-100 mt-4">Valider et passer au paiement</button>
                 <?php endif; ?>
             </div>
-            </form>
+            </div>
     </div>
 </div>
 

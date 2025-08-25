@@ -8,7 +8,7 @@ include_once 'includes/templates/header.php';
 
 $formData = null;
 
-if (isset($_SESSION['form_data'])) {
+if (existsSession('form_data')) {
     $formData = $_SESSION['form_data'];
 }
 
@@ -26,12 +26,12 @@ if (isset($_SESSION['form_data'])) {
     <div class="login-card shadow-lg">
         <h2 class="mb-4 text-center fw-semibold">Connexion</h2>
         <?php
-            if (isset($_SESSION['error'])) {
+            if (existsSession('error')) {
                 displayAlert('error', 1);
                 unset($_SESSION['error']);
             }
 
-            if (isset($_SESSION['success'])) {
+            if (existsSession('success')) {
                 displayAlert('success', 0);
                 unset($_SESSION['success']);
             }
@@ -61,7 +61,7 @@ if (isset($_SESSION['form_data'])) {
 <?php 
 
 if ($formData) {
-    unset($_SESSION['form_data']);
+    unsetSession('form_data');
 }
 include_once "includes/templates/footer.php";
 

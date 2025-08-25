@@ -48,7 +48,7 @@ if ($method === 'POST') {
 
     exit();
 } else if ($method === 'GET') {
-    if (isset($_SESSION['cart_items'])) {
+    if (existsSession('cart_items')) {
         echo json_encode(["ok" => true] + $_SESSION['cart_items']);
         exit();
     }

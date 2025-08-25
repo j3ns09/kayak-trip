@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    unset($_SESSION['form_data']);
+    unsetSession('form_data');
     
     setDiscountNewValues($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
 }

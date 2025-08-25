@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
-    unset($_SESSION['form_data']);
+    unsetSession('form_data');
 
     setPackNewValues($pdo, $id, $name, $duration, $description, $price);
 }

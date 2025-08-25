@@ -9,7 +9,7 @@ include_once $root . '/includes/functions.php';
 
 header("Content-Type: application/json");
 
-if (isset($_SESSION['user_id'])) {
+if (existsSession('user_id')) {
     $key = getApiKey($pdo, $_SESSION['user_id']);
 
     if (!$key) {

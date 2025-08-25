@@ -12,7 +12,7 @@ header("Content-Type: application/json");
 $method = $_SERVER["REQUEST_METHOD"];
 $requester = null;
 
-if (isset($_SESSION["user_id"])) {
+if (existsSession('user_id')) {
     $requester = $_SESSION["user_id"];
     $key = getApiKey($pdo, $_SESSION["user_id"]);
 } else {
