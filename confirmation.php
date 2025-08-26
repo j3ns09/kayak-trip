@@ -4,7 +4,7 @@ session_start();
 
 include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
-include_once 'includes/templates/header.php';
+include_once 'includes/templates/header.html';
 
 $items = null;
 if (existsSession('cart_items')) {

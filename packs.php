@@ -5,7 +5,7 @@ include_once 'includes/store.php';
 require_once 'includes/config/config.php';
 require_once 'includes/functions.php';
 
-include_once 'includes/templates/header.php';
+include_once 'includes/templates/header.html';
 
 if (existsSession('user_id')) {
     $userId = $_SESSION['user_id'];
@@ -58,4 +58,4 @@ $isConnected = !is_null($userId);
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
 
-<?php include_once 'includes/templates/footer.php'; ?>
+<?php include_once 'includes/templates/footer.html'; ?>

@@ -2,7 +2,7 @@
 
 include_once 'includes/store.php';
 include_once 'includes/functions.php';
-include_once 'includes/templates/header.php';
+include_once 'includes/templates/header.html';
 
 $formData = $_SESSION['form_data'];
 ?>
@@ -66,6 +66,6 @@ $formData = $_SESSION['form_data'];
 <?php
 
 unsetSession('form_data');
-include_once "includes/templates/footer.php";
+include_once "includes/templates/footer.html";
 
 ?>

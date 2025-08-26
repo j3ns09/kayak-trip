@@ -4,7 +4,7 @@ $root = $_SERVER['DOCUMENT_ROOT'];
 include_once $root . '/includes/store.php';
 include_once $root . '/includes/config/config.php';
 include_once $root . '/includes/functions.php';
-include_once $root . '/includes/templates/header.php';
+include_once $root . '/includes/templates/header.html';
 
 if (!isset($_SESSION['user_id']) || !isAdmin($pdo, $_SESSION['user_id'])) {
     redirect('index');
@@ -189,4 +189,4 @@ if ($selectedThreadId) {
     </div>
 </div>
 
-<?php include_once $root . '/includes/templates/footer.php'; ?>
+<?php include_once $root . '/includes/templates/footer.html'; ?>

@@ -3,7 +3,7 @@
 include_once 'includes/store.php';
 include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
-include_once 'includes/templates/header.php';
+include_once 'includes/templates/header.html';
 
 if (existsSession('user_id')) {
     $userId = $_SESSION['user_id'];
@@ -171,4 +171,4 @@ if (existsSession('event')) {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 
-<?php include_once "includes/templates/footer.php"; ?>
+<?php include_once "includes/templates/footer.html"; ?>

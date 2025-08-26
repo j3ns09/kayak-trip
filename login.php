@@ -4,7 +4,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 include_once 'includes/store.php';
 include_once 'includes/functions.php';
-include_once 'includes/templates/header.php';
+include_once 'includes/templates/header.html';
 
 $formData = null;
 
@@ -63,6 +63,6 @@ if (existsSession('form_data')) {
 if ($formData) {
     unsetSession('form_data');
 }
-include_once "includes/templates/footer.php";
+include_once "includes/templates/footer.html";
 
 ?>
