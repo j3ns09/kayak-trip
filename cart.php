@@ -102,20 +102,24 @@ include_once 'includes/templates/navbar.php';
                     echo '<div id="spendings">';
                     foreach ($travel_options as $opt) :
                         $title = htmlspecialchars($opt['name'] ?? 'Produit inconnu');
-                        $price = $opt['price'] ?? 0;
                         $qty = $items['person_count'] ?? 1;
-                        $total += $price * $qty;
                         displayItem($opt, $qty);
                     endforeach;
                     echo '</div>';
                     ?>
                     <hr>
-                    <div class="d-flex justify-content-between mb-2"><span>Frais de service</span><span>Inclus</span></div>
-                    <div class="d-flex justify-content-between fw-bold fs-5 mb-3"><span>Total</span><span id="total"><?= $total ?> €</span></div>
-
                     <label for="discount-code" class="form-label">Code de promotion</label>
-                    <input type="text" id="discount-code" class="form-control col-3" placeholder="Entrez un code de promotion...">
-
+                    <div id="discount-group" class="mb-3">
+                        <div class="input-group">
+                            <span class="input-group-text" id="valid-icon"><i class="bi bi-exclamation-circle-fill text-warning" data-bs-toggle="tooltip" data-bs-title="Pas de code promo sélectionné"></i></span>
+                            <input type="text" id="discount-code" class="form-control col-3" placeholder="Entrez un code de promotion..." aria-describedby="cp-icon form-text1">
+                            <input type="hidden" id="discount-value">
+                            <button class="input-group-text" id="cp-icon"><i class="bi bi-search"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2"><span>Frais de service</span><span>Inclus</span></div>
+                    <div class="d-flex justify-content-between fw-bold fs-5 mb-3"><span>Total</span><span id="total" data-basePrice="0">0 €</span></div>
 
                     <span id="duration" style="display:none;"><?= $items['desired_time']['duration'] ?? 0 ?></span>
                     <span id="start-date" style="display:none;"><?= frenchDate($items['desired_time']['dates'][0] ?? '') ?></span>
@@ -130,4 +134,7 @@ include_once 'includes/templates/navbar.php';
 </div>
 
 <script src="/src/js/cart/main.js" type="module"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+
 <?php include_once 'includes/templates/footer.php'; ?>

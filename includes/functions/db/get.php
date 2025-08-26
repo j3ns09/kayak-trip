@@ -114,6 +114,14 @@ function getAllPromotions(PDO $pdo) : array | bool {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getPromotion(PDO $pdo, string $code) : array | bool {
+    $stmt = $pdo->prepare("SELECT code, description, discount_value, valid_from, valid_to, first_time_only FROM promotions WHERE code = :code");
+    $stmt->bindParam(':code', $code);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function getAllServices(PDO $pdo) : array | bool {
     $r = $pdo->query("SELECT id, name, description, price, is_active FROM services");
     return $r->fetchAll(PDO::FETCH_ASSOC);

@@ -1,13 +1,14 @@
-let baseTotal = 0;
+const radios = document.querySelectorAll('.acc-radio');
+const totalSpan = document.getElementById('total');
+const discountValue = document.getElementById('discount-value');
+
+let discountPercent = 0;
+
+const baseTotal = parseFloat(totalSpan.textContent.replace("€", "").trim()) || 0;
 let selectedAcc = {};
 
 export function updateTotal() {
-    const radios = document.querySelectorAll('.acc-radio');
-    const totalSpan = document.getElementById('total');
-
     if (!totalSpan) return;
-
-    baseTotal = parseFloat(totalSpan.textContent.replace("€", "").trim()) || 0;
 
     radios.forEach(radio => {
         radio.addEventListener('change', () => {
@@ -16,6 +17,18 @@ export function updateTotal() {
             selectedAcc[stopName] = price;
             recalculateTotal();
         });
+    });
+
+    discountValue.addEventListener('change', () => {
+        const reduction = parseFloat(discountValue.value);
+     
+        if (!isNaN(reduction) && reduction > 0) {
+            discountPercent = reduction;
+        } else {
+            discountPercent = 0;
+        }
+
+        recalculateTotal();
     });
 }
 
@@ -48,7 +61,7 @@ export function updateQuantities() {
     });
 }
 
-function recalculateTotal() {
+export function recalculateTotal() {
     const totalSpan = document.getElementById('total');
     if (!totalSpan) return;
 
@@ -64,6 +77,10 @@ function recalculateTotal() {
         const qty = parseInt(qtySpan.textContent);
         total += qty * price;
     });
+
+    if (discountPercent > 0) {
+        total = total - (total * discountPercent / 100);
+    }
 
     totalSpan.textContent = total.toFixed(2) + " €";
 }
