@@ -67,7 +67,7 @@ $isConnected = !is_null($userId);
         <div class="container ps-3 row gx-1 justify-content-around align-items-center">
             <div class="col-7 px-5">
                 <h1 class="display-2 fw-semibold">Besoin d'aide ?</h1>
-                <p>Discutez avec nos commerciaux</p>
+                <p class="fst-italic fs-5">Discutez avec nos commerciaux</p>
             </div>
             <div class="col-5">
                 <button id="chat-button" class="btn text-white fw-semibold rounded-5 home-buttons">Parler avec nos équipes</button>

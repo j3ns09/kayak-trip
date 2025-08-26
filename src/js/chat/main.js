@@ -9,6 +9,11 @@ let activeThread;
 let allMessages;
 
 document.addEventListener('DOMContentLoaded', async () => {    
+    const chatButton = document.getElementById('chat-button');
+    if (chatButton) {
+        chatButton.addEventListener('click', () => chatWindow.classList.remove('d-none'));
+    }
+    
     toggleBtn.addEventListener('click', () => chatWindow.classList.toggle('d-none'));
     closeBtn.addEventListener('click', () => chatWindow.classList.add('d-none'));
     

@@ -64,6 +64,11 @@ function getAccommodationsByStop(PDO $pdo, int $stopId) {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getAccommodation(PDO $pdo, int $accId) {
+    $r = $pdo->query("SELECT id, name, description, base_price_per_night, stars FROM accommodations WHERE id = $accId");
+    return $r->fetch(PDO::FETCH_ASSOC);
+}
+
 function getAllPacks(PDO $pdo) : array | bool {
     $r = $pdo->query("SELECT id, name, duration, description, price FROM packs");
     return $r->fetchAll(PDO::FETCH_ASSOC);
@@ -130,6 +135,21 @@ function getAllServices(PDO $pdo) : array | bool {
 function getService(PDO $pdo, int $serviceId) : array | bool {
     $r = $pdo->query("SELECT id, name, description, price, is_active FROM services WHERE id = $serviceId");
     return $r->fetch(PDO::FETCH_ASSOC);
+}
+
+function getServiceCol(PDO $pdo, int $serviceId, string $column) {
+    $cols = ['name', 'description', 'price', 'is_active'];
+
+    if (!in_array($column, $cols)) {
+        return false;
+    }
+    
+    $stmt = $pdo->prepare("SELECT $column FROM services WHERE id = :id");
+
+    $stmt->bindParam(':id', $serviceId, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
 // TODO: Terminer sql

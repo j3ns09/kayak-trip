@@ -17,14 +17,14 @@ function submitCheckout() {
         accommodations[stopId] = parseInt(accommodationId);
     });
 
-    const quantities = {};
+    const services = {};
     document.querySelectorAll('.qty-service').forEach(span => {
         const parent = span.closest('[id^="sub-"]');
         const serviceId = parent?.id.replace('sub-', '').trim();
         const qty = parseInt(span.textContent.trim());
 
         if (!isNaN(serviceId) && !isNaN(qty)) {
-            quantities[serviceId] = qty;
+            services[serviceId] = qty;
         }
     });
 
@@ -47,7 +47,7 @@ function submitCheckout() {
 
     const data = {
         accommodations,
-        quantities,
+        services: services,
         discountCode,
         total,
         desiredTime: {
