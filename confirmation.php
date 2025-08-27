@@ -8,7 +8,7 @@ if (existsSession('user_id')) {
     $userId = $_SESSION["user_id"];
     $userInfo = getDisplayableUserInfo($pdo, $userId);
 } else {
-    $userId = null;
+    redirect('login');
 }
 
 $isConnected = !is_null($userId);
@@ -21,11 +21,45 @@ if (!$order) {
 }
 
 $accommodations = $order['accommodations'] ?? [];
+$rooms          = $order['rooms'] ?? [];
 $services       = $order['services'] ?? [];
-$discountCode   = $order['discountCode'] ?? '';
+$discountCode   = $order['discountCode'] ?? null;
 $total          = $order['total'] ?? 0;
 $desiredTime    = $order['desiredTime'] ?? [];
 $personCount    = $order['personCount'] ?? 1;
+
+$startDate = $desiredTime['dates'][0] ?? null;
+$endDate   = $desiredTime['dates'][1] ?? null;
+$duration  = $desiredTime['duration'] ?? null;
+
+if (bookingExists($pdo, $userId, $startDate, $endDate)) {
+    redirect('index');
+}
+
+$ok = createBooking($pdo, $userId, $startDate, $endDate, $total, $discountCode);
+if ($ok) {
+    $bookingId = $pdo->lastInsertId();
+
+    if (!empty($accommodations)) {
+        foreach ($accommodations as $accId){
+            $ok = createBookingAccommodations($pdo, $bookingId, $accId);
+        
+            if (!empty($rooms[$accId]) && $ok) {
+                foreach ($rooms[$accId] as $roomId) {
+                    $roomPrice = getRoomCol($pdo, $roomId, 'price');
+        
+                    createBookingRooms($pdo, $bookingId, $roomId, $roomPrice);
+                }
+            }
+        }
+    }
+
+    foreach ($services as $serviceId => $qty) {
+        createBookingServices($pdo, $bookingId, $serviceId, $qty);
+    }
+}
+
+
 
 include_once 'includes/templates/header.html';
 include_once 'includes/templates/navbar.php';
@@ -50,15 +84,33 @@ include_once 'includes/templates/navbar.php';
             <h5 class="mt-4"><i class="bi bi-house-fill"></i> Hébergements sélectionnés</h5>
             <?php if (!empty($accommodations)): ?>
                 <ul class="list-group">
-                    <?php foreach ($accommodations as $stopId => $accId): 
+                    <?php foreach ($accommodations as $accId => $t):
+                        $total_temp = 0;
                         $acc = getAccommodation($pdo, $accId);
                         ?>
-                        <li class="list-group-item d-flex justify-content-between">
-                            <span>
-                                <?= htmlspecialchars($acc['name'] ?? "Hébergement #$accId") ?>
-                                <small class="text-muted">(Arrêt #<?= $stopId ?>)</small>
-                            </span>
-                            <span><?= $acc['base_price_per_night'] ?? '-' ?> € / nuit</span>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <span>
+                                    <?= $acc['name'] ?>
+                                    <small class="text-muted">(Arrêt #<?= $accId ?>)</small>
+                                </span>
+                            </div>
+
+                            <?php if (!empty($rooms[$accId])): ?>
+                                <ul class="my-2">
+                                    <?php foreach ($rooms[$accId] as $roomId): 
+                                        $room = getRoom($pdo, $roomId);
+                                        $total_temp += $room['price'];
+                                        ?>
+                                        <li>
+                                            <?= $room['name'] ?> - <?= $room['price'] ?? '?' ?> €
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                            <div>
+                                Total : <strong><?= $total_temp ?></strong>
+                            </div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -75,7 +127,7 @@ include_once 'includes/templates/navbar.php';
                         $srv = getService($pdo, $srvId);
                         ?>
                         <li class="list-group-item d-flex justify-content-between">
-                            <span><?= htmlspecialchars($srv['name'] ?? "Service #$srvId") ?> (x<?= $qty ?>)</span>
+                            <span><?= $srv['name'] ?> (x<?= $qty ?>)</span>
                             <span><?= $srv['price'] * $qty ?> €</span>
                         </li>
                     <?php endforeach; ?>
@@ -85,20 +137,19 @@ include_once 'includes/templates/navbar.php';
             <?php endif; ?>
 
             <?php if (!empty($discountCode)): ?>
-                <h5 class="mt-4">🎟️ Code promo appliqué</h5>
-                <p><strong><?= htmlspecialchars($discountCode) ?></strong></p>
+                <h5 class="mt-4"><i class="bi bi-ticket-perforated-fill"></i> Code promo appliqué</h5>
+                <p class="ps-4"><strong><?= $discountCode ?></strong></p>
             <?php else: ?>
                 <h5 class="mt-4">Aucun code de promotion appliqué</h5>
             <?php endif; ?>
         </div>
 
-        <!-- Colonne droite récap -->
         <div class="col-lg-4 p-5 bg-light">
             <h4 class="fw-bold mb-4">Récapitulatif</h4>
 
             <div class="d-flex justify-content-between mb-2">
                 <span>Sous-total</span>
-                <span><?= number_format($total, 2, ',', ' ') ?> €</span>
+                <span><?= $total ?> €</span>
             </div>
             <div class="d-flex justify-content-between mb-2">
                 <span>Frais de service</span>
@@ -107,7 +158,7 @@ include_once 'includes/templates/navbar.php';
             <hr>
             <div class="d-flex justify-content-between fw-bold fs-5 mb-4">
                 <span>Total</span>
-                <span><?= number_format($total, 2, ',', ' ') ?> €</span>
+                <span><?= $total ?> €</span>
             </div>
 
             <form action="pay.php" method="POST">
@@ -117,5 +168,8 @@ include_once 'includes/templates/navbar.php';
         </div>
     </div>
 </div>
+
+<?php include_once 'includes/templates/offcanvas.php' ?>
+<?php include_once 'includes/templates/chat.php' ?>
 
 <?php include_once 'includes/templates/footer.html'; ?>

@@ -205,4 +205,91 @@ function createRouteStops(PDO $pdo, int $routeId, array $stops_ids) {
 
 }
 
+function createBooking(
+    PDO $pdo, 
+    int $userId,
+    string $startDate,
+    string $endDate,
+    float $totalPrice,
+    string | null $discountCode
+) : bool
+{
+    $startDate = DateTime::createFromFormat('d/m/Y', $startDate);
+    $endDate = DateTime::createFromFormat('d/m/Y', $endDate);
+
+    if (!$startDate || !$endDate) {
+        return false;
+    }
+
+    $startDate = $startDate->format('Y-m-d');
+    $endDate = $endDate->format('Y-m-d');
+    
+    $sql = "INSERT INTO bookings (user_id, start_date, end_date, total_price, promotion_code_used)
+    VALUES (:user_id, :start_date, :end_date, :total_price, :promotion_code_used)";
+    
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->bindParam(':start_date', $startDate, PDO::PARAM_STR);
+    $stmt->bindParam(':end_date', $endDate, PDO::PARAM_STR);
+    $stmt->bindParam(':total_price', $totalPrice);
+    $stmt->bindParam(':promotion_code_used', $discountCode);
+
+    return $stmt->execute();
+}
+
+function createBookingAccommodations(
+    PDO $pdo,
+    int $bookingId,
+    int $accommodationId
+) : bool
+{
+    $sql = "INSERT INTO booking_accommodations (booking_id, accommodation_id)
+    VALUES (:booking_id, :accommodation_id)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+    $stmt->bindParam(':accommodation_id', $accommodationId, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
+
+function createBookingRooms(
+    PDO $pdo,
+    int $bookingId,
+    int $roomId,
+    float $price
+) : bool
+{
+    $sql = "INSERT INTO booking_rooms (booking_id, room_id, price)
+    VALUES (:booking_id, :room_id, :price)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+    $stmt->bindParam(':room_id', $roomId, PDO::PARAM_INT);
+    $stmt->bindParam(':price', $price);
+
+    return $stmt->execute();
+}
+
+function createBookingServices(
+    PDO $pdo,
+    int $bookingId,
+    int $serviceId,
+    int $quantity
+) : bool
+{
+    $sql = "INSERT INTO booking_services (booking_id, service_id, quantity)
+    VALUES (:booking_id, :service_id, :quantity)";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':booking_id', $bookingId, PDO::PARAM_INT);
+    $stmt->bindParam(':service_id', $serviceId, PDO::PARAM_INT);
+    $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
+
+    return $stmt->execute();
+}
 ?>

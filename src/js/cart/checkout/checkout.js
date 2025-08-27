@@ -11,10 +11,21 @@ export function submitForm() {
 
 function submitCheckout() {
     const accommodations = {};
-    document.querySelectorAll('.acc-radio:checked').forEach(radio => {
-        const stopId = radio.name.replace('acc-', '');
-        const accommodationId = radio.id.replace('radio-', '');
-        accommodations[stopId] = parseInt(accommodationId);
+    const rooms = {};
+
+    document.querySelectorAll('input[type="checkbox"][name^="room-"]:checked').forEach(checkbox => {
+        const parts = checkbox.name.replace('[]', '').split('-'); 
+        const accId = parts[1]; 
+        const roomId = checkbox.value;
+
+        if (accId && roomId) {
+            if (!rooms[accId]) {
+                rooms[accId] = [];
+            }
+            rooms[accId].push(parseInt(roomId));
+
+            accommodations[accId] = parseInt(accId);
+        }
     });
 
     const services = {};
@@ -47,7 +58,8 @@ function submitCheckout() {
 
     const data = {
         accommodations,
-        services: services,
+        rooms,
+        services,
         discountCode,
         total,
         desiredTime: {

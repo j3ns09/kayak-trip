@@ -6,7 +6,7 @@
 <div id="chat-window" class="card shadow-lg d-none"
      style="position: fixed; bottom: 90px; right: 20px; width: 350px; height: 450px;">
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-        <span><i class="bi bi-people"></i> Chat Commercial</span>
+        <span><i class="bi bi-people"></i> Service client</span>
         <button id="chat-close" class="btn-close btn-close-white"></button>
     </div>
     <div id="chat-messages" class="card-body bg-light overflow-auto" style="height: 320px;">

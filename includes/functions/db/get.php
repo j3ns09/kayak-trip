@@ -58,15 +58,71 @@ function getAllAccommodations(PDO $pdo) : array | bool {
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getAccommodationsByStop(PDO $pdo, int $stopId) {
-        $r = $pdo->query("
-        SELECT id, name, description, base_price_per_night, stars FROM accommodations WHERE stop_id = $stopId");
-    return $r->fetchAll(PDO::FETCH_ASSOC);
+function getAccommodationsByStop(PDO $pdo, int $stopId): array {
+    $sql = "
+        SELECT 
+            a.id AS accommodation_id,
+            a.name AS accommodation_name,
+            a.description,
+            a.stars,
+            r.id AS room_id,
+            r.room_name,
+            r.capacity,
+            r.base_price
+        FROM accommodations AS a
+        INNER JOIN rooms AS r ON r.accommodation_id = a.id
+        WHERE a.stop_id = :stopId
+    ";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam('stopId', $stopId, PDO::PARAM_INT);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $accommodations = [];
+
+    foreach ($rows as $row) {
+        $accId = $row['accommodation_id'];
+
+        if (!isset($accommodations[$accId])) {
+            $accommodations[$accId] = [
+                'id' => $row['accommodation_id'],
+                'name' => $row['accommodation_name'],
+                'description' => $row['description'],
+                'stars' => $row['stars'],
+                'rooms' => []
+            ];
+        }
+
+        $accommodations[$accId]['rooms'][] = [
+            'id' => $row['room_id'],
+            'name' => $row['room_name'],
+            'capacity' => $row['capacity'],
+            'base_price' => $row['base_price']
+        ];
+    }
+
+    return array_values($accommodations);
 }
 
 function getAccommodation(PDO $pdo, int $accId) {
     $r = $pdo->query("SELECT id, name, description, base_price_per_night, stars FROM accommodations WHERE id = $accId");
     return $r->fetch(PDO::FETCH_ASSOC);
+}
+
+function getAccommodationCol(PDO $pdo, int $accId, string $column) {
+    $cols = ['id', 'name', 'description', 'stars'];
+
+    if (!in_array($column, $cols)) {
+        return false;
+    }
+    
+    $stmt = $pdo->prepare("SELECT $column FROM accommodations WHERE id = :id");
+
+    $stmt->bindParam(':id', $accId, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
 function getAllPacks(PDO $pdo) : array | bool {
@@ -152,11 +208,74 @@ function getServiceCol(PDO $pdo, int $serviceId, string $column) {
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
-// TODO: Terminer sql
-function getOrders(PDO $pdo, int $userId) {
+function getRoom(PDO $pdo, int $roomId) {
+    $r = $pdo->query("SELECT 
+    r.id, r.accommodation_id, r.room_name AS name, r.capacity, 
+    COALESCE(a.price_override, r.base_price) AS price
+    FROM rooms AS r
+    LEFT JOIN
+    room_availability AS a 
+    ON a.room_id = r.id 
+    WHERE r.id = $roomId
+    ");
+    return $r->fetch(PDO::FETCH_ASSOC);
+}
+
+function getRoomCol(PDO $pdo, int $roomId, string $column) {
+    $cols = ['id', 'accommodation_id', 'base_price', 'room_name', 'capacity'];
+
+    if (!in_array($column, $cols)) {
+        return false;
+    }
+
+    $sql = "SELECT $column FROM rooms WHERE id = :id";
+
+    if ($column == 'price') {
+        $sql = "
+        SELECT COALESCE(a.price_override, r.base_price) AS price
+        FROM rooms AS r
+        LEFT JOIN
+        room_availability AS a 
+        ON a.room_id = r.id 
+        WHERE r.id = :id)";
+    }
+
+    
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':id', $roomId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_COLUMN);    
+}
+
+function getBookings(PDO $pdo, int $userId) : array | bool {
+    $r = $pdo->query("SELECT id, user_id, start_date, end_date, created_at, total_price, promotion_code_used FROM bookings WHERE user_id = $userId");
+    return $r->fetch(PDO::FETCH_ASSOC);
+}
+
+function getBookingsDetails(PDO $pdo, int $userId) {
     $sql = "
     SELECT 
-        booking.id
+        b.id AS booking_id,
+        b.user_id ,
+        b.start_date,
+        b.end_date,
+        b.created_at,
+        b.total_price,
+        b.promotion_code_used
+
+    INNER JOIN
+
+    booking_accommodations AS ba
+
+    INNER JOIN 
+
+    booking_rooms AS br
+
+    INNER JOIN
+
+    booking_services AS bs
 
     ";
 }

@@ -19,6 +19,30 @@ function userExistsPasswordCorrect(PDO $pdo, string $email, string $password) : 
     return ($psw && password_verify($password, $psw));
 }
 
+function bookingExists(PDO $pdo, int $userId, string $startDate, string $endDate) : bool {
+    $startDate = DateTime::createFromFormat('d/m/Y', $startDate);
+    $endDate = DateTime::createFromFormat('d/m/Y', $endDate);
+
+    if (!$startDate || !$endDate) {
+        return false;
+    }
+
+    $startDate = $startDate->format('Y-m-d');
+    $endDate = $endDate->format('Y-m-d');
+
+    $sql = "SELECT id from bookings WHERE user_id = :user_id AND start_date = :start_date AND end_date = :end_date";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->bindParam(':user_id', $userId);
+    $stmt->bindParam(':start_date', $startDate);
+    $stmt->bindParam(':end_date', $endDate);
+
+    $stmt->execute();
+
+    return $stmt->fetch() !== false;
+}
+
 function getSession(string $key) {
     return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
 }

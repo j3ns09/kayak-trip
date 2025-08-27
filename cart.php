@@ -41,36 +41,71 @@ include_once 'includes/templates/navbar.php';
                                 <?php
                                 $accommodations = getAccommodationsByStop($pdo, $stop['id']) ?? [];
                                 if (!empty($accommodations)): ?>
-                                    <ul class="list-group mt-2">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input no-accommodation"
+                                            type="checkbox"
+                                            name="no-acc-<?= $stop['id'] ?>"
+                                            id="no-acc-<?= $stop['id'] ?>"
+                                            value="1">
+                                        <label class="form-check-label fw-semibold text-danger" for="no-acc-<?= $stop['id'] ?>">
+                                            Je ne souhaite pas réserver d’hébergement pour cet arrêt
+                                        </label>
+                                    </div>
+                                    <div class="accordion" id="accordion-<?= $stop['id'] ?>">
                                         <?php foreach ($accommodations as $acc): ?>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <div class="form-check">
-                                                    <input
-                                                        class="form-check-input acc-radio"
-                                                        type="radio"
-                                                        name="acc-<?= $stop['id'] ?>"
-                                                        id="radio-<?= $acc['id'] ?>"
-                                                        data-price="<?= $acc['base_price_per_night'] ?>">
-                                                    <div class="form-check-label" for="radio-<?= $acc['id'] ?>">
-                                                        <span class="fw-semibold">
-                                                            <?= htmlspecialchars($acc['name']) ?>
-                                                            <span class="ps-2">
-                                                                <?php for ($i = 0; $i < 5; $i++) {
-                                                                    if ($i < $acc['stars']) {
-                                                                        echo '<i class="bi bi-star-fill text-warning"></i>';
-                                                                    } else {
-                                                                        echo '<i class="bi bi-star"></i>';
-                                                                    }
-                                                                } ?>
-                                                            </span>
-                                                        </span><br>
-                                                        <small class="text-muted"><?= htmlspecialchars($acc['description'] ?? '') ?></small>
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="heading-<?= $stop['id'] ?>-<?= $acc['id'] ?>">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse"
+                                                            data-bs-target="#collapse-<?= $stop['id'] ?>-<?= $acc['id'] ?>"
+                                                            aria-expanded="false"
+                                                            aria-controls="collapse-<?= $stop['id'] ?>-<?= $acc['id'] ?>">
+                                                        <span class="fw-bold"><?= htmlspecialchars($acc['name']) ?></span>
+                                                        <span class="ps-3">
+                                                            <?php for ($i = 0; $i < 5; $i++): ?>
+                                                                <?php if ($i < $acc['stars']): ?>
+                                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                                <?php else: ?>
+                                                                    <i class="bi bi-star"></i>
+                                                                <?php endif; ?>
+                                                            <?php endfor; ?>
+                                                        </span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse-<?= $stop['id'] ?>-<?= $acc['id'] ?>"
+                                                    class="accordion-collapse collapse"
+                                                    aria-labelledby="heading-<?= $stop['id'] ?>-<?= $acc['id'] ?>"
+                                                    data-bs-parent="#accordion-<?= $stop['id'] ?>">
+                                                    <div class="accordion-body">
+                                                        <p class="text-muted"><?= htmlspecialchars($acc['description']) ?></p>
+                                                        <?php if (!empty($acc['rooms'])): ?>
+                                                            <ul class="list-group">
+                                                                <?php foreach ($acc['rooms'] as $room): ?>
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                                        <div class="form-check">
+                                                                            <input class="form-check-input acc-checkbox"
+                                                                                type="checkbox"
+                                                                                name="room-<?= $stop['id'] ?>[]"
+                                                                                id="room-<?= $room['id'] ?>"
+                                                                                value="<?= $room['id'] ?>"
+                                                                                data-price="<?= $room['base_price'] ?>">
+                                                                            <label class="form-check-label" for="room-<?= $room['id'] ?>">
+                                                                                <?= $room['name'] ?>
+                                                                                <small class="text-muted">(capacité : <?= $room['capacity'] ?>)</small>
+                                                                            </label>
+                                                                        </div>
+                                                                        <span class="badge bg-primary rounded-pill"><?= $room['base_price'] ?> €</span>
+                                                                    </li>
+                                                                <?php endforeach; ?>
+                                                            </ul>
+                                                        <?php else: ?>
+                                                            <p class="text-muted fst-italic">Aucune chambre disponible pour cet hébergement.</p>
+                                                        <?php endif; ?>
                                                     </div>
-                                                    <span class="badge bg-primary rounded-pill"><?= $acc['base_price_per_night'] ?> €</span>
                                                 </div>
-                                            </li>
+                                            </div>
                                         <?php endforeach; ?>
-                                    </ul>
+                                    </div>
                                 <?php else: ?>
                                     <p class="text-muted fst-italic">Aucun hébergement disponible pour cet arrêt.</p>
                                 <?php endif; ?>

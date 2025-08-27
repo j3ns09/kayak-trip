@@ -68,11 +68,11 @@ function displayItem(array $option, int $qty) {
             <div class="text-muted small">Prix unitaire: ' . $price . ' €</div>
             <div class="text-muted small">
                 Quantité: 
-                <button class="btn btn-sm bg-primary min-btn"><i class="bi bi-arrow-left-circle text-white"></i></button>
+                <button class="btn btn-sm bg-primary min-btn"><i class="bi bi-dash-lg text-white"></i></button>
                 <span class="qty-service" data-price="' . $price . '">
                     ' . $qty . '
                     </span>
-                <button class="btn btn-sm bg-primary pls-btn"><i class="bi bi-arrow-right-circle text-white"></i></button>
+                <button class="btn btn-sm bg-primary pls-btn"><i class="bi bi-plus-lg text-white"></i></button>
             </div>
         </div>
         <div class="text-end">
