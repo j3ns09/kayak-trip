@@ -28,7 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    createPack($pdo, $name, $duration, $description, $price);
+    $ok = createPack($pdo, $name, $duration, $description, $price);
+
+    if ($ok) {
+        redirectAlert('success', 'Le pack a bien été crée !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du service', 'admin/dashboard');
+    exit();
 }
 
 redirect("admin/dashboard");

@@ -26,7 +26,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    createService($pdo, $name, $description, $price);
+    $ok = createService($pdo, $name, $description, $price);
+
+    if ($ok) {
+        redirectAlert('success', 'Le service a bien été crée !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du service', 'admin/dashboard');
+    exit();
 }
 
 redirect("admin/dashboard");

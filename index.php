@@ -99,7 +99,7 @@ if (existsSession("event")) {
         );
     }
 
-    unset($_SESSION["event"]);
+    unsetSession('event');
 }
 
 if (existsSession("error")) {

@@ -1,0 +1,35 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    background: url('/src/img/PA1_rando-kayak.jpeg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#main {
+    min-height: 100vh;
+    padding-top: 6rem;
+    color: white;
+}
+
+.navbar {
+    background-color: #000000;
+    backdrop-filter: blur(55%);
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link {
+    color: white !important;
+}
+
+.home-buttons {
+    background-color: rgba(255, 255, 255, 0.6);
+}
+
+.home-buttons:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.title {
+    font-weight: 800;
+}

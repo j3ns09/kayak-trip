@@ -78,7 +78,7 @@ if ($method === "GET") {
     }
 
     if (isAdmin($pdo, $senderId)) {
-        createMessage($pdo, $threadId, 'com', $senderId, $message);
+        createMessage($pdo, $threadId, 'admin', $senderId, $message);
         echo json_encode(["ok" => true]);
         exit();
     }

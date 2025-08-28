@@ -37,6 +37,7 @@ if (existsSession('user_id')) {
     <a href="#services"><i class="bi bi-tools"></i> Services</a>
     <a href="#messagerie"><i class="bi bi-envelope"></i> Messagerie</a>
     <a href="#newsletter"><i class="bi bi-newspaper"></i> Newsletter</a>
+    <a href="#orders"><i class="bi bi-receipt"></i> Commandes</a>
 </div>
 
 <div class="main-content">
@@ -143,7 +144,6 @@ if (existsSession('user_id')) {
                 <label for="arret" class="form-label">Point d'arrêt</label>
                 <select name="arret" id="arret-list" class="form-select" required>
                 <option disabled selected>Choisir un point d'arrêt</option>
-                <!-- options remplies dynamiquement -->
                 </select>
             </div>
 
@@ -347,6 +347,26 @@ if (existsSession('user_id')) {
             <button class="btn btn-primary">Ajouter</button>
         </form>
     </div>
+
+    <div id="orders" class="section">
+        <h2>Commandes</h2>
+        <table class="table table-dark table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom/Prénom</th>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Créée le</th>
+                    <th>Vendu</th>
+                    <th>Code promo utilisé ?</th>
+                </tr>
+            </thead>
+            <tbody id="ordersShowing">
+            </tbody>
+        </table>
+        <ul id="orders-pagination" class="pagination justify-content-center"></ul>
+    </div>
 </div>
 
 <?php
@@ -357,9 +377,20 @@ if (existsSession('error')) {
         "danger",
         "Erreur",
         "Maintenant",
-        $_SESSION["error"],
+        getSession('error'),
     );
-    unset($_SESSION["error"]);
+    unsetSession('error');
+}
+
+if (existsSession('success')) {
+    displayToast(
+        "successToast",
+        "success",
+        "Succès",
+        "Maintenant",
+        getSession('success'),
+    );
+    unsetSession('success');
 }
 ?>
 

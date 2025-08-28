@@ -32,7 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     unsetSession('form_data');
     
-    createDiscount($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
+    $ok = createDiscount($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
+
+    if ($ok) {
+        redirectAlert('success', 'Le code promo a bien été crée !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du service', 'admin/dashboard');
     exit();
 }
 

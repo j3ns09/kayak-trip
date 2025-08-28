@@ -29,7 +29,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    setPackNewValues($pdo, $id, $name, $duration, $description, $price);
+    $ok = setPackNewValues($pdo, $id, $name, $duration, $description, $price);
+
+    if ($ok) {
+        redirectAlert('success', 'Le pack a bien été modifié !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du point', 'admin/dashboard');
+    exit();
 }
 
 redirect("admin/dashboard");

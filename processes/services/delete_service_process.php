@@ -8,7 +8,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
 
     if ($id) {
-        deleteService($pdo, $id);
+        $ok = deleteService($pdo, $id);
+        if ($ok) {
+            redirectAlert('success', 'Le service a bien été supprimé !', 'admin/dashboard');
+            exit();
+        }
+        
+        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'admin/dashboard');
+        exit();
     }
 }
 

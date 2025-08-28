@@ -30,8 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         unsetSession('form_data');
         
         $userId = getUserId($pdo, $email);
-        $_SESSION['user_id'] = $userId;
-        $_SESSION['event'] = 'login';
+        setSession('user_id', $userId);
+
+        setSession('event', 'login');
         setUserOnline($pdo, $userId);
     
         redirect('index');

@@ -1,7 +1,5 @@
 <?php 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 include_once 'includes/store.php';
 include_once 'includes/functions.php';
 include_once 'includes/templates/header.html';
@@ -9,7 +7,7 @@ include_once 'includes/templates/header.html';
 $formData = null;
 
 if (existsSession('form_data')) {
-    $formData = $_SESSION['form_data'];
+    $formData = getSession('form_data');
 }
 
 ?>
@@ -28,12 +26,12 @@ if (existsSession('form_data')) {
         <?php
             if (existsSession('error')) {
                 displayAlert('error', 1);
-                unset($_SESSION['error']);
+                unsetSession('error');
             }
 
             if (existsSession('success')) {
                 displayAlert('success', 0);
-                unset($_SESSION['success']);
+                unsetSession('success');
             }
         ?>
         <form action="processes/user/access/login_process.php" method="POST">

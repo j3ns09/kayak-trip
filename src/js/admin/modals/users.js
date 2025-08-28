@@ -67,7 +67,7 @@ function generateSwitchModal(id, isAdmin) {
     <div class="modal fade" id="confirmSwitch${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+            <form method="POST" action="/processes/user/account/set_admin_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Changer les droits</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -92,7 +92,7 @@ function generateDeleteModal(id) {
     <div class="modal fade" id="deleteProfile${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+            <form method="POST" action="/processes/user/account/delete_user_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Supprimer un profil</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -116,7 +116,7 @@ function generateEditModal(id, user) {
     <div class="modal fade" id="editProfile${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="">
+            <form method="POST" action="/processes/user/account/edit_profile_admin_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Modifier un profil</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>

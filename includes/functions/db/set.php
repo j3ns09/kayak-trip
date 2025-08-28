@@ -110,4 +110,34 @@ function setPackNewValues(
 
     return $stmt->execute();
 }
+
+function setUserNewValues(
+    PDO $pdo,
+    int $id,
+    string $firstName,
+    string $lastName,
+    string $email,
+    string $phone,
+    string | null $password,
+    string | null $passwordConfirm
+)
+{
+    if (is_null($password) && is_null($passwordConfirm) && $password !== $passwordConfirm) {
+        return false;
+    }
+
+    $stmt = $pdo->prepare("UPDATE users SET 
+    first_name = :first_name, last_name = :last_name, email = :email, phone = :phone
+    WHERE id = :id");
+
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':first_name', $firstName);
+    $stmt->bindParam(':last_name', $lastName);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':phone', $phone);
+
+    return $stmt->execute();
+}
+
+
 ?>

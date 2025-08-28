@@ -58,8 +58,7 @@ $stops = getAllStops($pdo);
                                     data-lat="<?= htmlspecialchars($stop['latitude']) ?>"
                                     data-lng="<?= htmlspecialchars($stop['longitude']) ?>"
                                     data-name="<?= $stop['name'] ?>"
-                                    data-id="<?= $stop['id'] ?>"
-                                    data-price="<?= $stop['base_price_per_night']?>">
+                                    data-id="<?= $stop['id'] ?>">
                                 <label class="form-check-label" for="stop-<?= htmlspecialchars($stop['id']) ?>">
                                     <?= htmlspecialchars($stop['name']) ?>
                                 </label>

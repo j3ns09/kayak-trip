@@ -11,9 +11,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $price = filter_input(INPUT_POST, 'price', FILTER_VALIDATE_FLOAT);
 
     if ($id && $name && $price && $description) {
-        setServiceNewValues($pdo, $id, $name, $description, $price);
+        $ok = setServiceNewValues($pdo, $id, $name, $description, $price);
+        if ($ok) {
+            redirectAlert('success', 'Le service a bien été modifié !', 'admin/dashboard');
+            exit();
+        }
+        
+        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'admin/dashboard');
+        exit();
     } else {
-        echo "Erreur : certaines données sont invalides ou manquantes.";
+        redirectAlert('error', 'Certaines données sont invalides ou manquantes.', 'admin/dashboard');
+        exit();
     }
 }
 

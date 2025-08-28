@@ -8,7 +8,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
 
     if ($id) {
-        deleteStop($pdo, $id);
+        $ok = deleteStop($pdo, $id);
+        if ($ok) {
+            redirectAlert('success', 'Le point d\'arrêt a bien été supprimé !', 'admin/dashboard');
+            exit();
+        }
+        
+        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'admin/dashboard');
+        exit();
     }
 }
 

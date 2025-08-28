@@ -103,7 +103,6 @@ function getValues() {
         options: selectedOptions
     };
 
-    console.log(data);
     sendData(data);
 
 }

@@ -11,5 +11,4 @@ export const renderToasts = () => {
         const t = bootstrap.Toast.getOrCreateInstance(successToast);
         t.show();
     }
-
 };

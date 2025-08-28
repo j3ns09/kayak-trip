@@ -7,6 +7,7 @@ import { loadServices } from "./modals/services.js";
 import { loadDiscounts, today } from "./modals/promotions.js";
 import { loadPacks } from "./modals/packs.js";
 import { loadMap } from "./map/map.js";
+import { loadBookings } from "./modals/orders.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
     const links = document.querySelectorAll('a[href^="#"]');
@@ -25,6 +26,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadServices();
     await loadDiscounts();
     await loadPacks();
+    await loadBookings();
 
     let map;
     await loadStops();

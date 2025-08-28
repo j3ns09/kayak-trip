@@ -32,7 +32,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
     
-    setDiscountNewValues($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
+    $ok = setDiscountNewValues($pdo, $code, $date_start, $date_end, $description, $reduction, $unique_use);
+
+    if ($ok) {
+        redirectAlert('success', 'Le code promo a bien été modifié !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du point', 'admin/dashboard');
+    exit();
 }
 
 redirect("admin/dashboard");

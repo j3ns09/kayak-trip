@@ -6,7 +6,7 @@ include_once $root . '/includes/config/config.php';
 include_once $root . '/includes/functions.php';
 include_once $root . '/includes/templates/header.html';
 
-if (!isset($_SESSION['user_id']) || !isAdmin($pdo, $_SESSION['user_id'])) {
+if (!existsSession('user_id') || !isAdmin($pdo, $_SESSION['user_id'])) {
     redirect('index');
     exit();
 }

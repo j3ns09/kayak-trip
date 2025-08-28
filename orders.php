@@ -18,19 +18,24 @@ $orders = getBookingsDetails($pdo, $userId);
 include_once 'includes/templates/header.html';
 include_once 'includes/templates/navbar.php';
 
-// TODO: Fix affichage commandes
-
 ?>
 
+<link rel="stylesheet" href="/src/css/home.css">
 
-<div class="container min-vh-100" style="margin-top:6rem;">
-    <h3 class="fw-bold mb-4">Mes commandes</h3>
+<div class="container min-vh-100" style="margin-top:6rem; margin-bottom:50px">
+    <h3 class="fw-bold mb-4 pt-3">Mes commandes</h3>
 
     <?php if (empty($orders)): ?>
         <p class="text-muted fst-italic">Vous n’avez encore passé aucune commande.</p>
     <?php else: ?>
         <div class="accordion" id="ordersAccordion">
-            <?php foreach ($orders as $index => $order): ?>
+            <?php foreach ($orders as $index => $order): 
+                $start = new DateTime($order['start_date']);
+                $end = new DateTime($order['end_date']);
+                $interval = $start->diff($end);
+                $diff = $interval->days;
+
+            ?>
                 <div class="accordion-item mb-3">
                     <h2 class="accordion-header" id="heading<?= $index ?>">
                         <button class="accordion-button <?= $index === 0 ? '' : 'collapsed' ?>" 
@@ -39,8 +44,13 @@ include_once 'includes/templates/navbar.php';
                                 data-bs-target="#collapse<?= $index ?>" 
                                 aria-expanded="<?= $index === 0 ? 'true' : 'false' ?>" 
                                 aria-controls="collapse<?= $index ?>">
-                            Commande #<?= $order['id'] ?> – <?= date("d/m/Y", strtotime($order['created_at'])) ?>  
-                            (<?= $order['total'] ?> €)
+                            Commande #<?= $order['booking_id'] ?> – <?= date("d/m/Y", strtotime($order['created_at'])) ?>  
+                            (<?= $order['total_price'] ?> €)
+                            <?php if ($order['is_paid']): ?>
+                                <span class="badge bg-success ms-3">Payée</span>
+                            <?php else: ?>
+                                <span class="badge bg-danger ms-3">Non payée</span>
+                            <?php endif; ?>
                         </button>
                     </h2>
                     <div id="collapse<?= $index ?>" 
@@ -48,7 +58,7 @@ include_once 'includes/templates/navbar.php';
                          aria-labelledby="heading<?= $index ?>" 
                          data-bs-parent="#ordersAccordion">
                         <div class="accordion-body">
-                            <p><strong>Durée :</strong> <?= $order['duration'] ?> jour(s)</p>
+                            <p><strong>Durée :</strong> <?= $diff ?> jour(s)</p>
                             <p><strong>Dates :</strong> <?= $order['start_date'] ?> → <?= $order['end_date'] ?></p>
                             <p><strong>Personnes :</strong> <?= $order['person_count'] ?></p>
 
@@ -56,31 +66,56 @@ include_once 'includes/templates/navbar.php';
                                 <p><strong>Code promo :</strong> <?= htmlspecialchars($order['discount_code']) ?></p>
                             <?php endif; ?>
 
+                            <p><strong>Statut :</strong> 
+                                <?php if ($order['is_paid']): ?>
+                                    <span class="badge bg-success">Payée</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger">Non payée</span>
+                                    <a href="pay.php?booking_id=<?= $order['booking_id'] ?>" 
+                                    class="btn btn-sm btn-primary ms-2">
+                                        <i class="bi bi-credit-card"></i> Payer maintenant
+                                    </a>
+                                <?php endif; ?>
+                            </p>
+
                             <h6 class="mt-3">Hébergements</h6>
                             <?php
-                            $stmtAcc = $pdo->prepare("SELECT * FROM order_accommodations WHERE order_id = ?");
-                            $stmtAcc->execute([$order['id']]);
-                            $accs = $stmtAcc->fetchAll(PDO::FETCH_ASSOC);
+                            $accs = getAccommodationsFromBooking($pdo, $order['booking_id']);
 
                             if ($accs):
-                                echo '<ul class="list-group mb-2">';
-                                foreach ($accs as $acc) {
-                                    $accInfo = getAccommodation($pdo, $acc['accommodation_id']);
-                                    echo "<li class='list-group-item'>" . htmlspecialchars($accInfo['name']) . "</li>";
+                                foreach ($accs as $acc): ?>
+                                    <div class="card mb-3 shadow-sm">
+                                        <div class="card-body">
+                                            <h5 class="card-title mb-1">
+                                                <i class="bi bi-house-fill text-primary"></i>
+                                                <?= htmlspecialchars($acc['name']) ?>
+                                            </h5>
+                                            <p class="text-muted small mb-2">
+                                                Arrêt #<?= $acc['id'] ?>
+                                            </p>
 
-                                    $stmtRooms = $pdo->prepare("SELECT * FROM order_rooms WHERE order_id = ?");
-                                    $stmtRooms->execute([$order['id']]);
-                                    $rooms = $stmtRooms->fetchAll(PDO::FETCH_ASSOC);
-                                    if ($rooms) {
-                                        echo "<ul class='ps-4'>";
-                                        foreach ($rooms as $room) {
-                                            $roomInfo = getRoom($pdo, $room['room_id']);
-                                            echo "<li>" . htmlspecialchars($roomInfo['name']) . " – " . $room['price'] . " €</li>";
-                                        }
-                                        echo "</ul>";
-                                    }
-                                }
-                                echo '</ul>';
+                                            <?php 
+                                            $rooms = getRoomsFromBooking($pdo, $order['booking_id']);
+                                            if ($rooms): ?>
+                                                <ul class="list-group list-group-flush">
+                                                    <?php foreach ($rooms as $room): ?>
+                                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                            <span>
+                                                                <i class="bi bi-door-closed"></i> 
+                                                                <?= htmlspecialchars($room['room_name']) ?>
+                                                            </span>
+                                                            <span class="badge bg-success rounded-pill">
+                                                                <?= number_format($room['price'], 2, ',', ' ') ?> €
+                                                            </span>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                </ul>
+                                            <?php else: ?>
+                                                <p class="fst-italic text-muted mt-2">Aucune chambre sélectionnée</p>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php endforeach;
                             else:
                                 echo "<p class='fst-italic text-muted'>Aucun hébergement choisi</p>";
                             endif;
@@ -88,20 +123,27 @@ include_once 'includes/templates/navbar.php';
 
                             <h6 class="mt-3">Services</h6>
                             <?php
-                            $stmtSrv = $pdo->prepare("SELECT * FROM order_services WHERE order_id = ?");
-                            $stmtSrv->execute([$order['id']]);
-                            $srvs = $stmtSrv->fetchAll(PDO::FETCH_ASSOC);
+                            $srvs = getServicesFromBooking($pdo, $order['booking_id']);
 
                             if ($srvs):
-                                echo '<ul class="list-group">';
-                                foreach ($srvs as $srv) {
-                                    $srvInfo = getService($pdo, $srv['service_id']);
-                                    echo "<li class='list-group-item d-flex justify-content-between'>";
-                                    echo "<span>" . htmlspecialchars($srvInfo['name']) . " (x{$srv['quantity']})</span>";
-                                    echo "<span>" . ($srv['price'] * $srv['quantity']) . " €</span>";
-                                    echo "</li>";
-                                }
-                                echo '</ul>';
+                                foreach ($srvs as $srv): ?>
+                                    <div class="card mb-2 shadow-sm">
+                                        <div class="card-body d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="card-title mb-1">
+                                                    <i class="bi bi-bag-check text-warning"></i>
+                                                    <?= htmlspecialchars($srv['name']) ?>
+                                                </h6>
+                                                <p class="text-muted small mb-0">
+                                                    Quantité : <?= $srv['quantity'] ?>
+                                                </p>
+                                            </div>
+                                            <span class="badge bg-success rounded-pill">
+                                                <?= number_format($srv['price'] * $srv['quantity'], 2, ',', ' ') ?> €
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach;
                             else:
                                 echo "<p class='fst-italic text-muted'>Aucun service sélectionné</p>";
                             endif;
@@ -114,4 +156,13 @@ include_once 'includes/templates/navbar.php';
     <?php endif; ?>
 </div>
 
-<?php include_once 'includes/templates/footer.html'; ?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+
+<?php 
+
+include_once 'includes/templates/offcanvas.php';
+include_once 'includes/templates/chat.php';
+include_once 'includes/templates/footer.html';
+
+?>

@@ -211,6 +211,7 @@ function createBooking(
     string $startDate,
     string $endDate,
     float $totalPrice,
+    int $personCount,
     string | null $discountCode
 ) : bool
 {
@@ -224,8 +225,8 @@ function createBooking(
     $startDate = $startDate->format('Y-m-d');
     $endDate = $endDate->format('Y-m-d');
     
-    $sql = "INSERT INTO bookings (user_id, start_date, end_date, total_price, promotion_code_used)
-    VALUES (:user_id, :start_date, :end_date, :total_price, :promotion_code_used)";
+    $sql = "INSERT INTO bookings (user_id, start_date, end_date, total_price, person_count, promotion_code_used)
+    VALUES (:user_id, :start_date, :end_date, :total_price, :person_count, :promotion_code_used)";
     
     $stmt = $pdo->prepare($sql);
 
@@ -233,6 +234,7 @@ function createBooking(
     $stmt->bindParam(':start_date', $startDate, PDO::PARAM_STR);
     $stmt->bindParam(':end_date', $endDate, PDO::PARAM_STR);
     $stmt->bindParam(':total_price', $totalPrice);
+    $stmt->bindParam(':person_count', $personCount, PDO::PARAM_INT);
     $stmt->bindParam(':promotion_code_used', $discountCode);
 
     return $stmt->execute();

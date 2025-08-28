@@ -28,7 +28,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    createStop($pdo, $name, $lat, $lng, $description);
+    $ok = createStop($pdo, $name, $lat, $lng, $description);
+
+    if ($ok) {
+        redirectAlert('success', 'Le point d\'arrêt a bien été crée !', 'admin/dashboard');
+        exit();
+    }
+    
+    redirectAlert('error', 'Erreur dans l\'enregistrement du point', 'admin/dashboard');
+    exit();
 }
 
 redirect("admin/dashboard");

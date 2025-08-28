@@ -12,9 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $description = filter_input(INPUT_POST, 'description', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if ($id && $name && $latitude !== false && $longitude !== false && $description) {
-        setStopNewValues($pdo, $id, $name, $latitude, $longitude, $description);
+        $ok = setStopNewValues($pdo, $id, $name, $latitude, $longitude, $description);
+        if ($ok) {
+            redirectAlert('success', 'Le point d\'arrêt a bien été modifié !', 'admin/dashboard');
+            exit();
+        }
+        
+        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'admin/dashboard');
+        exit();
     } else {
-        echo "Erreur : certaines données sont invalides ou manquantes.";
+        redirectAlert('error', 'Certaines données sont invalides ou manquantes.', 'admin/dashboard');
+        exit();
     }
 }
 
