@@ -13,19 +13,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $phone = filter_input(INPUT_POST, 'phone', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
     if (empty($firstName) || empty($lastName) || empty($email)) {
-        redirectAlert('error', 'Veuillez remplir tous les champs obligatoires.', 'profile');
+        redirectAlert('error', 'Veuillez remplir tous les champs obligatoires.', 'admin/dashboard');
     } elseif (is_null($email)) {
-        redirectAlert('error', 'Adresse email invalide.', 'profile');
+        redirectAlert('error', 'Adresse email invalide.', 'admin/dashboard');
+    } elseif (emailExists($pdo, $email)) {
+        redirectAlert('error', 'L\'email sélectionné est déjà utilisé.', 'admin/dashboard');
     } else {
-        $ok = setUserNewValues($pdo, $id, $firstName, $lastName, $email, $phone, $password, $passwordConfirm);
+        $ok = setUserNewValuesAdmin($pdo, $id, $firstName, $lastName, $email, $phone);
 
         if ($ok) {
-            redirectAlert('success', 'Vos modification ont bien été enregistrés !', 'profile');
+            redirectAlert('success', 'Vos modification ont bien été enregistrés !', 'admin/dashboard');
             exit();
         }
 
-        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'profile');
-        redirect('profile');
+        redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'admin/dashboard');
         exit();
     }
 }

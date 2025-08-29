@@ -126,6 +126,32 @@ function setUserNewValues(
         return false;
     }
 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+    $stmt = $pdo->prepare("UPDATE users SET 
+    first_name = :first_name, last_name = :last_name, email = :email, phone = :phone, password = :password
+    WHERE id = :id");
+
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':first_name', $firstName);
+    $stmt->bindParam(':last_name', $lastName);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':phone', $phone);
+    $stmt->bindParam(':password', $hashedPassword);
+
+    return $stmt->execute();
+}
+
+function setUserNewValuesAdmin(
+    PDO $pdo,
+    int $id,
+    string $firstName,
+    string $lastName,
+    string $email,
+    string $phone
+)
+{
+
     $stmt = $pdo->prepare("UPDATE users SET 
     first_name = :first_name, last_name = :last_name, email = :email, phone = :phone
     WHERE id = :id");

@@ -27,7 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         redirectAlert('error', 'Erreur dans l\'enregistrement des modifications', 'profile');
-        redirect('profile');
         exit();
     }
 }

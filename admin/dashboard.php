@@ -358,7 +358,8 @@ if (existsSession('user_id')) {
                     <th>Date début</th>
                     <th>Date fin</th>
                     <th>Créée le</th>
-                    <th>Vendu</th>
+                    <th>Vendue</th>
+                    <th>Payée</th>
                     <th>Code promo utilisé ?</th>
                 </tr>
             </thead>

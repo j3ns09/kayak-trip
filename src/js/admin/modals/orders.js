@@ -37,8 +37,9 @@ function renderPage(page) {
             <td>${booking.end_date}</td>
             <td>${booking.created_at}</td>
             <td>${booking.total_price} €</td>
+            <td>${booking.is_paid ? "Oui" : "Non"}</td>
             <td>
-                ${booking.promotion_code_used ? `Oui` : 'Non'}
+                ${booking.promotion_code_used ? "Oui" : "Non"}
             </td>
         `;
 

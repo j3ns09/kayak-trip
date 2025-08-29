@@ -19,6 +19,12 @@ function isPasswordCorrect(PDO $pdo, int $userId, string $password) : bool {
     return (password_verify($password, $psw));
 }
 
+function emailExists(PDO $pdo, string $email) : array | bool {
+    $r = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+    $r->bindParam(':email', $email, PDO::PARAM_STR);
+    return $r->execute();
+}
+
 function userExistsPasswordCorrect(PDO $pdo, string $email, string $password) : bool {
     $r = $pdo->prepare("SELECT password FROM users WHERE email = :email");
     $r->bindParam(':email', $email, PDO::PARAM_STR);

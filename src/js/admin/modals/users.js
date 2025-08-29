@@ -123,9 +123,9 @@ function generateEditModal(id, user) {
             </div>
             <div class="modal-body">
                 <input type="hidden" name="id" value="${id}">
-                <div class="mb-3"><label>Nom</label><input name="nom" class="form-control" value="${user.last_name}" /></div>
-                <div class="mb-3"><label>Prénom</label><input name="prenom" class="form-control" value="${user.first_name}" /></div>
-                <div class="mb-3"><label>Téléphone</label><input name="tel" class="form-control" value="${user.phone}" /></div>
+                <div class="mb-3"><label>Nom</label><input name="last_name" class="form-control" value="${user.last_name}" /></div>
+                <div class="mb-3"><label>Prénom</label><input name="first_name" class="form-control" value="${user.first_name}" /></div>
+                <div class="mb-3"><label>Téléphone</label><input name="phone" class="form-control" value="${user.phone}" /></div>
                 <div class="mb-3"><label>Email</label><input name="email" class="form-control" value="${user.email}" /></div>
             </div>
             <div class="modal-footer">
