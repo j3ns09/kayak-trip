@@ -13,17 +13,6 @@
                 <a href="/profile.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-person-fill me-2"></i> Profil
                 </a>
-
-                <?php if (isAdmin($pdo, $userId)): ?>
-                    <a href="/admin/dashboard.php" class="btn btn-outline-light fw-bold">
-                        <i class="bi bi-person-fill-gear"></i> Espace Administrateur
-                    </a>
-                    
-                    <a href="/admin/chat.php" class="btn btn-outline-light fw-bold">
-                        <i class="bi bi-chat-right-dots-fill"></i> Espace Discussion
-                    </a>
-                <?php endif; ?>
-                
                 <a href="/packs.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-backpack2-fill"></i> Packs
                 </a>
@@ -36,6 +25,15 @@
                 <a href="/orders.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-receipt"></i> Mes commandes
                 </a>
+                <?php if (isAdmin($pdo, $userId)): ?>
+                    <a href="/admin/dashboard.php" class="btn btn-outline-light fw-bold">
+                        <i class="bi bi-person-fill-gear"></i> Espace Administrateur
+                    </a>
+                    
+                    <a href="/admin/chat.php" class="btn btn-outline-light fw-bold">
+                        <i class="bi bi-chat-right-dots-fill"></i> Espace Discussion
+                    </a>
+                <?php endif; ?>
             </div>
             
             <div class="border-top pt-3 mt-4">
@@ -45,7 +43,7 @@
             </div>
 
             <?php else: ?>
-                <a href="admin/login.php" class="btn btn-warning text-dark fw-bold fs-5">
+                <a href="/login.php" class="btn btn-warning text-dark fw-bold fs-5">
                     <i class="bi bi-box-arrow-in-right me-2"></i> Connexion
                 </a>
             <?php endif; ?>

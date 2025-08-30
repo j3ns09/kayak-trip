@@ -7,6 +7,7 @@ export async function loadServices() {
 
     const data = await response.json();
     const services = data.services;
+    window.allServices = services;
     const userIdSession = data.waiter;
     let no = 1;
 

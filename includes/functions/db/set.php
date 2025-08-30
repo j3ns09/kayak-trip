@@ -95,12 +95,14 @@ function setPackNewValues(
     string $description,
     float $price,
     array $stops,
-    array $accommodations
-): bool 
+    array $accommodations,
+    array $services = [],
+    int $personCount = 1
+): bool
 {
     $stmt = $pdo->prepare("
         UPDATE packs 
-        SET name = :name, duration = :duration, description = :description, price = :price
+        SET name = :name, duration = :duration, description = :description, price = :price, person_count = :person_count
         WHERE id = :id
     ");
 
@@ -109,6 +111,7 @@ function setPackNewValues(
     $stmt->bindParam(':duration', $duration, PDO::PARAM_INT);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price);
+    $stmt->bindParam(':person_count', $personCount, PDO::PARAM_INT);
 
     if (!$stmt->execute()) return false;
 
@@ -116,6 +119,9 @@ function setPackNewValues(
         ->execute([':id' => $id]);
 
     $pdo->prepare("DELETE FROM pack_accommodations WHERE pack_id = :id")
+        ->execute([':id' => $id]);
+    
+    $pdo->prepare("DELETE FROM pack_services WHERE pack_id = :id")
         ->execute([':id' => $id]);
 
     $stmtStop = $pdo->prepare("
@@ -150,6 +156,17 @@ function setPackNewValues(
 
             if (!$ok) return false;
         }
+    }
+
+    foreach ($services as $serviceId) {
+        $stmtService = $pdo->prepare("
+            INSERT INTO pack_services (pack_id, service_id)
+            VALUES (:pack_id, :service_id)
+        ");
+        $stmtService->bindParam(':pack_id', $id, PDO::PARAM_INT);
+        $stmtService->bindParam(':service_id', $serviceId, PDO::PARAM_INT);
+
+        if (!$stmtService->execute()) return false;
     }
 
     return true;

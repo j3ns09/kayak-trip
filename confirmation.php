@@ -68,7 +68,7 @@ include_once 'includes/templates/navbar.php';
 
 <link rel="stylesheet" href="/src/css/home.css">
 
-<div class="container min-vh-100" style="margin-top:6rem;">
+<div class="container min-vh-100">
     <div class="row">
         <div class="col-lg-8 bg-white bg-opacity-75 p-5">
             <h3 class="fw-bold mb-4">Confirmation de commande</h3>

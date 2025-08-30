@@ -156,18 +156,21 @@ function createPack(
     string $description,
     float $price,
     array $stops,
-    array $accommodations
+    array $accommodations,
+    array $services = [],
+    int $personCount = 1
 ): bool
 {
     $stmt = $pdo->prepare("
-        INSERT INTO packs (name, duration, description, price)
-        VALUES (:name, :duration, :description, :price)
+        INSERT INTO packs (name, duration, description, price, person_count)
+        VALUES (:name, :duration, :description, :price, :person_count)
     ");
 
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':duration', $duration, PDO::PARAM_INT);
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price);
+    $stmt->bindParam(':person_count', $personCount, PDO::PARAM_INT);
 
     $ok = $stmt->execute();
 
@@ -180,7 +183,7 @@ function createPack(
     $order = 1;
     foreach ($stops as $index => $stopId) {
         $stmt = $pdo->prepare("
-            INSERT INTO pack_stops (pack_id, stop_id, day_order)
+            INSERT INTO pack_stops (pack_id, stop_id, stop_order)
             VALUES (:pack_id, :stop_id, :stop_order)
         ");
         $stmt->bindParam(':pack_id', $packId, PDO::PARAM_INT);
@@ -204,6 +207,17 @@ function createPack(
         }
 
         $order++;
+    }
+
+    foreach ($services as $serviceId) {
+        $stmtService = $pdo->prepare("
+            INSERT INTO pack_services (pack_id, service_id)
+            VALUES (:pack_id, :service_id)
+        ");
+        $stmtService->bindParam(':pack_id', $packId, PDO::PARAM_INT);
+        $stmtService->bindParam(':service_id', $serviceId, PDO::PARAM_INT);
+
+        if (!$stmtService->execute()) return false;
     }
 
     return true;

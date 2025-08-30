@@ -26,7 +26,6 @@ $isConnected = !is_null($userId);
         <div class="ms-auto mb-3 me-2">
             <?php if ($isConnected): ?>
                 <p class="text-white px-3 py-2 rounded fs-5 my-0 shadow-sm">Bonjour, <span class="fw-bold"><?= strtoupper($userInfo['last_name']) . " " . $userInfo['first_name'] ?></span></p>
-
             <?php else: ?>
                 <a href="login.php" class="btn btn-warning text-white fs-5">
                     <span class="fw-bolder">

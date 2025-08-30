@@ -136,7 +136,7 @@ function getAccommodationCol(PDO $pdo, int $accId, string $column) {
 }
 
 function getAllPacks(PDO $pdo): array {
-    $packs = $pdo->query("SELECT id, name, duration, description, price FROM packs")
+    $packs = $pdo->query("SELECT id, name, duration, description, price, person_count FROM packs")
                  ->fetchAll(PDO::FETCH_ASSOC);
 
     $stmt = $pdo->query("
@@ -152,14 +152,15 @@ function getAllPacks(PDO $pdo): array {
     ");
     $rawStops = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->query("SELECT id, name, stop_id FROM accommodations");
+    $stmt = $pdo->query("SELECT id, name, stop_id, stars FROM accommodations");
     $allAccommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $accommodationsByStop = [];
     foreach ($allAccommodations as $acc) {
         $accommodationsByStop[$acc['stop_id']][] = [
             'id' => $acc['id'],
-            'name' => $acc['name']
+            'name' => $acc['name'],
+            'stars' => $acc['stars']
         ];
     }
 
@@ -185,11 +186,32 @@ function getAllPacks(PDO $pdo): array {
         $pack['stops'] = $stopsByPack[$pack['id']] ?? [];
     }
 
+    $stmt = $pdo->query("
+        SELECT ps.pack_id, s.id AS service_id, s.name AS service_name
+        FROM pack_services ps
+        INNER JOIN services s ON ps.service_id = s.id
+    ");
+    $rawServices = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $servicesByPack = [];
+    foreach ($rawServices as $row) {
+        $servicesByPack[$row['pack_id']][] = [
+            'id' => $row['service_id'],
+            'name' => $row['service_name']
+        ];
+    }
+
+    foreach ($packs as &$pack) {
+        $packId = $pack['id'];
+        $pack['stops'] = $stopsByPack[$packId] ?? [];
+        $pack['services'] = $servicesByPack[$packId] ?? [];
+    }
+
     return $packs;
 }
 
 function getPack(PDO $pdo, int $packId): ?array {
-    $stmt = $pdo->prepare("SELECT id, name, duration, description, price FROM packs WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT id, name, duration, description, price, person_count FROM packs WHERE id = ?");
     $stmt->execute([$packId]);
     $pack = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -212,14 +234,15 @@ function getPack(PDO $pdo, int $packId): ?array {
     $stmt->execute([$packId]);
     $rawStops = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $stmt = $pdo->query("SELECT id, name, stop_id FROM accommodations");
+    $stmt = $pdo->query("SELECT id, name, stop_id, stars FROM accommodations");
     $allAccommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $accommodationsByStop = [];
     foreach ($allAccommodations as $acc) {
         $accommodationsByStop[$acc['stop_id']][] = [
             'id' => $acc['id'],
-            'name' => $acc['name']
+            'name' => $acc['name'],
+            'stars' => $acc['stars']
         ];
     }
 
@@ -242,6 +265,19 @@ function getPack(PDO $pdo, int $packId): ?array {
     }
 
     $pack['stops'] = $stopsByPack;
+
+    $stmt = $pdo->prepare("
+        SELECT s.id, s.name
+        FROM services s
+        INNER JOIN pack_services ps ON s.id = ps.service_id
+        WHERE ps.pack_id = :pack_id
+    ");
+    $stmt->bindParam('pack_id', $packId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $pack['services'] = $services;
 
     return $pack;
 }

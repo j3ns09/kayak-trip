@@ -88,4 +88,18 @@ function frenchDate(string $isoDate) {
     return $date;
 }
 
+function displayAccStars($acc) {
+    $r = '';
+    
+    for ($i = 0; $i < 5; $i++):
+        if ($i < $acc['stars']):
+            $r .= '<i class="bi bi-star-fill text-warning"></i>';
+        else:
+            $r .= '<i class="bi bi-star"></i>';
+        endif;
+    endfor;
+    
+    echo '<span class="ps-3">' . $r . '</span>';
+}
+
 ?>

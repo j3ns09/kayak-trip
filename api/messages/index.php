@@ -44,7 +44,7 @@ if ($method === "GET") {
         // TODO : Rajouter une colonne ou une table pour le support d'aide (accès aux fils de discussion)
         // Ou utiliser admin ?
         $thread = getThread($pdo, $threadId);
-        if ($requester !== $thread["user_id"]) {
+        if ($requester !== $thread["user_id"] && !isAdmin($pdo, $requester)) {
             echo json_encode(["ok" => false, "error" => "Erreur: Accès au fil non autorisé"]);
             exit();
         }

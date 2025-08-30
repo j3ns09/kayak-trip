@@ -17,6 +17,10 @@ if (existsSession('user_id')) {
     redirectAlert('error', 'Accès non autorisé à la page ' . $_SERVER['HTTP_HOST'], 'index');
 }
 
+if (existsSession('form_data')) {
+    var_dump(getSession('form_data'));
+}
+
 ?>
 
 <link rel="stylesheet" href="/src/css/admin.css">
@@ -190,23 +194,39 @@ if (existsSession('user_id')) {
 
     <div id="packs" class="section">
         <h2>Packs</h2>
-        <form class="row g-3" method="POST" action="/processes/packs/test_add_pack_process.php">
+        <form class="row g-3" method="POST" action="/processes/packs/add_pack_process.php">
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="pack-nom" class="form-label">Nom du pack</label>
                     <input type="text" name="name" id="pack-nom" class="form-control">
                 </div>
                 <div class="col-md-3">
-                    <label for="pack-duree" class="form-label">Durée</label>
-                    <input type="number" name="duration" id="pack-duree" class="form-control" min="1" max="10">
-                </div>
-                <div class="col-md-3">
                     <label for="pack-description" class="form-label">Description</label>
                     <input type="text" name="description" id="pack-description" class="form-control">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-1">
+                    <label for="pack-duree" class="form-label">Durée</label>
+                    <input type="number" name="duration" id="pack-duree" class="form-control" min="1" max="10">
+                </div>
+                <div class="col-md-2">
                     <label for="pack-prix" class="form-label">Prix</label>
                     <input type="text" name="price" id="pack-prix" class="form-control" min="0" max="1000" placeholder="Prix en euros...">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Nombre de participants</label>
+                    <input name="person_count" type="number" class="form-control" min="1" max="20" placeholder="De 1 à 20" />
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Services associés</label>
+                    <select name="service_id[]" class="form-control" multiple>
+                        <?php
+                        $services = getAllServices($pdo);
+                        foreach ($services as $service) : ?>
+                            <option value="<?= $service['id'] ?>"><?= $service['name'] ?></option>
+                        
+                        <?php endforeach; ?>
+                    </select>
+                    <small class="text-muted">Maintenez Ctrl pour en sélectionner plusieurs</small>
                 </div>
             </div>
             <div id="selects-container" class="row mb-3">

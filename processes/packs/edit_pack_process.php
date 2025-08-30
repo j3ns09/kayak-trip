@@ -12,14 +12,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $price = filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT);
     $stops = filter_input(INPUT_POST, 'stop_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $accommodations = filter_input(INPUT_POST, 'accommodation_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    
+    $services = filter_input(INPUT_POST, 'service_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY) ?? [];
+    $personCount = filter_input(INPUT_POST, 'person_count', FILTER_VALIDATE_INT);
+
     $data = [
         'name' => $name,
         'duration' => $duration,
         'description' => $description,
         'price' => $price,
         'stops' => $stops,
-        'accommodations' => $accommodations
+        'accommodations' => $accommodations,
+        'services' => $services,
+        'person_count' => $personCount
     ];
 
     $_SESSION['form_data'] = $data;
@@ -33,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    $ok = setPackNewValues($pdo, $id, $name, $duration, $description, $price, $stops, $accommodations);
+    $ok = setPackNewValues($pdo, $id, $name, $duration, $description, $price, $stops, $accommodations, $services, $personCount);
 
     if ($ok) {
         redirectAlert('success', 'Le pack a bien été modifié !', 'admin/dashboard');

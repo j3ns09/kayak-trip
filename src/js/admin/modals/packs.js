@@ -153,6 +153,9 @@ function addStopRow(packId) {
 
 function generateEditModal(id, pack) {
     let stopsHtml = "";
+    const servicesHtml = window.allServices.map(s => `
+    <option value="${s.id}" ${pack.services.some(ps => ps.id === s.id) ? 'selected' : ''}>${s.name}</option>`).join("");
+
 
     if (pack.stops && pack.stops.length > 0) {
         pack.stops.forEach((stop, idx) => {
@@ -208,6 +211,18 @@ function generateEditModal(id, pack) {
                 <div class="mb-3">
                     <label class="form-label">Prix</label>
                     <input name="price" type="number" step="0.01" class="form-control" value="${pack.price}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nombre de participants</label>
+                    <input name="person_count" type="number" class="form-control" value="${pack.person_count}" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Services associés</label>
+                    <select name="service_id[]" class="form-control" multiple>
+                        ${servicesHtml}
+                    </select>
+                    <small class="text-muted">Maintenez Ctrl pour en sélectionner plusieurs</small>
                 </div>
 
                 <h6 class="mt-3">Étapes du pack</h6>

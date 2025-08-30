@@ -26,7 +26,7 @@ include_once 'includes/templates/navbar.php';
 
 <link rel="stylesheet" href="/src/css/home.css">
 
-<div class="container-fluid min-vh-100" style="margin-top:6rem;">
+<div class="container-fluid min-vh-100">
     <div>
         <?php if (!$isConnected): ?>
             <?php include_once 'login.php'; ?>
