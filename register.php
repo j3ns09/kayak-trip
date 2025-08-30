@@ -66,6 +66,6 @@ $formData = $_SESSION['form_data'];
 <?php
 
 unsetSession('form_data');
-include_once "includes/templates/footer.html";
+include_once "includes/templates/footer.php";
 
 ?>

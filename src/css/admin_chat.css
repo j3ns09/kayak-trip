@@ -1,0 +1,64 @@
+.glass-card {
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(15px);
+    color: white;
+    border: none;
+}
+
+.thread-item {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.thread-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.message-bubble {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    max-width: 75%;
+    word-wrap: break-word;
+}
+
+.message-sent {
+    background-color: #198754;
+    color: white;
+    text-align: right;
+}
+
+.message-received {
+    background-color: #343a40;
+    color: white;
+    text-align: left;
+}
+
+.scrollable {
+    overflow-y: auto;
+}
+
+.chat-footer input {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#chat-header {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.text-muted, .no-thread-selected {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+#chat-messages p {
+    padding: 1rem;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-style: italic;
+}
+
+.message-timestamp {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+}

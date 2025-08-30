@@ -61,6 +61,6 @@ if (existsSession('form_data')) {
 if ($formData) {
     unsetSession('form_data');
 }
-include_once "includes/templates/footer.html";
+include_once "includes/templates/footer.php";
 
 ?>

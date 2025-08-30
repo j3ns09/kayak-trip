@@ -12,23 +12,31 @@ header("Content-Type: application/json");
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {
-    $input = json_decode(file_get_contents('php://input'), true);
-    $type = trim($input['type'] ?? '');
+    $packId = filter_input(INPUT_GET, 'pack_id', FILTER_VALIDATE_INT);
     
-    if (empty($type)) {
+    if (!$packId) {
         $packs = getAllPacks($pdo);
+        if (!$packs) {
+            echo json_encode(["ok" => false, "error" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
+            exit();
+        }
+        echo json_encode([
+            "ok" => true,
+            "waiter" => $_SESSION['user_id'],
+            "packs" => $packs
+        ]);
+    } else {
+        $pack = getPack($pdo, $packId);
+        if (!$pack) {
+            echo json_encode(["ok" => false, "error" => "Pack introuvable"]);
+            exit();
+        }
+        echo json_encode([
+            "ok" => true,
+            "waiter" => $_SESSION['user_id'],
+            "pack" => $pack
+        ]);
     }
-
-    if (!$packs) {
-        echo json_encode(["ok" => false, "ok" => false, "error" => "Pas de packs ou mauvaise réponse", "response" => $packs]);
-        exit();
-    }
-
-    echo json_encode([
-        "ok" => true,
-        "waiter" => $_SESSION['user_id'],
-        "packs" => $packs
-    ]);
 }
 
 exit();

@@ -9,12 +9,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $duration = filter_input(INPUT_POST, "duration", FILTER_VALIDATE_INT);
     $description = filter_input(INPUT_POST, "description", FILTER_DEFAULT);
     $price = filter_input(INPUT_POST, "price", FILTER_VALIDATE_FLOAT);
-    
+    $stops = filter_input(INPUT_POST, 'stop_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+    $accommodations = filter_input(INPUT_POST, 'accommodation_id', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
+
     $data = [
         'name' => $name,
         'duration' => $duration,
         'description' => $description,
         'price' => $price,
+        'stops' => $stops,
+        'accommodations' => $accommodations
     ];
 
     $_SESSION['form_data'] = $data;
@@ -28,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     unsetSession('form_data');
 
-    $ok = createPack($pdo, $name, $duration, $description, $price);
+    $ok = createPack($pdo, $name, $duration, $description, $price, $stops, $accommodations);
 
     if ($ok) {
         redirectAlert('success', 'Le pack a bien été crée !', 'admin/dashboard');
@@ -38,8 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     redirectAlert('error', 'Erreur dans l\'enregistrement du service', 'admin/dashboard');
     exit();
 }
-
-redirect("admin/dashboard");
 exit();
 
 ?>

@@ -172,4 +172,4 @@ include_once 'includes/templates/navbar.php';
 <?php include_once 'includes/templates/offcanvas.php' ?>
 <?php include_once 'includes/templates/chat.php' ?>
 
-<?php include_once 'includes/templates/footer.html'; ?>
+<?php include_once 'includes/templates/footer.php'; ?>

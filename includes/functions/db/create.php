@@ -154,12 +154,14 @@ function createPack(
     string $name,
     int $duration,
     string $description,
-    float $price
-)
+    float $price,
+    array $stops,
+    array $accommodations
+): bool
 {
     $stmt = $pdo->prepare("
-    INSERT INTO packs (name, duration, description, price)
-    VALUES (:name, :duration, :description, :price)
+        INSERT INTO packs (name, duration, description, price)
+        VALUES (:name, :duration, :description, :price)
     ");
 
     $stmt->bindParam(':name', $name, PDO::PARAM_STR);
@@ -167,8 +169,46 @@ function createPack(
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price);
 
-    return $stmt->execute();
+    $ok = $stmt->execute();
+
+    if (!$ok) return false;
+
+    $packId = $pdo->lastInsertId();
+
+    if (!$packId) return false;
+
+    $order = 1;
+    foreach ($stops as $index => $stopId) {
+        $stmt = $pdo->prepare("
+            INSERT INTO pack_stops (pack_id, stop_id, day_order)
+            VALUES (:pack_id, :stop_id, :stop_order)
+        ");
+        $stmt->bindParam(':pack_id', $packId, PDO::PARAM_INT);
+        $stmt->bindParam(':stop_id', $stopId, PDO::PARAM_INT);
+        $stmt->bindParam(':stop_order', $order, PDO::PARAM_INT);
+
+        if (!$stmt->execute()) return false;
+
+        $accommodationId = $accommodations[$index] ?? null;
+
+        if ($accommodationId) {
+            $stmtAcc = $pdo->prepare("
+                INSERT INTO pack_accommodations (pack_id, stop_id, accommodation_id)
+                VALUES (:pack_id, :stop_id, :accommodation_id)
+            ");
+            $stmtAcc->bindParam(':pack_id', $packId, PDO::PARAM_INT);
+            $stmtAcc->bindParam(':stop_id', $stopId, PDO::PARAM_INT);
+            $stmtAcc->bindParam(':accommodation_id', $accommodationId, PDO::PARAM_INT);
+
+            if (!$stmtAcc->execute()) return false;
+        }
+
+        $order++;
+    }
+
+    return true;
 }
+
 
 function createRoute(PDO $pdo, int $userId) {
     $sqlRoutes = "INSERT INTO routes (user_id) VALUES (:user_id)";
@@ -292,6 +332,12 @@ function createBookingServices(
     $stmt->bindParam(':service_id', $serviceId, PDO::PARAM_INT);
     $stmt->bindParam(':quantity', $quantity, PDO::PARAM_INT);
 
+    return $stmt->execute();
+}
+
+function createSubscriber(PDO $pdo, int $userId) {
+    $stmt = $pdo->prepare("INSERT INTO newsletter_subscribers (user_id) VALUES (:user_id)");
+    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
     return $stmt->execute();
 }
 ?>

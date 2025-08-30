@@ -24,11 +24,12 @@ if (existsSession('user_id')) {
 $method = $_SERVER['REQUEST_METHOD'];
 
 if ($method === "GET") {
-    $input = json_decode(file_get_contents('php://input'), true);
-    $type = trim($input['type'] ?? '');
+    $stopId = filter_input(INPUT_GET, 'stop_id', FILTER_VALIDATE_INT);
     
-    if (empty($type)) {
+    if (is_null($stopId)) {
         $accommodations = getAllAccommodations($pdo);
+    } else {
+        $accommodations = getAccommodationsByStop($pdo, $stopId);
     }
 
     if (!$accommodations) {
@@ -37,6 +38,7 @@ if ($method === "GET") {
     }
 
     echo json_encode([
+        "ok" => true,
         "waiter" => $_SESSION['user_id'],
         "accommodations" => $accommodations
     ]);

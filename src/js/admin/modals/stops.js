@@ -8,6 +8,7 @@ export async function loadStops() {
 
     const data = await response.json();
     stopsData = data.stops;
+    window.allStops = stopsData;
 
     renderPage(1);
     renderPagination();

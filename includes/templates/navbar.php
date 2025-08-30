@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-dark fixed-top" style="height: 6rem;">
+<nav class="navbar navbar-dark bg-dark sticky-top" style="height: 6rem;">
     <div class="container-fluid">
         <a class="navbar-brand ms-3 fs-2 title" href="/"><i class="bi bi-dot"></i> KAYAK TRIP<hr class="mt-1"/></a>
         <div class="ms-auto mb-3 me-2">

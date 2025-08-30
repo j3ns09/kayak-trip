@@ -7,33 +7,33 @@
     <div class="offcanvas-body d-flex flex-column justify-content-between py-4">
         <?php if ($isConnected): ?>
             <div class="nav flex-column gap-3">
-                <a href="index.php" class="btn btn-outline-light fw-bold">
+                <a href="/index.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-house-door-fill me-2"></i> Accueil
                 </a>
-                <a href="profile.php" class="btn btn-outline-light fw-bold">
+                <a href="/profile.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-person-fill me-2"></i> Profil
                 </a>
 
                 <?php if (isAdmin($pdo, $userId)): ?>
-                    <a href="admin/dashboard.php" class="btn btn-outline-light fw-bold">
+                    <a href="/admin/dashboard.php" class="btn btn-outline-light fw-bold">
                         <i class="bi bi-person-fill-gear"></i> Espace Administrateur
                     </a>
                     
-                    <a href="admin/chat.php" class="btn btn-outline-light fw-bold">
+                    <a href="/admin/chat.php" class="btn btn-outline-light fw-bold">
                         <i class="bi bi-chat-right-dots-fill"></i> Espace Discussion
                     </a>
                 <?php endif; ?>
                 
-                <a href="packs.php" class="btn btn-outline-light fw-bold">
+                <a href="/packs.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-backpack2-fill"></i> Packs
                 </a>
-                <a href="build.php" class="btn btn-outline-light fw-bold">
+                <a href="/build.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-signpost-2-fill"></i> Composer son itinéraire
                 </a>
-                <a href="cart.php" class="btn btn-outline-light fw-bold">
+                <a href="/cart.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-cart"></i> Panier
                 </a>
-                <a href="orders.php" class="btn btn-outline-light fw-bold">
+                <a href="/orders.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-receipt"></i> Mes commandes
                 </a>
             </div>

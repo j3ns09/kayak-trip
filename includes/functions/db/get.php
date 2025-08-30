@@ -135,9 +135,115 @@ function getAccommodationCol(PDO $pdo, int $accId, string $column) {
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
-function getAllPacks(PDO $pdo) : array | bool {
-    $r = $pdo->query("SELECT id, name, duration, description, price FROM packs");
-    return $r->fetchAll(PDO::FETCH_ASSOC);
+function getAllPacks(PDO $pdo): array {
+    $packs = $pdo->query("SELECT id, name, duration, description, price FROM packs")
+                 ->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->query("
+        SELECT 
+            ps.pack_id,
+            s.id AS stop_id,
+            s.name AS stop_name,
+            pa.accommodation_id
+        FROM pack_stops ps
+        INNER JOIN stops s ON ps.stop_id = s.id
+        LEFT JOIN pack_accommodations pa 
+            ON pa.pack_id = ps.pack_id AND pa.stop_id = ps.stop_id
+    ");
+    $rawStops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->query("SELECT id, name, stop_id FROM accommodations");
+    $allAccommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $accommodationsByStop = [];
+    foreach ($allAccommodations as $acc) {
+        $accommodationsByStop[$acc['stop_id']][] = [
+            'id' => $acc['id'],
+            'name' => $acc['name']
+        ];
+    }
+
+    $stopsByPack = [];
+    $seen = [];
+
+    foreach ($rawStops as $row) {
+        $key = $row['pack_id'] . '_' . $row['stop_id'];
+
+        if (!isset($seen[$key])) {
+            $seen[$key] = true;
+
+            $stopsByPack[$row['pack_id']][] = [
+                'id' => $row['stop_id'],
+                'name' => $row['stop_name'],
+                'accommodation_id' => $row['accommodation_id'],
+                'accommodations' => $accommodationsByStop[$row['stop_id']] ?? []
+            ];
+        }
+    }
+
+    foreach ($packs as &$pack) {
+        $pack['stops'] = $stopsByPack[$pack['id']] ?? [];
+    }
+
+    return $packs;
+}
+
+function getPack(PDO $pdo, int $packId): ?array {
+    $stmt = $pdo->prepare("SELECT id, name, duration, description, price FROM packs WHERE id = ?");
+    $stmt->execute([$packId]);
+    $pack = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$pack) {
+        return null;
+    }
+
+    $stmt = $pdo->prepare("
+        SELECT 
+            ps.pack_id,
+            s.id AS stop_id,
+            s.name AS stop_name,
+            pa.accommodation_id
+        FROM pack_stops ps
+        INNER JOIN stops s ON ps.stop_id = s.id
+        LEFT JOIN pack_accommodations pa 
+            ON pa.pack_id = ps.pack_id AND pa.stop_id = ps.stop_id
+        WHERE ps.pack_id = ?
+    ");
+    $stmt->execute([$packId]);
+    $rawStops = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->query("SELECT id, name, stop_id FROM accommodations");
+    $allAccommodations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $accommodationsByStop = [];
+    foreach ($allAccommodations as $acc) {
+        $accommodationsByStop[$acc['stop_id']][] = [
+            'id' => $acc['id'],
+            'name' => $acc['name']
+        ];
+    }
+
+    $stopsByPack = [];
+    $seen = [];
+
+    foreach ($rawStops as $row) {
+        $key = $row['pack_id'] . '_' . $row['stop_id'];
+
+        if (!isset($seen[$key])) {
+            $seen[$key] = true;
+
+            $stopsByPack[] = [
+                'id' => $row['stop_id'],
+                'name' => $row['stop_name'],
+                'accommodation_id' => $row['accommodation_id'],
+                'accommodations' => $accommodationsByStop[$row['stop_id']] ?? []
+            ];
+        }
+    }
+
+    $pack['stops'] = $stopsByPack;
+
+    return $pack;
 }
 
 function getAllThreads(PDO $pdo) : array | bool {

@@ -93,13 +93,15 @@ function setPackNewValues(
     string $name,
     int $duration,
     string $description,
-    float $price
-)
+    float $price,
+    array $stops,
+    array $accommodations
+): bool 
 {
     $stmt = $pdo->prepare("
-    UPDATE packs 
-    SET name = :name, duration = :duration, description = :description, price = :price
-    WHERE id = :id
+        UPDATE packs 
+        SET name = :name, duration = :duration, description = :description, price = :price
+        WHERE id = :id
     ");
 
     $stmt->bindParam(':id', $id, PDO::PARAM_INT);
@@ -108,8 +110,51 @@ function setPackNewValues(
     $stmt->bindParam(':description', $description, PDO::PARAM_STR);
     $stmt->bindParam(':price', $price);
 
-    return $stmt->execute();
+    if (!$stmt->execute()) return false;
+
+    $pdo->prepare("DELETE FROM pack_stops WHERE pack_id = :id")
+        ->execute([':id' => $id]);
+
+    $pdo->prepare("DELETE FROM pack_accommodations WHERE pack_id = :id")
+        ->execute([':id' => $id]);
+
+    $stmtStop = $pdo->prepare("
+        INSERT INTO pack_stops (pack_id, stop_id, stop_order)
+        VALUES (:pack_id, :stop_id, :stop_order)
+    ");
+
+    $stmtAcc = $pdo->prepare("
+        INSERT INTO pack_accommodations (pack_id, stop_id, accommodation_id)
+        VALUES (:pack_id, :stop_id, :accommodation_id)
+    ");
+
+    foreach ($stops as $i => $stopId) {
+        $order = $i + 1;
+
+        $ok = $stmtStop->execute([
+            ':pack_id' => $id,
+            ':stop_id' => $stopId,
+            ':stop_order' => $order,
+        ]);
+
+        if (!$ok) return false;
+
+        $accommodationId = $accommodations[$i] ?? null;
+
+        if (!empty($accommodationId)) {
+            $ok = $stmtAcc->execute([
+                ':pack_id' => $id,
+                ':stop_id' => $stopId,
+                ':accommodation_id' => $accommodationId,
+            ]);
+
+            if (!$ok) return false;
+        }
+    }
+
+    return true;
 }
+
 
 function setUserNewValues(
     PDO $pdo,

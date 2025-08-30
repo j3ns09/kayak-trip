@@ -163,6 +163,6 @@ include_once 'includes/templates/navbar.php';
 
 include_once 'includes/templates/offcanvas.php';
 include_once 'includes/templates/chat.php';
-include_once 'includes/templates/footer.html';
+include_once 'includes/templates/footer.php';
 
 ?>

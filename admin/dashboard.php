@@ -190,7 +190,7 @@ if (existsSession('user_id')) {
 
     <div id="packs" class="section">
         <h2>Packs</h2>
-        <form class="row g-3" method="POST" action="/processes/packs/add_pack_process.php">
+        <form class="row g-3" method="POST" action="/processes/packs/test_add_pack_process.php">
             <div class="row mb-3">
                 <div class="col-md-3">
                     <label for="pack-nom" class="form-label">Nom du pack</label>
@@ -209,7 +209,26 @@ if (existsSession('user_id')) {
                     <input type="text" name="price" id="pack-prix" class="form-control" min="0" max="1000" placeholder="Prix en euros...">
                 </div>
             </div>
-            <div class="row">
+            <div id="selects-container" class="row mb-3">
+                <div class="row">
+                    <label class="col-md-2 form-label">Arrêts <button id="add-stop" type="button" class="btn btn-sm btn-primary">Ajouter un arrêt</button></label>
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <select name="stop_id[]" class="form-control selects-stops">
+                        <?php 
+                        $stops = getAllStops($pdo);
+                        foreach ($stops as $stop): ?>
+                            <option value="<?= $stop['id'] ?>"><?= htmlspecialchars($stop['name']) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <select name="accommodation_id[]" class="form-control selects-accommodations">
+                        <option value="">Choisissez un hébergement</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
                 <div class="col-md-6 d-flex align-items-center">
                     <button type="submit" class="btn btn-success">Ajouter</button>
                 </div>

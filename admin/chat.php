@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 $root = $_SERVER['DOCUMENT_ROOT'];
 
 include_once $root . '/includes/store.php';
@@ -6,42 +8,19 @@ include_once $root . '/includes/config/config.php';
 include_once $root . '/includes/functions.php';
 include_once $root . '/includes/templates/header.html';
 
-if (!existsSession('user_id') || !isAdmin($pdo, $_SESSION['user_id'])) {
-    redirect('index');
-    exit();
-}
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'reply') {
-    $threadId = filter_input(INPUT_POST, 'thread_id', FILTER_VALIDATE_INT);
-    $message  = trim($_POST['message'] ?? '');
-    $adminId  = (int)$_SESSION['user_id'];
-
-    if ($threadId && $message !== '') {
-        if (function_exists('createMessage')) {
-            createMessage($pdo, $threadId, 'admin', $adminId, $message);
-            redirect("admin/chat?thread_id={$threadId}");
-            exit();
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO chat_messages (thread_id, sender_type, sender_id, message) VALUES (:tid, 'admin', :sid, :msg)");
-            $stmt->execute([':tid' => $threadId, ':sid' => $adminId, ':msg' => $message]);
-            redirect("admin/chat?thread_id={$threadId}");
-            exit();
-        }
+if (existsSession('user_id')) {
+    $userId = $_SESSION["user_id"];
+    if (!isAdmin($pdo, $userId)) {
+        redirectAlert('error', 'Accès non autorisé à cette page', 'index');
     }
+    $userInfo = getDisplayableUserInfo($pdo, $userId);
+} else {
+    $userId = null;
 }
 
-if (isset($_GET['close_thread'])) {
-    $toClose = filter_input(INPUT_GET, 'close_thread', FILTER_VALIDATE_INT);
-    if ($toClose) {
-        if (function_exists('setThreadClosed')) {
-            setThreadClosed($pdo, $toClose);
-        } else {
-            $pdo->query("UPDATE chat_threads SET is_closed = 1 WHERE id = " . (int)$toClose);
-        }
-        redirect("admin/chat");
-        exit();
-    }
-}
+$isConnected = !is_null($userId);
+
+$userId = (int)$_SESSION['user_id'];
 
 $threadsStmt = $pdo->query("
     SELECT ct.id, ct.user_id, ct.started_at, ct.is_closed,
@@ -53,140 +32,164 @@ $threadsStmt = $pdo->query("
 ");
 $openThreads = $threadsStmt->fetchAll(PDO::FETCH_ASSOC);
 
-$selectedThreadId = filter_input(INPUT_GET, 'thread_id', FILTER_VALIDATE_INT);
-if (!$selectedThreadId && !empty($openThreads)) {
-    $selectedThreadId = (int)$openThreads[0]['id'];
-}
-
-$messages = [];
-$selectedUser = null;
-if ($selectedThreadId) {
-    $uStmt = $pdo->prepare("
-        SELECT u.id, u.first_name, u.last_name, u.email, ct.started_at
-        FROM chat_threads ct
-        JOIN users u ON u.id = ct.user_id
-        WHERE ct.id = :tid
-    ");
-    $uStmt->execute([':tid' => $selectedThreadId]);
-    $selectedUser = $uStmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($selectedUser) {
-        if (function_exists('getAllMessagesFromThread')) {
-            $messages = getAllMessagesFromThread($pdo, $selectedThreadId) ?: [];
-        } else {
-            $mStmt = $pdo->prepare("
-                SELECT id, thread_id, sender_type, sender_id, message, sent_at
-                FROM chat_messages
-                WHERE thread_id = :tid
-                ORDER BY sent_at ASC, id ASC
-            ");
-            $mStmt->execute([':tid' => $selectedThreadId]);
-            $messages = $mStmt->fetchAll(PDO::FETCH_ASSOC);
-        }
-    }
-}
+include_once $root . '/includes/templates/navbar.php';
 ?>
 
-<div class="container-fluid my-4">
-    <div class="mb-4">
-        <a href="/index.php" class="btn btn-outline-dark btn-sm rounded-pill">
-            <i class="bi bi-arrow-left-circle"></i> Retour utilisateur
-        </a>
-    </div>
-    <h1 class="mb-4">Centre de messagerie</h1>
-    <div class="row" style="min-height: 70vh;">
-        <div class="col-12 col-md-4 col-lg-3">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                    <span><i class="bi bi-inbox"></i> Threads ouverts</span>
-                    <span class="badge bg-warning text-dark"><?= count($openThreads) ?></span>
-                </div>
-                <ul class="list-group list-group-flush" style="max-height: 70vh; overflow: auto;">
-                    <?php if (empty($openThreads)) : ?>
-                        <li class="list-group-item text-muted">Aucun thread ouvert</li>
-                    <?php else: ?>
-                        <?php foreach ($openThreads as $t): ?>
-                            <?php
-                                $active = ($selectedThreadId === (int)$t['id']) ? 'active' : '';
-                                $userLabel = htmlspecialchars(($t['first_name'] ?? '') . ' ' . ($t['name'] ?? ''));
-                                $email = htmlspecialchars($t['email'] ?? '');
-                                $started = htmlspecialchars($t['started_at'] ?? '');
-                            ?>
-                            <a class="list-group-item list-group-item-action <?= $active ?>" href="/admin/chat.php?thread_id=<?= (int)$t['id'] ?>">
-                                <div class="d-flex justify-content-between">
-                                    <div>
-                                        <div class="fw-semibold"><?= $userLabel ?></div>
-                                        <div class="small text-muted"><?= $email ?></div>
-                                    </div>
-                                    <div class="text-end">
-                                        <div class="small text-muted"><i class="bi bi-clock"></i> <?= $started ?></div>
-                                        <a class="btn btn-sm btn-outline-danger mt-1" href="/admin/chat.php?close_thread=<?= (int)$t['id'] ?>" onclick="return confirm('Fermer ce thread ?')">
-                                            <i class="bi bi-x-circle"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </a>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </ul>
-            </div>
-        </div>
+<link rel="stylesheet" href="/src/css/home.css">
+<link rel="stylesheet" href="/src/css/admin_chat.css">
 
-        <div class="col-12 col-md-8 col-lg-9 mt-4 mt-md-0">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <div>
-                        <?php if ($selectedUser): ?>
-                            <span class="fw-semibold"><i class="bi bi-person"></i>
-                                <?= htmlspecialchars(($selectedUser['first_name'] ?? '') . ' ' . ($selectedUser['name'] ?? '')) ?>
-                            </span>
-                            <span class="small ms-2"><?= htmlspecialchars($selectedUser['email'] ?? '') ?></span>
-                        <?php else: ?>
-                            <span class="fw-semibold">Aucun thread sélectionné</span>
-                        <?php endif; ?>
+<div class="container-fluid" id="main">
+    <div class="row justify-content-center">
+        <div class="col-11 col-md-10">
+            <h1 class="title mb-4">Centre de messagerie - Admin</h1>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <div class="card glass-card h-100 shadow">
+                        <div class="card-header border-0">
+                            <i class="bi bi-inbox"></i> Threads ouverts
+                        </div>
+                        <ul class="list-group list-group-flush scrollable" style="max-height: 70vh;" id="threads-list">
+                            <?php foreach ($openThreads as $t): ?>
+                                <li class="list-group-item bg-transparent text-white border-0 thread-item" data-thread-id="<?= (int)$t['id'] ?>" data-user-id="<?= (int)$t['user_id'] ?>">
+                                    <strong><?= htmlspecialchars($t['first_name'] . ' ' . $t['last_name']) ?></strong><br>
+                                    <small><?= htmlspecialchars($t['email']) ?></small><br>
+                                    <small class="text-muted"><i class="bi bi-clock"></i> <?= htmlspecialchars($t['started_at']) ?></small>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
                     </div>
-                    <?php if ($selectedThreadId): ?>
-                        <span class="badge bg-light text-dark">Thread #<?= (int)$selectedThreadId ?></span>
-                    <?php endif; ?>
                 </div>
 
-                <div class="card-body bg-light" style="height: 60vh; overflow: auto;">
-                    <?php if ($selectedThreadId && !empty($messages)): ?>
-                        <?php foreach ($messages as $m): ?>
-                            <?php
-                                $isClient = ($m['sender_type'] ?? '') === 'client';
-                                $bubbleClass = $isClient ? 'bg-success text-white' : 'bg-dark text-white';
-                                $alignClass = $isClient ? 'text-end' : 'text-start';
-                                $content = htmlspecialchars($m['message'] ?? '');
-                                $time = htmlspecialchars($m['sent_at'] ?? '');
-                            ?>
-                            <div class="mb-2 <?= $alignClass ?>">
-                                <div class="d-inline-block rounded px-3 py-2 <?= $bubbleClass ?>">
-                                    <?= nl2br($content) ?>
-                                </div>
-                                <div class="small text-muted"><?= $time ?></div>
+                <div class="col-md-8">
+                    <div class="card glass-card h-100 shadow d-flex flex-column">
+                        <div class="card-header border-0" id="chat-header">
+                            <span class="text-muted">Aucun thread sélectionné</span>
+                        </div>
+                        <div class="card-body flex-grow-1 scrollable" id="chat-messages" style="height: 55vh;">
+                            <p class="text-muted">Sélectionnez un thread pour commencer la conversation.</p>
+                        </div>
+                        <div class="card-footer border-0 chat-footer">
+                            <div class="input-group">
+                                <input type="text" id="chat-input" class="form-control rounded-start" placeholder="Votre réponse...">
+                                <button class="btn btn-success" id="chat-send"><i class="bi bi-send"></i></button>
                             </div>
-                        <?php endforeach; ?>
-                    <?php elseif ($selectedThreadId): ?>
-                        <div class="text-muted">Aucun message pour ce thread.</div>
-                    <?php else: ?>
-                        <div class="text-muted">Sélectionnez un thread pour afficher les messages.</div>
-                    <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
-
-                <?php if ($selectedThreadId): ?>
-                <div class="card-footer">
-                    <form method="post" class="d-flex gap-2">
-                        <input type="hidden" name="action" value="reply">
-                        <input type="hidden" name="thread_id" value="<?= (int)$selectedThreadId ?>">
-                        <input type="text" name="message" class="form-control" placeholder="Votre réponse..." required>
-                        <button class="btn btn-primary"><i class="bi bi-send"></i></button>
-                    </form>
-                </div>
-                <?php endif; ?>
             </div>
         </div>
-    </div>
+    </div>  
 </div>
 
-<?php include_once $root . '/includes/templates/footer.html'; ?>
+<script>
+const adminId = <?= json_encode($userId) ?>;
+let activeThreadId = null;
+let activeUserId = null;
+let pollingInterval;
+let lastMessageTimestamp = null;
+let allMessages = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+    const chatInput = document.getElementById('chat-input');
+    const chatSend = document.getElementById('chat-send');
+    const chatMessages = document.getElementById('chat-messages');
+    const threads = document.querySelectorAll('.thread-item');
+
+    threads.forEach(thread => {
+        thread.addEventListener('click', async () => {
+            activeThreadId = thread.dataset.threadId;
+            activeUserId = thread.dataset.userId;
+            const userName = thread.querySelector('strong').textContent;
+            document.getElementById('chat-header').innerHTML = `<i class="bi bi-person"></i> ${userName} <span class="badge bg-light text-dark ms-2">Thread #${activeThreadId}</span>`;
+            await pollMessages();
+        });
+    });
+
+    chatSend.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+
+    pollingInterval = setInterval(pollMessages, 3000);
+
+    async function pollMessages() {
+        if (!activeThreadId || !activeUserId) return;
+
+        try {
+            const response = await fetch(`/api/messages/?userId=${activeUserId}&threadId=${activeThreadId}`);
+            const data = await response.json();
+
+            if (data.ok && Array.isArray(data.messages)) {
+                const newMessages = data.messages;
+
+                if (JSON.stringify(newMessages) !== JSON.stringify(allMessages)) {
+                    allMessages = newMessages;
+                    await loadMessages(allMessages);
+                }
+            }
+        } catch (e) {
+            console.error("Erreur lors du polling :", e);
+        }
+    }
+
+    async function loadMessages(messagesss) {
+        chatMessages.innerHTML = '';
+
+        if (!messagesss) {
+            chatMessages.innerHTML = `<div class="text-danger">'Erreur lors du chargement.'</div>`;
+            return;
+        }
+
+        messagesss.forEach(msg => {
+            const msgDiv = document.createElement('div');
+            const isMe = msg.sender_id === adminId;
+            msgDiv.className = `mb-2 text-${isMe ? 'end' : 'start'}`;
+            msgDiv.innerHTML = `<span class="badge bg-${isMe ? 'success' : 'dark'}">${sanitize(msg.message)}</span><br><small class="text-muted">${msg.sent_at}</small>`;
+            chatMessages.appendChild(msgDiv);
+        });
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessage() {
+        const input = chatInput.value.trim();
+        if (!input || input.length > 500 || !activeThreadId) return;
+
+        const payload = {
+            userId: adminId,
+            threadId: activeThreadId,
+            message: input
+        };
+
+        const res = await fetch("/api/messages/", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+            chatInput.value = '';
+            await loadMessages();
+        } else {
+            alert("Erreur lors de l'envoi.");
+        }
+    }
+
+    function sanitize(str) {
+        const div = document.createElement('div');
+        div.innerText = str;
+        return div.innerHTML;
+    }
+});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+
+<?php 
+include_once $root . '/includes/templates/offcanvas.php';
+include_once $root . '/includes/templates/footer.php'; 
+?>

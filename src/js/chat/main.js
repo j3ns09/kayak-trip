@@ -5,6 +5,9 @@ const sendBtn = document.getElementById('chat-send');
 const input = document.getElementById('chat-input');
 const messages = document.getElementById('chat-messages');
 
+let pollingInterval;
+let lastMessageTimestamp = null;
+
 let activeThread;
 let allMessages;
 
@@ -14,7 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         chatButton.addEventListener('click', () => chatWindow.classList.remove('d-none'));
     }
     
-    toggleBtn.addEventListener('click', () => chatWindow.classList.toggle('d-none'));
+    toggleBtn.addEventListener('click', () => {
+        chatWindow.classList.toggle('d-none');
+        if (chatWindow.classList.contains('d-none')) {
+            clearInterval(pollingInterval);
+        } else {
+            pollMessages();
+            pollingInterval = setInterval(pollMessages, 3000);
+        }
+    });
+    
     closeBtn.addEventListener('click', () => chatWindow.classList.add('d-none'));
     
     sendBtn.addEventListener('click', () => {
@@ -75,6 +87,29 @@ async function getNewThread() {
     }
     return false;
 }
+
+async function pollMessages() {
+    if (!activeThread || !userId) return;
+
+    try {
+        const response = await fetch(`/api/messages/?userId=${userId}&threadId=${activeThread}`);
+        const data = await response.json();
+
+        if (data.ok && Array.isArray(data.messages)) {
+            // Ne ré-affiche que si nouveaux messages
+            const newMessages = data.messages;
+
+            // Option : ne re-render que si on détecte du nouveau
+            if (JSON.stringify(newMessages) !== JSON.stringify(allMessages)) {
+                allMessages = newMessages;
+                renderMessages(allMessages);
+            }
+        }
+    } catch (e) {
+        console.error("Erreur lors du polling :", e);
+    }
+}
+
 
 function showMessage(content) {
     const msgDiv = document.createElement('div');
@@ -160,10 +195,10 @@ function renderMessages(messagesArray) {
     messagesArray.forEach((msg) => {
         const msgDiv = document.createElement('div');
 
-        const isClient = msg.sender_type === 'client';
-        msgDiv.className = `mb-2 text-${isClient ? 'end' : 'start'}`;
+        const isMe = msg.sender_id === userId;
+        msgDiv.className = `mb-2 text-${isMe ? 'end' : 'start'}`;
         msgDiv.innerHTML = `
-            <span class="badge bg-${isClient ? 'success' : 'secondary'}">${msg.message}</span>
+            <span class="badge bg-${isMe ? 'success' : 'secondary'}">${msg.message}</span>
         `;
 
         messages.appendChild(msgDiv);

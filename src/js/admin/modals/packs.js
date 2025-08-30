@@ -33,10 +33,12 @@ export async function loadPacks() {
 
                 ${generateDeleteModal(id)}
                 ${generateEditModal(id, pack)}
-
-            </td>`;
                 
+                </td>`;
+        
         tbody.appendChild(tr);
+        addStopRow(id);
+        attachAddStopButtonListener(id);
         no++;
     }
 }
@@ -65,10 +67,123 @@ function generateDeleteModal(id) {
     </div>`;
 }
 
+function attachAccommodationLoader(stopSelect, accommodationSelect) {
+    stopSelect.addEventListener("change", async () => {
+        const stopId = stopSelect.value;
+        if (!stopId) {
+            accommodationSelect.innerHTML = '<option value="">Choisissez un hébergement</option>';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/accommodations/?stop_id=${stopId}`);
+            if (!response.ok) throw new Error("Erreur API");
+
+            let accommodations = await response.json();
+
+            accommodationSelect.innerHTML = '<option value="">Choisissez un hébergement</option>';
+
+            console.log(accommodations);
+            accommodations = accommodations.accommodations;
+            accommodations.forEach(acc => {
+                const opt = document.createElement("option");
+                opt.value = acc.id;
+                opt.textContent = acc.name;
+                accommodationSelect.appendChild(opt);
+            });
+        } catch (err) {
+            console.error("Erreur chargement hébergements:", err);
+            accommodationSelect.innerHTML = '<option value="">(Erreur de chargement)</option>';
+        }
+    });
+}
+
+function attachAddStopButtonListener(packId) {
+    const btn = document.getElementById(`addStopBtn${packId}`);
+    if (btn) {
+        btn.addEventListener("click", () => {
+            addStopRow(packId);
+        });
+    } else {
+        console.warn(`Bouton addStopBtn${packId} introuvable`);
+    }
+}
+
+
+function addStopRow(packId) {
+    const container = document.getElementById(`editStopsContainer${packId}`);
+
+    const row = document.createElement("div");
+    row.classList.add("row", "mb-2");
+
+    const stopDiv = document.createElement("div");
+    stopDiv.classList.add("col-sm-6");
+    const stopLabel = document.createElement("label");
+    stopLabel.classList.add("form-label");
+    stopLabel.textContent = "Arrêt";
+    const stopSelect = document.createElement("select");
+    stopSelect.name = "stop_id[]";
+    stopSelect.classList.add("form-control", "selects-stops");
+
+    stopSelect.innerHTML = window.allStops
+        .map(s => `<option value="${s.id}">${s.name}</option>`)
+        .join("");
+
+    stopDiv.appendChild(stopLabel);
+    stopDiv.appendChild(stopSelect);
+
+    const accDiv = document.createElement("div");
+    accDiv.classList.add("col-sm-6");
+    const accLabel = document.createElement("label");
+    accLabel.classList.add("form-label");
+    accLabel.textContent = "Hébergement";
+    const accSelect = document.createElement("select");
+    accSelect.name = "accommodation_id[]";
+    accSelect.classList.add("form-control", "selects-accommodations");
+    accSelect.innerHTML = `<option value="">Choisissez un hébergement</option>`;
+    accDiv.appendChild(accLabel);
+    accDiv.appendChild(accSelect);
+
+    row.appendChild(stopDiv);
+    row.appendChild(accDiv);
+    container.appendChild(row);
+
+    attachAccommodationLoader(stopSelect, accSelect);
+}
+
 function generateEditModal(id, pack) {
+    let stopsHtml = "";
+
+    if (pack.stops && pack.stops.length > 0) {
+        pack.stops.forEach((stop, idx) => {
+            stopsHtml += `
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <label class="form-label">Arrêt ${idx + 1}</label>
+                    <select name="stop_id[]" class="form-control selects-stops" data-selected="${stop.id}">
+                        ${window.allStops.map(s => `
+                            <option value="${s.id}" ${s.id == stop.id ? "selected" : ""}>${s.name}</option>
+                        `).join("")}
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-label">Hébergement</label>
+                    <select name="accommodation_id[]" class="form-control selects-accommodations" data-selected="${stop.accommodation_id}">
+                        <option value="">Choisissez un hébergement</option>
+                        ${stop.accommodations.map(acc => `
+                            <option value="${acc.id}" ${acc.id == stop.accommodation_id ? "selected" : ""}>${acc.name}</option>
+                        `).join("")}
+                    </select>
+                </div>
+            </div>`;
+        });
+
+        console.log(stopsHtml);
+    }
+
     return `
     <div class="modal fade" id="editPack${id}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form method="POST" action="/processes/packs/edit_pack_process.php">
             <div class="modal-header">
@@ -77,11 +192,31 @@ function generateEditModal(id, pack) {
             </div>
             <div class="modal-body">
                 <input type="hidden" name="id" value="${id}">
-                <div class="mb-3"><label class="form-label">Nom</label><input name="name" class="form-control" value="${pack.name}" /></div>
-                <div class="mb-3"><label class="form-label">Durée</label><input name="duration" class="form-control" value="${pack.duration}" /></div>
-                <div class="mb-3"><label class="form-label">Description</label><input name="description" class="form-control" value="${pack.description}" /></div>
-                <div class="mb-3"><label class="form-label">Prix</label><input name="price" class="form-control" value="${pack.price}" /></div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Nom</label>
+                    <input name="name" class="form-control" value="${pack.name}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Durée</label>
+                    <input name="duration" type="number" min="1" class="form-control" value="${pack.duration}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input name="description" class="form-control" value="${pack.description}" />
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Prix</label>
+                    <input name="price" type="number" step="0.01" class="form-control" value="${pack.price}" />
+                </div>
+
+                <h6 class="mt-3">Étapes du pack</h6>
+                <div id="editStopsContainer${id}">
+                    ${stopsHtml}
+                </div>
+                <button id="addStopBtn${id}" type="button" class="btn btn-sm btn-primary">+ Ajouter un arrêt</button>
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
                 <button type="submit" class="btn btn-success">Sauvegarder</button>

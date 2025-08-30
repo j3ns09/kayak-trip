@@ -94,5 +94,5 @@ if (existsSession("success")) {
 }
 
 include_once 'includes/templates/offcanvas.php';
-include_once 'includes/templates/footer.html';
+include_once 'includes/templates/footer.php';
 ?>

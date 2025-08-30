@@ -9,6 +9,8 @@ import { loadPacks } from "./modals/packs.js";
 import { loadMap } from "./map/map.js";
 import { loadBookings } from "./modals/orders.js";
 
+import { addDiv } from "./stops/stops.js";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const links = document.querySelectorAll('a[href^="#"]');
     
@@ -21,6 +23,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     renderToasts();
     
+
+
+    let map;
+    await loadStops();
+    
+    addDiv();
+    
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
     await loadUsers();
     await loadAccommodations();
     await loadServices();
@@ -28,12 +40,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadPacks();
     await loadBookings();
 
-    let map;
-    await loadStops();
-    
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-    
     loadMap();
 
     setMinDate();
