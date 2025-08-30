@@ -365,20 +365,6 @@ if (existsSession('form_data')) {
         </table>
     </div>
 
-    <div id="messagerie" class="section">
-        <h2>Messagerie commerciale</h2>
-        <ul class="list-group list-group-flush bg-transparent text-white mt-4">
-            <li class="list-group-item bg-dark text-white d-flex justify-content-between">
-                jean@example.com
-                <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-            </li>
-            <li class="list-group-item bg-dark text-white d-flex justify-content-between">
-                anna@example.com
-                <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-            </li>
-        </ul>
-    </div>
-
     <div id="newsletter" class="section">
         <h2>Newsletter</h2>
         <form class="d-flex gap-3">
