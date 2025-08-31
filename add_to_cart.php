@@ -6,21 +6,25 @@ include_once $root . '/includes/config/config.php';
 include_once $root . '/includes/functions.php';
 
 if (!existsSession('user_id')) {
-    header("Location: /login.php");
+    redirect('login');
     exit();
+}
+
+if (!isVerified($pdo, getSession('user_id'))) {
+    redirectAlert('error', 'Veuillez vérifier votre compte.', 'index');
 }
 
 $packId = filter_input(INPUT_POST, 'pack_id', FILTER_VALIDATE_INT);
 
 if (!$packId) {
-    header("Location: /packs.php");
+    redirect('packs');
     exit();
 }
 
 $pack = getPack($pdo, $packId);
 
 if (!$pack) {
-    header("Location: /packs.php");
+    redirect('packs');
     exit();
 }
 
@@ -31,7 +35,7 @@ $_SESSION['cart_items'] = [
     'price' => $pack['price'],
     'stops' => $pack['stops'],
     'options' => $pack['services'],
-    'person_count' => 1,
+    'person_count' => $pack['person_count'],
     'desired_time' => [
         'duration' => $pack['duration'],
         'dates' => [date('Y-m-d'), date('Y-m-d', strtotime("+{$pack['duration']} days"))]

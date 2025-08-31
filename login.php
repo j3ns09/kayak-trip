@@ -47,7 +47,7 @@ if (existsSession('form_data')) {
         </form>
         <div>
             <div class="mt-3 text-center">
-                <a href="#" class="text-light text-decoration-underline">Mot de passe oublié ?</a>
+                <a href="forgot.php" class="text-light text-decoration-underline">Mot de passe oublié ?</a>
             </div>
             <div class="mt-3 text-center">
                 <a href="register.php" class="text-light text-decoration-underline">Vous n'avez pas de compte ?</a>

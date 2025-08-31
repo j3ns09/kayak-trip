@@ -8,6 +8,12 @@ function setUserOffline(PDO $pdo, int $userId) {
     $r = $pdo->query("UPDATE users SET is_online = 0 WHERE id = $userId");
 }
 
+function setUserAdmin(PDO $pdo, int $userId, int $right) {
+    $r = $pdo->prepare("UPDATE users SET is_admin = :right WHERE id = $userId");
+    $r->bindParam(':right', $right, PDO::PARAM_INT);
+    return $r->execute();
+}
+
 function setThreadClosed(PDO $pdo, int $threadId) {
     $r = $pdo->prepare("UPDATE chat_threads SET is_closed = 1 WHERE id = :id");
     $r->bindParam(':id', $threadId, PDO::PARAM_INT);

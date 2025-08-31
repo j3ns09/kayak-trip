@@ -210,8 +210,9 @@ function getAllPacks(PDO $pdo): array {
 }
 
 function getPack(PDO $pdo, int $packId): ?array {
-    $stmt = $pdo->prepare("SELECT id, name, duration, description, price, person_count FROM packs WHERE id = ?");
-    $stmt->execute([$packId]);
+    $stmt = $pdo->prepare("SELECT id, name, duration, description, price, person_count FROM packs WHERE id = :id");
+    $stmt->bindParam(':id', $packId, PDO::PARAM_INT);
+    $stmt->execute();
     $pack = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$pack) {

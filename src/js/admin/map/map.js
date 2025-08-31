@@ -1,4 +1,5 @@
 let clickedMarker = null;
+let map;
 
 export function loadMap() {
     map = L.map('map').setView([47.3, 0.7], 7);

@@ -11,8 +11,19 @@ function isAdmin(PDO $pdo, int $userId) : bool {
 }
 
 function hasToken(PDO $pdo, string $token) : bool {
-    $r = $pdo->query("SELECT id FROM users WHERE verification_token = $token");
+    $r = $pdo->prepare("SELECT id FROM users WHERE verification_token = :token");
+    $r->bindParam(':token', $token, PDO::PARAM_STR);
+    $r->execute();
+
     return $r->fetch(PDO::FETCH_COLUMN);
+}
+
+function isVerified(PDO $pdo, int $userId) : bool {
+    $r = $pdo->prepare("SELECT verification_token FROM users WHERE id = :id");
+    $r->bindParam(':id', $userId, PDO::PARAM_INT);
+    $r->execute();
+
+    return $r->fetch(PDO::FETCH_COLUMN) === NULL;
 }
 
 function verifyUser(PDO $pdo, int $userId) : bool {
@@ -35,6 +46,15 @@ function isSubscribed(PDO $pdo, int $userId) : bool {
     $r->bindParam(':user_id', $userId, PDO::PARAM_INT);
     $r->execute();
     return $r->fetch(PDO::FETCH_COLUMN);
+}
+
+function hasUsedDiscount(PDO $pdo, int $userId, string $discountCode) {
+    $stmt = $pdo->prepare("SELECT id FROM bookings WHERE promotion_code_used = :code AND user_id = :user_id");
+    $stmt->bindParam(':code', $discountCode, PDO::PARAM_STR);
+    $stmt->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
 function emailExists(PDO $pdo, string $email) : array | bool {

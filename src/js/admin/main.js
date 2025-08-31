@@ -25,9 +25,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     renderToasts();
     
-
-
-    let map;
     await loadStops();
     
     addDiv();

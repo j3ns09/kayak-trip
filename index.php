@@ -15,6 +15,10 @@ if (existsSession('user_id')) {
 }
 
 $isConnected = !is_null($userId);
+
+if ($isConnected) {
+    $isVerified = isVerified($pdo, $userId);
+}
 ?>
 
 <link rel="stylesheet" href="/src/css/home.css">
@@ -54,10 +58,16 @@ $isConnected = !is_null($userId);
 
             <div class="col-5 row gx-5 ps-5">
                 <div class="col">
-                    <a href="build.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Composer mon itinéraire</a>
+                    <button onclick="location.href='build.php'" class="btn text-white col fw-semibold rounded-5 home-buttons"
+                        <?php if ($isConnected && $isVerified) { echo ''; } else { echo 'disabled'; } ?>>
+                        Composer mon itinéraire
+                    </button>
                 </div>
                 <div class="col">
-                    <a href="packs.php" class="btn text-white col fw-semibold rounded-5 home-buttons">Voir les packs disponibles</a>
+                    <button onclick="location.href='packs.php'" class="btn text-white col fw-semibold rounded-5 home-buttons"
+                        <?php if ($isConnected && $isVerified) { echo ''; } else { echo 'disabled'; } ?>>
+                        Composer mon itinéraire
+                    </button>
                 </div>
             </div>
             <!-- <hr class="border border-light border-2 opacity-100" style="width: 300px;"> -->
@@ -70,7 +80,7 @@ $isConnected = !is_null($userId);
                 <p class="fst-italic fs-5">Discutez avec nos commerciaux</p>
             </div>
             <div class="col-5">
-                <button id="chat-button" class="btn text-white fw-semibold rounded-5 home-buttons">Parler avec nos équipes</button>
+                <button id="chat-button" class="btn text-white fw-semibold rounded-5 home-buttons" <?php if ($isConnected) { echo $isVerified ? '' : 'disabled'; } else { echo 'disabled'; } ?> >Parler avec nos équipes</button>
             </div>
         </div>
     </div>

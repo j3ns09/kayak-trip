@@ -90,8 +90,8 @@ include_once $root . '/includes/templates/navbar.php';
                 <button type="submit" class="btn btn-success">Réserver ce pack</button>
             </form>
         <?php else: ?>
-            <div class="alert alert-warning mt-3">
-                <a href="/login.php" class="btn btn-outline-light">Connectez-vous pour réserver</a>
+            <div class="mt-3">
+                <a href="/login.php" class="btn btn-warning">Connectez-vous pour réserver</a>
             </div>
         <?php endif; ?>
     </div>

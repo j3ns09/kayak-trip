@@ -19,9 +19,6 @@
                 <a href="/build.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-signpost-2-fill"></i> Composer son itinéraire
                 </a>
-                <a href="/cart.php" class="btn btn-outline-light fw-bold">
-                    <i class="bi bi-cart"></i> Panier
-                </a>
                 <a href="/orders.php" class="btn btn-outline-light fw-bold">
                     <i class="bi bi-receipt"></i> Mes commandes
                 </a>
