@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $ok = deleteUser($pdo, $userId);
 
-    if ($ok) {
+    if ($ok && !isAdmin($pdo, getSession('user_id'))) {
         deleteSession();
         redirectAlert('success', 'Votre compte a été clôturé avec succès.', 'index');
         exit();

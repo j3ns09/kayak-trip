@@ -437,6 +437,7 @@ function getAllBookings(PDO $pdo) : array | bool {
     b.start_date,
     b.end_date,
     b.created_at,
+    b.is_paid,
     b.total_price,
     b.promotion_code_used
 
