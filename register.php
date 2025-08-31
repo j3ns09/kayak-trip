@@ -1,6 +1,7 @@
 <?php 
 
 include_once 'includes/store.php';
+include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
 include_once 'includes/templates/header.html';
 

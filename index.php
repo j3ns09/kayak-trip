@@ -108,9 +108,20 @@ if (existsSession("error")) {
         "danger",
         "Erreur",
         "Maintenant",
-        $_SESSION["error"],
+        getSession('error'),
     );
     unsetSession('error');
+}
+
+if (existsSession("success")) {
+    displayToast(
+        "successToast",
+        "success",
+        "Succès",
+        "Maintenant",
+        getSession('success'),
+    );
+    unsetSession('success');
 }
 
 if ($isConnected) {

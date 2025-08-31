@@ -132,16 +132,8 @@ if (existsSession('form_data')) {
             </div>
 
             <div class="col-md-2">
-                <label for="type_hebergement" class="form-label">Type</label>
-                <select class="form-select" id="type_hebergement" name="type_hebergement" required>
-                <option disabled selected>Choisir un type</option>
-                <option value="camping">Camping</option>
-                <option value="gite">Gîte</option>
-                <option value="hotel">Hôtel</option>
-                <option value="chambre_hote">Chambre d’hôtes</option>
-                <option value="refuge">Refuge</option>
-                <option value="autre">Autre</option>
-                </select>
+                <label for="stars" class="form-label">Nombre d'étoiles</label>
+                <input type="number" class="form-control" id="stars" name="stars" min="1" max="5" required>
             </div>
 
             <div class="col-md-3">
@@ -149,11 +141,6 @@ if (existsSession('form_data')) {
                 <select name="arret" id="arret-list" class="form-select" required>
                 <option disabled selected>Choisir un point d'arrêt</option>
                 </select>
-            </div>
-
-            <div class="col-md-3">
-                <label for="prix_base" class="form-label">Prix de base / nuit (€)</label>
-                <input type="number" min="0" step="0.01" class="form-control" name="prix_base" required>
             </div>
 
             <div class="col-md-12">
@@ -367,10 +354,33 @@ if (existsSession('form_data')) {
 
     <div id="newsletter" class="section">
         <h2>Newsletter</h2>
-        <form class="d-flex gap-3">
-            <input type="email" class="form-control" placeholder="Adresse e-mail">
-            <button class="btn btn-primary">Ajouter</button>
+        <form action="/processes/newsletter/send_news.php" method="POST" class="d-flex flex-column gap-3 mb-3">
+            <div class="mb-2">
+                <label for="objet" class="form-label">Objet</label>
+                <input name="object" type="text" class="form-control" placeholder="Objet de la news" id="objet">
+            </div>
+            <div class="form-floating">
+                <textarea name="content" class="form-control" placeholder="Message aux abonnés" id="mailTextArea"></textarea>
+                <label for="mailTextArea">Message</label>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary">Envoyer</button>
+            </div>
         </form>
+
+        <h3>Abonnés à la newsletter</h3>
+        <table class="table table-dark table-striped mt-4">
+            <thead>
+                <th>#</th>
+                <th>Email</th>
+                <th>Abonné depuis</th>
+                <th>Actions</th>
+            </thead>
+            <tbody id="subscribersShowing">
+            </tbody>
+        </table>
+        <ul id="news-pagination" class="pagination justify-content-center"></ul>
     </div>
 
     <div id="orders" class="section">

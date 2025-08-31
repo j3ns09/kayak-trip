@@ -180,8 +180,6 @@ function generateEditModal(id, pack) {
                 </div>
             </div>`;
         });
-
-        console.log(stopsHtml);
     }
 
     return `

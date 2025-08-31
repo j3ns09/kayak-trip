@@ -8,8 +8,10 @@ import { loadDiscounts, today } from "./modals/promotions.js";
 import { loadPacks } from "./modals/packs.js";
 import { loadMap } from "./map/map.js";
 import { loadBookings } from "./modals/orders.js";
+import { loadSubscribers } from "./modals/newsletter.js";
 
 import { addDiv } from "./stops/stops.js";
+import { initHebergements } from "./accommodations/accommodations.js";
 
 document.addEventListener('DOMContentLoaded', async function () {
     const links = document.querySelectorAll('a[href^="#"]');
@@ -29,6 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadStops();
     
     addDiv();
+    initHebergements();
     
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
@@ -39,6 +42,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadDiscounts();
     await loadPacks();
     await loadBookings();
+    await loadSubscribers();
 
     loadMap();
 

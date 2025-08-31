@@ -7,7 +7,8 @@ function createUser(
     string $phone,
     string $email,
     string $password,
-    string $confirmPassword
+    string $confirmPassword,
+    string $token
     )
 {
     if (!$firstName || !$name || !$email || !$phone || !$password || !$confirmPassword) {
@@ -29,9 +30,9 @@ function createUser(
 
     $sql = 
     "INSERT INTO users 
-    (email, password, first_name, last_name, phone) 
+    (email, password, first_name, last_name, phone, verification_token) 
     VALUES 
-    (:email, :password, :first_name, :last_name, :phone)";
+    (:email, :password, :first_name, :last_name, :phone, :verification_token)";
 
     $stmt = $pdo->prepare($sql);
 
@@ -40,6 +41,7 @@ function createUser(
     $stmt->bindParam(':first_name', $firstName, PDO::PARAM_STR);
     $stmt->bindParam(':last_name', $name, PDO::PARAM_STR);
     $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+    $stmt->bindParam(':verification_token', $token, PDO::PARAM_STR);
 
     if ($stmt->execute()) return ['ok' => true, 'message' => ""];
 

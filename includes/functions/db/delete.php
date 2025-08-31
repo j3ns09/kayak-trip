@@ -23,4 +23,16 @@ function deletePack(PDO $pdo, int $packId) {
     $stmt->bindParam(':id', $packId, PDO::PARAM_INT);
     return $stmt->execute();
 }
+
+function deleteUser(PDO $pdo, int $userId) {
+    $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+    $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
+
+function deleteSub(PDO $pdo, int $subId) {
+    $stmt = $pdo->prepare("DELETE FROM newsletter_subscribers WHERE id = :id");
+    $stmt->bindParam(':id', $subId, PDO::PARAM_INT);
+    return $stmt->execute();
+}
 ?>

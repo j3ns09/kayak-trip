@@ -40,7 +40,6 @@ function getAllAccommodations(PDO $pdo) : array | bool {
         a.name,
         a.description,
         s.name AS stop_name,
-        a.base_price_per_night,
         COUNT(DISTINCT r.id) AS nb_chambres,
         COALESCE(SUM(r.capacity), 0) AS capacite_totale,
         (
@@ -53,7 +52,7 @@ function getAllAccommodations(PDO $pdo) : array | bool {
     FROM accommodations a
     JOIN stops s ON a.stop_id = s.id
     LEFT JOIN rooms r ON r.accommodation_id = a.id
-    GROUP BY a.id, a.name, a.description, s.name, a.base_price_per_night
+    GROUP BY a.id, a.name, a.description, s.name
     ");
     return $r->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -106,7 +105,7 @@ function getAccommodationsByStop(PDO $pdo, int $stopId): array {
 }
 
 function getAccommodation(PDO $pdo, int $accId) {
-    $r = $pdo->query("SELECT id, name, description, base_price_per_night, stars FROM accommodations WHERE id = $accId");
+    $r = $pdo->query("SELECT id, name, description, stars FROM accommodations WHERE id = $accId");
     return $r->fetch(PDO::FETCH_ASSOC);
 }
 
@@ -468,6 +467,24 @@ function getBookingsDetails(PDO $pdo, int $userId) : array | bool {
 
     $stmt->bindParam(':user_id', $userId);
 
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getAllSubscribers(PDO $pdo) {
+    $sql = 
+    "SELECT
+        ns.id, u.email, ns.subscribed_at
+    FROM 
+        users AS u
+    INNER JOIN
+        newsletter_subscribers AS ns
+    ON 
+    u.id = ns.user_id
+    ";
+
+    $stmt = $pdo->prepare($sql);
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

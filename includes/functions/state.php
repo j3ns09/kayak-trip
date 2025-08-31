@@ -10,6 +10,17 @@ function isAdmin(PDO $pdo, int $userId) : bool {
     return $r->fetch(PDO::FETCH_COLUMN) == 1;
 }
 
+function hasToken(PDO $pdo, string $token) : bool {
+    $r = $pdo->query("SELECT id FROM users WHERE verification_token = $token");
+    return $r->fetch(PDO::FETCH_COLUMN);
+}
+
+function verifyUser(PDO $pdo, int $userId) : bool {
+    $stmt = $pdo->prepare("UPDATE users SET verification_token = NULL WHERE id = :id");
+    $stmt->bindParam(':id', $userId);
+    return $stmt->execute();
+}
+
 function isPasswordCorrect(PDO $pdo, int $userId, string $password) : bool {
     $r = $pdo->prepare("SELECT password FROM users WHERE id = :id");
     $r->bindParam(':id', $userId, PDO::PARAM_INT);
@@ -19,10 +30,11 @@ function isPasswordCorrect(PDO $pdo, int $userId, string $password) : bool {
     return (password_verify($password, $psw));
 }
 
-function isSubscribed(PDO $pdo, int $userId) {
+function isSubscribed(PDO $pdo, int $userId) : bool {
     $r = $pdo->prepare("SELECT id FROM newsletter_subscribers WHERE user_id = :user_id");
-    $r->bindParam('user_id', $userId, PDO::PARAM_INT);
-    return $r->execute();
+    $r->bindParam(':user_id', $userId, PDO::PARAM_INT);
+    $r->execute();
+    return $r->fetch(PDO::FETCH_COLUMN);
 }
 
 function emailExists(PDO $pdo, string $email) : array | bool {
@@ -78,6 +90,11 @@ function setSession(string $key, $value) : void {
 
 function unsetSession(string $key) : void {
     unset($_SESSION[$key]);
+}
+
+function deleteSession() : void {
+    session_unset();
+    session_destroy();
 }
 
 ?>

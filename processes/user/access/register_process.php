@@ -31,14 +31,16 @@ foreach ($data as $key => $value) {
     }
 }
 
-$result = createUser($pdo, $nom, $prenom, $tel, $email, $password, $passwordConfirm);
+$verificationToken = bin2hex(random_bytes(32));
+$result = createUser($pdo, $nom, $prenom, $tel, $email, $password, $passwordConfirm, $verificationToken);
 
 $ok = $result['ok'];
 $message = $result['message'];
 
 if ($ok) {
     unsetSession('form_data');
-    redirectAlert('success', 'Compte crée avec succès', 'login');
+    sendVerificationEmail($email, $prenom, $verificationToken);
+    redirectAlert('success', 'Compte crée avec succès. Email de vérification envoyé sur ' . $email . '.', 'login');
 }
 
 redirectAlert('error', $message, 'register');

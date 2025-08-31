@@ -9,7 +9,9 @@ function setUserOffline(PDO $pdo, int $userId) {
 }
 
 function setThreadClosed(PDO $pdo, int $threadId) {
-    $r = $pdo->query("UPDATE chat_threads SET is_closed = 1 WHERE id = $threadId");
+    $r = $pdo->prepare("UPDATE chat_threads SET is_closed = 1 WHERE id = :id");
+    $r->bindParam(':id', $threadId, PDO::PARAM_INT);
+    return $r->execute();
 }
 
 function setStopNewValues(
@@ -170,6 +172,26 @@ function setPackNewValues(
     }
 
     return true;
+}
+
+function setAccommodationNewValues(
+    PDO $pdo,
+    int $id,
+    string $name,
+    string $description,
+    int $stars
+)
+{
+    $stmt = $pdo->prepare("UPDATE accommodations SET 
+    name = :name, description = :description, stars = :stars
+    WHERE id = :id");
+
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':name', $name, PDO::PARAM_STR);
+    $stmt->bindParam(':description', $description, PDO::PARAM_STR);
+    $stmt->bindParam(':stars', $stars, PDO::PARAM_INT);
+
+    return $stmt->execute();
 }
 
 

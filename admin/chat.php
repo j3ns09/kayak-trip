@@ -47,6 +47,7 @@ include_once $root . '/includes/templates/navbar.php';
                     <div class="card glass-card h-100 shadow">
                         <div class="card-header border-0">
                             <i class="bi bi-inbox"></i> Threads ouverts
+                            <button id="refreshButton" class="btn btn-sm btn-warning"><i class="bi bi-arrow-clockwise"></i></button>
                         </div>
                         <ul class="list-group list-group-flush scrollable" style="max-height: 70vh;" id="threads-list">
                             <?php foreach ($openThreads as $t): ?>
@@ -94,13 +95,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatSend = document.getElementById('chat-send');
     const chatMessages = document.getElementById('chat-messages');
     const threads = document.querySelectorAll('.thread-item');
+    const refreshButton = document.getElementById('refreshButton');
+
+    refreshButton.addEventListener('click', () => {
+        window.location.reload();
+    });
 
     threads.forEach(thread => {
         thread.addEventListener('click', async () => {
             activeThreadId = thread.dataset.threadId;
             activeUserId = thread.dataset.userId;
             const userName = thread.querySelector('strong').textContent;
-            document.getElementById('chat-header').innerHTML = `<i class="bi bi-person"></i> ${userName} <span class="badge bg-light text-dark ms-2">Thread #${activeThreadId}</span>`;
+            document.getElementById('chat-header').innerHTML = `
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="bi bi-person"></i> ${userName}
+                        <span class="badge bg-light text-dark ms-2">Thread #${activeThreadId}</span>
+                    </div>
+                    <button class="btn btn-sm btn-danger" id="end-chat-btn">
+                        <i class="bi bi-x-circle"></i> Terminer le chat
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('end-chat-btn').addEventListener('click', async () => {
+                if (!activeThreadId) return;
+
+                const confirmClose = confirm("Voulez-vous vraiment terminer ce chat ?");
+                if (!confirmClose) return;
+
+                try {
+                    const res = await fetch(`/api/chat/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ threadId: activeThreadId })
+                    });
+
+                    const result = await res.json();
+                    if (result.ok) {
+                        alert("Le chat a été terminé.");
+                        location.reload();
+                    } else {
+                        alert("Erreur lors de la fermeture du chat.");
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Erreur serveur.");
+                }
+            });
+
             await pollMessages();
         });
     });
@@ -173,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (data.ok) {
             chatInput.value = '';
-            await loadMessages();
+            await pollMessages();
         } else {
             alert("Erreur lors de l'envoi.");
         }

@@ -27,16 +27,18 @@ function renderPage(page) {
 
     let no = start + 1;
 
+    console.log(accommodationsData);
+
     for (const accom of accommodations) {
         const tr = document.createElement('tr');
 
         tr.innerHTML = `
             <td>${no}</td>
             <td>${accom.name}</td>
-            <td>${accom.nb_chambres} chambres</td>
+            <td>${accom.rooms_count} chambres</td>
             <td>${accom.stop_name}</td>
             <td>${accom.description}</td>
-            <td>${accom.base_price_per_night} €/nuit</td>
+            <td>${accom.avg_price} €/nuit</td>
             <td>
                 ${accom.dates_fermeture ? `Fermé : ${accom.dates_fermeture}` : '<span class="text-success">Ouvert</span>'}
             </td>
@@ -134,14 +136,12 @@ function generateEditModal(accom) {
                             <input name="name" class="form-control" value="${accom.name}" />
                         </div>
                         <div class="mb-3">
-                            <label>Type</label>
-                            <select name="type" class="form-select">
-                                ${generateTypeOptions(accom.description)}
-                            </select>
+                            <label>Description</label>
+                            <textarea name="description" class="form-control">${accom.description}</textarea>
                         </div>
                         <div class="mb-3">
-                            <label>Prix de base (€)</label>
-                            <input name="base_price" class="form-control" value="${accom.base_price_per_night}" type="number" step="0.01" />
+                            <label>Etoiles</label>
+                            <input name="stars" class="form-control" value="${accom.stars}" />
                         </div>
                     </div>
                     <div class="modal-footer">
