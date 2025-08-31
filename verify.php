@@ -3,7 +3,7 @@
 include_once 'includes/config/config.php';
 include_once 'includes/functions.php';
 
-$token = filter_input(INPUT_GET, 'token', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+$token = filter_input(INPUT_GET, 'token', FILTER_DEFAULT);
 
 if ($token) {
     $userId = hasToken($pdo, $token);

@@ -11,7 +11,7 @@ if (!existsSession("user_id")) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $userId = intval($_POST['id']);
 
-    if ($userId !== getSession('user_id') && !isAdmin($pdo, $userId)) {
+    if ($userId !== getSession('user_id') && !isAdmin($pdo, getSession('user_id'))) {
         redirectAlert('error', 'Action non autorisée.', 'profile');
         exit();
     }

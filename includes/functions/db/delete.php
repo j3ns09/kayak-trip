@@ -26,6 +26,7 @@ function deletePack(PDO $pdo, int $packId) {
 
 function deleteUser(PDO $pdo, int $userId) {
     $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
+    
     $stmt->bindParam(':id', $userId, PDO::PARAM_INT);
     return $stmt->execute();
 }

@@ -10,7 +10,7 @@ function isAdmin(PDO $pdo, int $userId) : bool {
     return $r->fetch(PDO::FETCH_COLUMN) == 1;
 }
 
-function hasToken(PDO $pdo, string $token) : bool {
+function hasToken(PDO $pdo, string $token) : int {
     $r = $pdo->prepare("SELECT id FROM users WHERE verification_token = :token");
     $r->bindParam(':token', $token, PDO::PARAM_STR);
     $r->execute();

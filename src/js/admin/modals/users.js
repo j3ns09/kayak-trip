@@ -92,7 +92,7 @@ function generateDeleteModal(id) {
     <div class="modal fade" id="deleteProfile${id}" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
         <div class="modal-content">
-            <form method="POST" action="/processes/user/account/delete_user_process.php">
+            <form method="POST" action="/processes/user/account/delete_account_process.php">
             <div class="modal-header">
                 <h5 class="modal-title">Supprimer un profil</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
