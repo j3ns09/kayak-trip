@@ -66,7 +66,7 @@ if ($isConnected) {
                 <div class="col">
                     <button onclick="location.href='packs.php'" class="btn text-white col fw-semibold rounded-5 home-buttons"
                         <?php if ($isConnected && $isVerified) { echo ''; } else { echo 'disabled'; } ?>>
-                        Composer mon itinéraire
+                        Voir les packs
                     </button>
                 </div>
             </div>

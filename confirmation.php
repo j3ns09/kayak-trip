@@ -36,6 +36,10 @@ if (bookingExists($pdo, $userId, $startDate, $endDate)) {
     redirect('index');
 }
 
+if (empty($discountCode)) {
+    $discountCode = null;
+}
+
 $ok = createBooking($pdo, $userId, $startDate, $endDate, $total, $personCount, $discountCode);
 if ($ok) {
     $bookingId = $pdo->lastInsertId();

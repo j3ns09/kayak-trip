@@ -72,7 +72,7 @@ if (existsSession('form_data')) {
         <form class="row g-3" method="POST" action="/processes/stops/add_stop_process.php">
             <div class="col-md-4">
                 <label for="nom_etape" class="form-label">Nom de l’étape</label>
-                <input type="text" class="form-control" id="nom_etape" name="nom_etape" placeholder="Ex : Pause déjeuner">
+                <input type="text" class="form-control" id="nom_etape" name="nom_etape" placeholder="Ex: Nom de la ville..">
             </div>
 
             <div class="col-md-3">
