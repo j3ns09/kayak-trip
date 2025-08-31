@@ -318,6 +318,66 @@ if (existsSession('form_data')) {
         </table>
     </div>
 
+    <div id="promotions" class="section">
+        <h2>Offres promotionnelles</h2>
+        <form class="row g-3" method="POST" action="/processes/promotions/add_promotion_process.php">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="promo-description" class="form-label">Nom</label>
+                    <input type="text" id="promo-description" name="promo_nom" class="form-control" placeholder="Description de la promotion..." required>
+                </div>
+                <div class="col-md-2">
+                    <label for="promo-reduction" class="form-label">Remise (%)</label>
+                    <input id="promo-reduction" name="promo_discount" type="number" class="form-control" placeholder="Ex: 15, 40" min="1" max="100" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="promo-hebergement" class="form-label">Hébergement associé</label>
+                    <select name="acc_id" class="form-control selects-stops">
+                        <?php 
+                        $accs = getAllAccommodations($pdo);
+                        foreach ($accs as $acc): ?>
+                            <option value="<?= $acc['id'] ?>"><?= $acc['name'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <div class="row col-md-6 mb-3">
+                <div class="col">
+                    <label class="form-label">Période</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input id="promo-start" name="promo_start_date" type="date" class="form-control" required>
+                            <div class="form-text text-white">Date de début</div>
+                        </div>
+                        <div class="col-6">
+                            <input id="promo-end" name="promo_end_date" type="date" class="form-control" required>
+                            <div class="form-text text-white">Date de fin</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 d-flex align-items-center">
+                    <button type="submit" class="btn btn-success">Ajouter</button>
+                </div>
+            </div>
+        </form>
+
+        <table class="table table-dark table-striped mt-4">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Période</th>
+                    <th>Remise</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="promotions-list"></tbody>
+        </table>
+    </div>
+
+
     <div id="services" class="section">
         <h2>Services complémentaires</h2>
         <form class="row g-3" method="POST" action="/processes/services/add_service_process.php">

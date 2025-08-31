@@ -68,7 +68,9 @@ export function updateQuantities() {
         btn.addEventListener('click', () => {
             const span = btn.previousElementSibling;
             let qty = parseInt(span.textContent);
-            qty++;
+            if (qty < 30) {
+                qty++;
+            }
             span.textContent = qty;
             updateSubtotal(span);
             recalculateTotal();

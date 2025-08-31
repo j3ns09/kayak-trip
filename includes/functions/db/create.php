@@ -291,7 +291,12 @@ function createBooking(
     $stmt->bindParam(':end_date', $endDate, PDO::PARAM_STR);
     $stmt->bindParam(':total_price', $totalPrice);
     $stmt->bindParam(':person_count', $personCount, PDO::PARAM_INT);
-    $stmt->bindParam(':promotion_code_used', $discountCode);
+
+    if (is_null($discountCode)) {
+        $stmt->bindValue(':promotion_code_used', null);
+    } else {
+        $stmt->bindParam(':promotion_code_used', $discountCode);
+    }
 
     return $stmt->execute();
 }

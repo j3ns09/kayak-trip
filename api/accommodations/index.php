@@ -76,11 +76,26 @@ if ($method === "GET") {
                 ");
                 $accStmt->bindValue(":id", $acc['id'], PDO::PARAM_INT);
                 $accStmt->execute();
-                $accAvail = $accStmt->fetch(PDO::FETCH_ASSOC);
+                $accAvail = $accStmt->fetch(PDO::FETCH_COLUMN);
 
                 if ($accAvail) {
                     $available = (bool)$accAvail['is_available'];
                 }
+            }
+
+            $closureStmt = $pdo->prepare("
+                SELECT 0    
+                FROM accommodation_closures
+                WHERE accommodation_id = :id
+                AND CURDATE() BETWEEN start_date AND end_date
+                LIMIT 1
+            ");
+            $closureStmt->bindParam(":id", $acc['id'], PDO::PARAM_INT);
+            $closureStmt->execute();
+            $isClosed = $closureStmt->fetchColumn();
+
+            if ($isClosed) {
+                $available = false;
             }
 
             $acc['available'] = $available;
@@ -101,7 +116,6 @@ if ($method === "GET") {
         "waiter" => $_SESSION['user_id'],
         "accommodations" => $accommodations,
         "total" => $total,
-        "page" => $page,
         "pages" => ceil($total)
     ]);
 }

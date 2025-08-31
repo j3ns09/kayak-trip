@@ -335,6 +335,13 @@ function getPromotion(PDO $pdo, string $code) : array | bool {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function getAllPromotionPeriods(PDO $pdo) {
+    $stmt = $pdo->prepare("SELECT id, name, discount_value, accommodation_id, start_date, end_date, is_active FROM promotion_periods");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getAllServices(PDO $pdo) : array | bool {
     $r = $pdo->query("SELECT id, name, description, price, is_active FROM services");
     return $r->fetchAll(PDO::FETCH_ASSOC);

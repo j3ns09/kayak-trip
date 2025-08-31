@@ -116,7 +116,7 @@ $stops = getAllStops($pdo);
                         </div> -->
                         <div class="col-3 mb-3">
                             <label for="person-count" class="form-label fw-bold">Nombre de participants</label>
-                            <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" required>
+                            <input id="person-count" type="number" class="form-control pt-2" placeholder="Nombre de participants" min="1" max="10" required>
                         </div>
                     </div>
                     <div class="row pb-3">

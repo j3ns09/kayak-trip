@@ -9,6 +9,7 @@ import { loadPacks } from "./modals/packs.js";
 import { loadMap } from "./map/map.js";
 import { loadBookings } from "./modals/orders.js";
 import { loadSubscribers } from "./modals/newsletter.js";
+import { loadPromotions } from "./modals/promotionsPeriods.js";
 
 import { addDiv } from "./stops/stops.js";
 import { initHebergements } from "./accommodations/accommodations.js";
@@ -40,6 +41,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await loadPacks();
     await loadBookings();
     await loadSubscribers();
+    await loadPromotions();
 
     loadMap();
 
